@@ -2764,6 +2764,8 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       {isLiveCalibratorOpen && (
         <LiveCoordinateCalibratorModal
           initialDocType={activeDoc}
+          customBgUrl={activeBgUrl}
+          customBgs={customBgs}
           activeDocument={{ patient } as any}
           onClose={() => setIsLiveCalibratorOpen(false)}
           onApplyCoordinates={() => {

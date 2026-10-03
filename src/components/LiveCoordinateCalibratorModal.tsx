@@ -25,17 +25,23 @@ import {
   Check,
   ShieldCheck,
   Copy,
+  Upload,
+  Image as ImageIcon,
+  FileUp,
+  RefreshCw,
 } from 'lucide-react';
 import { DocType } from '../types';
 import { MasterTemplateV2, OverlayElement } from '../calibration/types/MasterTemplateV2';
 import { getMasterTemplateV2, setMasterTemplateV2 } from '../calibration/MasterRegistryV2';
 import { CalibrationEngine } from '../calibration/CalibrationEngine';
 import { generateCanonicalDocumentPDF } from '../utils/pdfExport';
-import { saveCustomTemplate, getCustomTemplate } from '../utils/templateStorage';
+import { saveCustomTemplate, getCustomTemplate, deleteCustomTemplate } from '../utils/templateStorage';
 
 interface LiveCoordinateCalibratorModalProps {
   initialDocType?: DocType;
   activeDocument?: any;
+  customBgUrl?: string | null;
+  customBgs?: Record<string, string>;
   onClose: () => void;
   onApplyCoordinates?: () => void;
 }
@@ -51,13 +57,15 @@ const DOC_TABS: Array<{ id: DocType; label: string; widthMm: number; heightMm: n
 export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorModalProps> = ({
   initialDocType = 'RECIPES',
   activeDocument,
+  customBgUrl = null,
+  customBgs = {},
   onClose,
   onApplyCoordinates,
 }) => {
   const [selectedDoc, setSelectedDoc] = useState<DocType>(initialDocType);
   const [template, setTemplate] = useState<MasterTemplateV2 | null>(null);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
-  const [zoom, setZoom] = useState<number>(0.9);
+  const [zoom, setZoom] = useState<number>(0.65);
   const [snapMm, setSnapMm] = useState<number>(0.5);
   const [showGrid, setShowGrid] = useState<boolean>(true);
   const [showSampleText, setShowSampleText] = useState<boolean>(true);
@@ -67,8 +75,127 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
   const [dragStart, setDragStart] = useState<{ mouseX: number; mouseY: number; elX: number; elY: number } | null>(null);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
-  const canvasRef = useRef<HTMLDivElement>(null);
+  // Estados para Fondo Maestro
   const activeDocMeta = DOC_TABS.find((d) => d.id === selectedDoc) || DOC_TABS[0];
+  const [activeBgImage, setActiveBgImage] = useState<string>(activeDocMeta.bg);
+  const [isCustomBg, setIsCustomBg] = useState<boolean>(false);
+  const [bgOpacity, setBgOpacity] = useState<number>(1.0);
+  const [showBg, setShowBg] = useState<boolean>(true);
+
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sincronizar y cargar el fondo maestro del documento seleccionado
+  useEffect(() => {
+    let isCancelled = false;
+
+    const resolveBackground = async () => {
+      // 1. Prioridad: customBgs provisto por props
+      if (customBgs && customBgs[selectedDoc]) {
+        setActiveBgImage(customBgs[selectedDoc]);
+        setIsCustomBg(true);
+        return;
+      }
+      if (customBgUrl && selectedDoc === initialDocType) {
+        setActiveBgImage(customBgUrl);
+        setIsCustomBg(true);
+        return;
+      }
+
+      // 2. Revisar almacenamiento persistente IndexedDB / localStorage
+      try {
+        const stored =
+          (await getCustomTemplate(selectedDoc)) ||
+          (await getCustomTemplate(selectedDoc.toLowerCase())) ||
+          (await getCustomTemplate(selectedDoc.toUpperCase()));
+        if (!isCancelled && stored) {
+          setActiveBgImage(stored);
+          setIsCustomBg(true);
+          return;
+        }
+
+        const local =
+          localStorage.getItem(`custom_tpl_${selectedDoc}`) ||
+          localStorage.getItem(`custom_tpl_${selectedDoc.toLowerCase()}`) ||
+          localStorage.getItem(`custom_tpl_${selectedDoc.toUpperCase()}`);
+        if (!isCancelled && local) {
+          setActiveBgImage(local);
+          setIsCustomBg(true);
+          return;
+        }
+      } catch (err) {
+        console.warn('Error resolviendo fondo maestro:', err);
+      }
+
+      // 3. Fallback a la imagen oficial base
+      if (!isCancelled) {
+        setActiveBgImage(activeDocMeta.bg);
+        setIsCustomBg(false);
+      }
+    };
+
+    resolveBackground();
+    return () => {
+      isCancelled = true;
+    };
+  }, [selectedDoc, customBgs, customBgUrl, activeDocMeta.bg, initialDocType]);
+
+  // Manejo de carga de fondo maestro por el usuario (JPG, PNG, WebP)
+  const handleUploadMasterBg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Por favor selecciona una imagen válida (JPG, PNG, WebP) del fondo maestro escaneado.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        setActiveBgImage(dataUrl);
+        setIsCustomBg(true);
+        try {
+          await saveCustomTemplate(selectedDoc, dataUrl);
+          await saveCustomTemplate(selectedDoc.toLowerCase(), dataUrl);
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+              new CustomEvent('stationery_cloud_synced', {
+                detail: { docType: selectedDoc, dataUrl },
+              })
+            );
+          }
+          setSaveStatus('✓ Fondo maestro cargado con éxito para este documento');
+          setTimeout(() => setSaveStatus(null), 3500);
+        } catch (err) {
+          console.warn('Error guardando plantilla personalizada:', err);
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  // Restablecer fondo maestro a la plantilla base oficial
+  const handleResetBgToDefault = async () => {
+    try {
+      await deleteCustomTemplate(selectedDoc);
+      await deleteCustomTemplate(selectedDoc.toLowerCase());
+      await deleteCustomTemplate(selectedDoc.toUpperCase());
+    } catch {}
+    setActiveBgImage(activeDocMeta.bg);
+    setIsCustomBg(false);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('stationery_cloud_synced', {
+          detail: { docType: selectedDoc, dataUrl: activeDocMeta.bg },
+        })
+      );
+    }
+    setSaveStatus('Fondo restablecido a la plantilla base oficial de fábrica');
+    setTimeout(() => setSaveStatus(null), 3000);
+  };
 
   // Cargar master al seleccionar documento
   useEffect(() => {
@@ -304,6 +431,24 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
 
           {/* Botones de Acción */}
           <div className="flex items-center gap-2">
+            {/* Input oculto para cargar fondo maestro */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/png,image/jpeg,image/webp,image/jpg"
+              className="hidden"
+              onChange={handleUploadMasterBg}
+            />
+
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-cyan-950/80 border border-cyan-500/50 px-3 py-2 text-xs font-semibold text-cyan-300 hover:bg-cyan-900 hover:border-cyan-400 transition cursor-pointer shadow-xs"
+              title="Cargar y calibrar sobre la imagen física o escaneo real de este documento"
+            >
+              <Upload className="h-3.5 w-3.5" />
+              <span>Cargar Fondo Maestro</span>
+            </button>
+
             <button
               onClick={handleTestPdf}
               className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 px-3 py-2 text-xs font-semibold text-cyan-300 hover:bg-slate-700 transition cursor-pointer"
@@ -405,27 +550,37 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
           <div className="flex flex-1 flex-col overflow-hidden bg-slate-950/40">
             {/* BARRA DE HERRAMIENTAS DEL CANVAS */}
             <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/60 px-6 py-2.5 text-xs text-slate-300">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 flex-wrap">
                 {/* Zoom */}
-                <div className="flex items-center gap-1.5 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">
+                <div className="flex items-center gap-1 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">
                   <button
-                    onClick={() => setZoom((z) => Math.max(0.4, Number((z - 0.1).toFixed(1))))}
+                    onClick={() => setZoom((z) => Math.max(0.3, Number((z - 0.05).toFixed(2))))}
                     className="p-1 hover:text-cyan-400 cursor-pointer"
+                    title="Reducir zoom"
                   >
                     <ZoomOut className="h-3.5 w-3.5" />
                   </button>
-                  <span className="font-mono font-bold text-cyan-300 w-12 text-center">
+                  <span className="font-mono font-bold text-cyan-300 w-12 text-center text-xs">
                     {Math.round(zoom * 100)}%
                   </span>
                   <button
-                    onClick={() => setZoom((z) => Math.min(2.0, Number((z + 0.1).toFixed(1))))}
+                    onClick={() => setZoom((z) => Math.min(2.0, Number((z + 0.05).toFixed(2))))}
                     className="p-1 hover:text-cyan-400 cursor-pointer"
+                    title="Aumentar zoom"
                   >
                     <ZoomIn className="h-3.5 w-3.5" />
                   </button>
                   <button
+                    onClick={() => setZoom(0.6)}
+                    className="px-1.5 py-0.5 bg-slate-800 text-[10px] rounded hover:bg-slate-700 cursor-pointer ml-0.5 text-cyan-200"
+                    title="Ajustar hoja entera a la pantalla"
+                  >
+                    Ajustar
+                  </button>
+                  <button
                     onClick={() => setZoom(1.0)}
-                    className="px-1.5 py-0.5 bg-slate-800 text-[10px] rounded hover:bg-slate-700 cursor-pointer ml-1"
+                    className="px-1.5 py-0.5 bg-slate-800 text-[10px] rounded hover:bg-slate-700 cursor-pointer text-slate-300"
+                    title="Tamaño real 100%"
                   >
                     100%
                   </button>
@@ -444,6 +599,55 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
                     <option value={0.5}>Estándar (0.5 mm)</option>
                     <option value={1.0}>Rejilla (1.0 mm)</option>
                   </select>
+                </div>
+
+                {/* Controles de Fondo Maestro */}
+                <div className="flex items-center gap-2 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">
+                  <label className="flex items-center gap-1.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={showBg}
+                      onChange={(e) => setShowBg(e.target.checked)}
+                      className="rounded text-cyan-600 bg-slate-800 border-slate-700"
+                    />
+                    <span className="font-semibold text-slate-200">Fondo Maestro</span>
+                  </label>
+
+                  {showBg && (
+                    <div className="flex items-center gap-1 text-[11px] text-slate-400 border-l border-slate-800 pl-2">
+                      <span>Opacidad:</span>
+                      <select
+                        value={bgOpacity}
+                        onChange={(e) => setBgOpacity(parseFloat(e.target.value))}
+                        className="bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5 text-cyan-300 cursor-pointer"
+                      >
+                        <option value={1.0}>100%</option>
+                        <option value={0.75}>75%</option>
+                        <option value={0.5}>50%</option>
+                        <option value={0.25}>25%</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {isCustomBg ? (
+                    <div className="flex items-center gap-1 border-l border-slate-800 pl-2">
+                      <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                        <CheckCircle className="w-3 h-3 text-emerald-400" />
+                        Papelería Real
+                      </span>
+                      <button
+                        onClick={handleResetBgToDefault}
+                        className="text-[10px] text-slate-400 hover:text-amber-300 transition underline cursor-pointer ml-1"
+                        title="Volver al fondo predeterminado de fábrica"
+                      >
+                        Restablecer
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-[10px] text-slate-500 border-l border-slate-800 pl-2">
+                      Fondo Oficial Base
+                    </span>
+                  )}
                 </div>
 
                 {/* Toggles */}
@@ -468,13 +672,13 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
               </div>
 
               {/* Coordenadas en Vivo */}
-              <div className="font-mono text-xs font-semibold text-emerald-400">
+              <div className="font-mono text-xs font-semibold text-emerald-400 whitespace-nowrap">
                 {mouseCoord ? `X: ${mouseCoord.x.toFixed(1)} mm | Y: ${mouseCoord.y.toFixed(1)} mm` : 'Pase el ratón'}
               </div>
             </div>
 
             {/* LIENZO DE RENDERIZADO VISUAL */}
-            <div className="flex-1 overflow-auto p-8 flex items-center justify-center bg-slate-950/70">
+            <div className="flex-1 overflow-auto p-4 sm:p-8 flex items-center justify-center bg-slate-950/70">
               <div
                 ref={canvasRef}
                 onMouseMove={handleMouseMove}
@@ -482,14 +686,19 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
                 style={{
                   width: `${activeDocMeta.widthMm * 3.7795 * zoom}px`,
                   height: `${activeDocMeta.heightMm * 3.7795 * zoom}px`,
+                  minWidth: `${activeDocMeta.widthMm * 3.7795 * zoom}px`,
+                  minHeight: `${activeDocMeta.heightMm * 3.7795 * zoom}px`,
                 }}
               >
-                {/* Imagen del membrete oficial */}
-                <img
-                  src={activeDocMeta.bg}
-                  alt="Membrete Oficial Base"
-                  className="absolute inset-0 w-full h-full object-fill pointer-events-none select-none z-0"
-                />
+                {/* Imagen del fondo maestro */}
+                {showBg && (
+                  <img
+                    src={activeBgImage}
+                    alt="Fondo Maestro Calibración"
+                    className="absolute inset-0 w-full h-full object-fill pointer-events-none select-none z-0 transition-opacity duration-150"
+                    style={{ opacity: bgOpacity }}
+                  />
+                )}
 
                 {/* Malla milimétrica opcional */}
                 {showGrid && (

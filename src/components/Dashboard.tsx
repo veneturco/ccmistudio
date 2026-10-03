@@ -909,6 +909,7 @@ export const Dashboard: React.FC = () => {
       {isLiveCalibratorOpen && (
         <LiveCoordinateCalibratorModal
           initialDocType={selectedDoc}
+          customBgs={customBgs}
           activeDocument={{ patient: activePatientData } as any}
           onClose={() => setIsLiveCalibratorOpen(false)}
           onApplyCoordinates={() => {
