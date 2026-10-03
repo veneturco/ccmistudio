@@ -1,0 +1,188 @@
+{
+  "masterId": "RECIPE-001",
+  "version": "2.0",
+  "documentType": "recipe",
+  "pageSize": {
+    "widthMm": 210.0,
+    "heightMm": 297.0,
+    "format": "A4 Portrait"
+  },
+  "backgroundPdf": "/templates/recipe_base.pdf",
+  "pageIndex": 0,
+  "status": "CALIBRATED",
+  "lockedRegions": [
+    { "id": "header_left", "xMm": 7.96, "yMm": 0, "widthMm": 95.0, "heightMm": 34.53 },
+    { "id": "header_right", "xMm": 111.96, "yMm": 0, "widthMm": 95.0, "heightMm": 34.53 }
+  ],
+  "pages": [
+    {
+      "pageIndex": 0,
+      "widthMm": 210.0,
+      "heightMm": 297.0,
+      "backgroundPdfPage": 0,
+      "elements": [
+        {
+          "type": "text",
+          "id": "left_patient_name",
+          "dataKey": "patient.fullName",
+          "xMm": 25.0,
+          "yMm": 52.0,
+          "widthMm": 75.0,
+          "heightMm": 5.5,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1,
+          "overflow": "shrink"
+        },
+        {
+          "type": "text",
+          "id": "left_patient_id",
+          "dataKey": "patient.idNumber",
+          "xMm": 15.0,
+          "yMm": 60.5,
+          "widthMm": 32.0,
+          "heightMm": 5.0,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1
+        },
+        {
+          "type": "text",
+          "id": "left_patient_age",
+          "dataKey": "patient.age",
+          "xMm": 51.0,
+          "yMm": 60.5,
+          "widthMm": 18.0,
+          "heightMm": 5.0,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "center",
+          "maxLines": 1
+        },
+        {
+          "type": "text",
+          "id": "left_date",
+          "dataKey": "document.date",
+          "xMm": 74.0,
+          "yMm": 60.5,
+          "widthMm": 25.0,
+          "heightMm": 5.0,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "center",
+          "maxLines": 1
+        },
+        {
+          "type": "multilineText",
+          "id": "left_rx_body",
+          "dataKey": "recipe.pharmacy",
+          "xMm": 10.0,
+          "yMm": 78.0,
+          "widthMm": 89.0,
+          "heightMm": 165.0,
+          "fontSizePt": 10.0,
+          "lineHeightPt": 15.0,
+          "align": "left",
+          "maxLines": 25,
+          "overflow": "shrink"
+        },
+        {
+          "type": "stamp",
+          "id": "left_doctor_stamp",
+          "dataKey": "doctor_stamp_signature",
+          "xMm": 58.0,
+          "yMm": 248.0,
+          "widthMm": 38.0,
+          "heightMm": 22.0,
+          "opacity": 0.90
+        },
+        {
+          "type": "text",
+          "id": "right_patient_name",
+          "dataKey": "patient.fullName",
+          "xMm": 129.0,
+          "yMm": 52.0,
+          "widthMm": 75.0,
+          "heightMm": 5.5,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1,
+          "overflow": "shrink"
+        },
+        {
+          "type": "text",
+          "id": "right_patient_id",
+          "dataKey": "patient.idNumber",
+          "xMm": 119.0,
+          "yMm": 60.5,
+          "widthMm": 32.0,
+          "heightMm": 5.0,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1
+        },
+        {
+          "type": "text",
+          "id": "right_patient_age",
+          "dataKey": "patient.age",
+          "xMm": 155.0,
+          "yMm": 60.5,
+          "widthMm": 18.0,
+          "heightMm": 5.0,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "center",
+          "maxLines": 1
+        },
+        {
+          "type": "text",
+          "id": "right_date",
+          "dataKey": "document.date",
+          "xMm": 178.0,
+          "yMm": 60.5,
+          "widthMm": 25.0,
+          "heightMm": 5.0,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "center",
+          "maxLines": 1
+        },
+        {
+          "type": "multilineText",
+          "id": "right_indications_body",
+          "dataKey": "recipe.indications",
+          "xMm": 114.0,
+          "yMm": 78.0,
+          "widthMm": 89.0,
+          "heightMm": 165.0,
+          "fontSizePt": 10.0,
+          "lineHeightPt": 15.0,
+          "align": "left",
+          "maxLines": 25,
+          "overflow": "shrink"
+        },
+        {
+          "type": "stamp",
+          "id": "right_doctor_stamp",
+          "dataKey": "doctor_stamp_signature",
+          "xMm": 162.0,
+          "yMm": 248.0,
+          "widthMm": 38.0,
+          "heightMm": 22.0,
+          "opacity": 0.90
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "name": "Récipe e Indicaciones Médicas (CCMI)",
+    "description": "Récipe médico oficial con doble talón (Farmacia e Indicaciones) en hoja A4 vertical",
+    "updatedAt": "2026-09-28T06:55:00.000Z",
+    "calibratedBy": "Dr. Samir Moucharrafie Naime",
+    "calibrationVersion": "v11.0-canonical"
+  }
+}

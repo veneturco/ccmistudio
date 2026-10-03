@@ -1,0 +1,6 @@
+{
+  "name": "CCMI — Centro Clínico Médico Integral",
+  "description": "Sistema operativo clínico simplificado y emisión ágil de documentos médicos oficiales del Dr. Samir Moucharrafie (CCMI — Centro Clínico Médico Integral).",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

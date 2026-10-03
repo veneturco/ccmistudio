@@ -1,0 +1,47 @@
+[
+  {
+    "id": "lumbociatalgia",
+    "name": "Lumbociatalgia Mecano-Postural Aguda",
+    "icd10": "M54.4",
+    "category": "Columna Lumbar",
+    "diagnosis": "Lumbociatalgia radicular L5-S1 mecano-postural aguda",
+    "treatment": "1. Pregabalina 75 mg: 1 cápsula vía oral cada noche por 14 días.\n2. Etoricoxib 90 mg: 1 comprimido vía oral cada 24 horas por 7 días (tomar tras el desayuno).\n3. Complejo B (Neurobión): 1 ampolla intramuscular interdiaria por 3 dosis.",
+    "instructions": "Reposo relativo por 5 días sin flexión de tronco ni levantar pesos > 3 kg. Aplicar calor local seco en región lumbar por 20 minutos cada 8 horas. Reevaluación en 10 días."
+  },
+  {
+    "id": "cervicobraquialgia",
+    "name": "Cervicobraquialgia / Radiculopatía Cervical",
+    "icd10": "M54.2",
+    "category": "Columna Cervical",
+    "diagnosis": "Cervicobraquialgia C6-C7 aguda con contractura paravertebral",
+    "treatment": "1. Meloxicam 15 mg: 1 tableta vía oral cada 24 horas por 5 días.\n2. Tizanidina 2 mg: 1 tableta vía oral cada 12 horas por 7 días.\n3. Pregabalina 50 mg: 1 cápsula nocturna por 10 días.",
+    "instructions": "Uso de collarín cervical blando solo para traslados o actividades en bipedestación durante 5 días. Dormir con almohada cervical baja. Evitar flexión cervical prolongada con dispositivos móviles."
+  },
+  {
+    "id": "canal_estrecho",
+    "name": "Canal Lumbar Estrecho / Claudicación Neurógena",
+    "icd10": "M48.06",
+    "category": "Estenosis Espinal",
+    "diagnosis": "Canal lumbar estrecho degenerativo L3-L4-L5 con claudicación neurógena",
+    "treatment": "1. Gabapentina 300 mg: 1 cápsula vía oral cada 12 horas por 30 días.\n2. Tramadol / Paracetamol 37.5/325 mg: 1 tableta cada 8 horas en caso de dolor moderado a severo.\n3. Calcio + Vitamina D3: 1 comprimido diario con el almuerzo.",
+    "instructions": "Marcha dosificada con pausas ante claudicación. Fisioterapia orientada a fortalecimiento del core abdominal y ejercicios de flexión de Williams. Reevaluación con RMN de columna lumbar."
+  },
+  {
+    "id": "postop_columna",
+    "name": "Control Post-Quirúrgico de Columna",
+    "icd10": "Z98.89",
+    "category": "Post-Operatorio",
+    "diagnosis": "Post-operatorio mediato de artrodesis / discectomía lumbar",
+    "treatment": "1. Cefadroxilo 500 mg: 1 cápsula vía oral cada 12 horas hasta completar 7 días post-alta.\n2. Ketoprofeno 100 mg: 1 cápsula vía oral cada 12 horas por 5 días.\n3. Paracetamol 1 g: 1 comprimido cada 8 horas en caso de dolor persistente.\n4. Omeprazol 20 mg: 1 cápsula antes del desayuno.",
+    "instructions": "Cuidado estricto de herida quirúrgica: curar con solución antiséptica y gasa seca cada 48 horas. No mojar la herida al ducharse. Retiro de puntos en 14 días. Uso de faja lumbosacra semirrígida al deambular."
+  },
+  {
+    "id": "fisioterapia",
+    "name": "Orden de Fisioterapia y Rehabilitación",
+    "icd10": "M54.5",
+    "category": "Rehabilitación",
+    "diagnosis": "Lumbalgia mecánica / Síndrome facetario lumbar",
+    "treatment": "Se solicita ciclo de Fisioterapia y Terapia Física (10 sesiones):\n- Termoterapia profunda (ultrasonido / diatermia lumbar).\n- TENS corriente analgésica paravertebral lumbar.\n- Masoterapia descontracturante muscular lumboglútea.\n- Ejercicios de Williams y fortalecimiento de musculatura estabilizadora del tronco (Core).",
+    "instructions": "Acudir a centro de rehabilitación 3 a 5 veces por semana. Presentar informe evolutivo del fisioterapeuta a la culminación de las 10 sesiones."
+  }
+]

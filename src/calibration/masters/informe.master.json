@@ -1,0 +1,166 @@
+{
+  "masterId": "INFORME-001",
+  "version": "2.0",
+  "documentType": "report",
+  "pageSize": { "widthMm": 153.5, "heightMm": 215.8, "format": "Media Carta Vertical" },
+  "backgroundPdf": "/templates/informe_base.pdf",
+  "pageIndex": 0,
+  "status": "CALIBRATED",
+  "lockedRegions": [
+    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 153.5, "heightMm": 37.37 },
+    { "id": "footer_brand", "xMm": 0, "yMm": 200.0, "widthMm": 153.5, "heightMm": 15.8 }
+  ],
+  "pages": [
+    {
+      "pageIndex": 0,
+      "widthMm": 153.5,
+      "heightMm": 215.8,
+      "elements": [
+        {
+          "type": "text",
+          "id": "patient.fullName",
+          "dataKey": "patient.fullName",
+          "xMm": 40.0,
+          "yMm": 40.0,
+          "widthMm": 90.0,
+          "heightMm": 5.5,
+          "fontSizePt": 9.0,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1,
+          "overflow": "shrink"
+        },
+        {
+          "type": "text",
+          "id": "patient.idNumber",
+          "dataKey": "patient.idNumber",
+          "xMm": 32.0,
+          "yMm": 49.0,
+          "widthMm": 28.0,
+          "heightMm": 5.5,
+          "fontSizePt": 9.0,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1
+        },
+        {
+          "type": "text",
+          "id": "patient.age",
+          "dataKey": "patient.age",
+          "xMm": 76.0,
+          "yMm": 49.0,
+          "widthMm": 10.0,
+          "heightMm": 5.5,
+          "fontSizePt": 9.0,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1
+        },
+        {
+          "type": "text",
+          "id": "patient.date",
+          "dataKey": "document.date",
+          "xMm": 102.0,
+          "yMm": 49.0,
+          "widthMm": 28.0,
+          "heightMm": 5.5,
+          "fontSizePt": 9.0,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 1
+        },
+        {
+          "type": "multilineText",
+          "id": "informe.bodyText",
+          "dataKey": "clinical.clinicalReport",
+          "xMm": 15.0,
+          "yMm": 62.0,
+          "widthMm": 124.0,
+          "heightMm": 125.0,
+          "fontSizePt": 9.5,
+          "lineHeightPt": 15.0,
+          "fontWeight": "normal",
+          "align": "left",
+          "maxLines": 25,
+          "overflow": "shrink"
+        },
+        {
+          "type": "stamp",
+          "id": "stamp",
+          "dataKey": "doctor_stamp_signature",
+          "xMm": 95.0,
+          "yMm": 178.0,
+          "widthMm": 43.0,
+          "heightMm": 20.0,
+          "opacity": 0.90
+        }
+      ]
+    }
+  ],
+  "editableFields": {
+    "patientHeader": {
+      "fullName": {
+        "xMm": 40.0,
+        "yMm": 40.0,
+        "widthMm": 90.0,
+        "heightMm": 5.5,
+        "fontSizePt": 9.0,
+        "fontWeight": "bold",
+        "align": "left",
+        "maxLines": 1,
+        "overflow": "shrink"
+      },
+      "idNumber": {
+        "xMm": 32.0,
+        "yMm": 49.0,
+        "widthMm": 28.0,
+        "heightMm": 5.5,
+        "fontSizePt": 9.0,
+        "fontWeight": "bold",
+        "align": "left",
+        "maxLines": 1
+      },
+      "age": {
+        "xMm": 76.0,
+        "yMm": 49.0,
+        "widthMm": 10.0,
+        "heightMm": 5.5,
+        "fontSizePt": 9.0,
+        "fontWeight": "bold",
+        "align": "left",
+        "maxLines": 1
+      },
+      "date": {
+        "xMm": 102.0,
+        "yMm": 49.0,
+        "widthMm": 28.0,
+        "heightMm": 5.5,
+        "fontSizePt": 9.0,
+        "fontWeight": "bold",
+        "align": "left",
+        "maxLines": 1
+      }
+    },
+    "body": {
+      "bodyText": {
+        "xMm": 15.0,
+        "yMm": 62.0,
+        "widthMm": 124.0,
+        "heightMm": 125.0,
+        "fontSizePt": 9.5,
+        "lineHeightPt": 15.0,
+        "fontWeight": "normal",
+        "align": "left",
+        "maxLines": 25,
+        "overflow": "shrink"
+      }
+    },
+    "doctorStamp": {
+      "xMm": 95.0,
+      "yMm": 178.0,
+      "widthMm": 43.0,
+      "heightMm": 20.0,
+      "opacity": 0.90
+    }
+  }
+}

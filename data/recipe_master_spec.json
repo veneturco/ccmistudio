@@ -1,0 +1,35 @@
+{
+  "masterId": "RECIPE-001",
+  "version": "1.0",
+  "documentType": "recipe",
+  "pageSize": { "widthMm": 210, "heightMm": 297, "format": "A4" },
+  "backgroundPdf": "/templates/recipe_base.pdf",
+  "pageIndex": 1,
+  "status": "LOCKED",
+  "lockedRegions": [
+    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 210, "heightMm": 42 },
+    { "id": "divider_center", "xMm": 103, "yMm": 42, "widthMm": 4, "heightMm": 240 },
+    { "id": "footer_brand", "xMm": 0, "yMm": 282, "widthMm": 210, "heightMm": 15 },
+    { "id": "qr_left", "xMm": 5, "yMm": 265, "widthMm": 18, "heightMm": 18 },
+    { "id": "signature_line_left", "xMm": 58, "yMm": 272, "widthMm": 40, "heightMm": 1 },
+    { "id": "signature_line_right", "xMm": 162, "yMm": 272, "widthMm": 40, "heightMm": 1 }
+  ],
+  "editableFields": {
+    "left_talon": {
+      "patientFullName": { "xMm": 25.0, "yMm": 44.5, "widthMm": 75.0, "heightMm": 6.5, "fontSizePt": 9.5, "fontWeight": "bold", "align": "left", "maxLines": 1, "overflow": "shrink" },
+      "patientId": { "xMm": 15.0, "yMm": 52.8, "widthMm": 32.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold", "align": "left", "maxLines": 1 },
+      "patientAge": { "xMm": 51.0, "yMm": 52.8, "widthMm": 18.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold", "align": "center", "maxLines": 1 },
+      "date": { "xMm": 74.0, "yMm": 52.8, "widthMm": 25.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold", "align": "center", "maxLines": 1 },
+      "rxBody": { "xMm": 10.0, "yMm": 72.0, "widthMm": 89.0, "heightMm": 172.0, "fontSizePt": 10.0, "lineHeightPt": 15.0, "align": "left", "maxLines": 25, "overflow": "shrink" },
+      "doctorStamp": { "xMm": 58.0, "yMm": 248.0, "widthMm": 38.0, "heightMm": 22.0, "opacity": 0.90 }
+    },
+    "right_talon": {
+      "patientFullName": { "xMm": 129.0, "yMm": 44.5, "widthMm": 75.0, "heightMm": 6.5, "fontSizePt": 9.5, "fontWeight": "bold", "align": "left", "maxLines": 1, "overflow": "shrink" },
+      "patientId": { "xMm": 119.0, "yMm": 52.8, "widthMm": 32.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold", "align": "left", "maxLines": 1 },
+      "patientAge": { "xMm": 155.0, "yMm": 52.8, "widthMm": 18.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold", "align": "center", "maxLines": 1 },
+      "date": { "xMm": 178.0, "yMm": 52.8, "widthMm": 25.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold", "align": "center", "maxLines": 1 },
+      "indicationsBody": { "xMm": 114.0, "yMm": 72.0, "widthMm": 89.0, "heightMm": 172.0, "fontSizePt": 10.0, "lineHeightPt": 15.0, "align": "left", "maxLines": 25, "overflow": "shrink" },
+      "doctorStamp": { "xMm": 162.0, "yMm": 248.0, "widthMm": 38.0, "heightMm": 22.0, "opacity": 0.90 }
+    }
+  }
+}

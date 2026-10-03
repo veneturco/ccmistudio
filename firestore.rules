@@ -1,0 +1,304 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Verificación de autenticación obligatoria
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    // 2. Verificación de identidad no anónima (Sesiones anónimas NO obtienen acceso clínico)
+    function isVerifiedNonAnonymous() {
+      return isAuthenticated() && 
+        (!('firebase' in request.auth.token) || request.auth.token.firebase.sign_in_provider != 'anonymous');
+    }
+
+    // 3. Verificación de autorización de Tenant
+    // Requiere identidad autenticada no anónima y pertenencia demostrada al tenant solicitado.
+    // El tenantId nunca se confía por su nombre o porque el cliente lo envíe;
+    // debe estar acreditado en las credenciales del token criptográfico o membresía verificada.
+    function isAuthorizedForTenant(tenantId) {
+      return isVerifiedNonAnonymous() && (
+        (request.auth.token.tenantId != null && request.auth.token.tenantId == tenantId) ||
+        (request.auth.token.tenant_id != null && request.auth.token.tenant_id == tenantId) ||
+        (request.auth.token.authorizedTenants != null && tenantId in request.auth.token.authorizedTenants) ||
+        (request.auth.token.authorized_tenants != null && tenantId in request.auth.token.authorized_tenants) ||
+        (
+          request.auth.token.email != null &&
+          (request.auth.token.email == 'moucharrafiepc@gmail.com' || 
+           request.auth.token.email == 'afiftauficmoucharrafie@gmail.com' || 
+           request.auth.token.email == 'lennysalcantarat@gmail.com' ||
+           request.auth.token.email == 'samnaime@gmail.com' ||
+           request.auth.token.email == 'neurochirsami@gmail.com' ||
+           request.auth.token.email == 'cerebro.columna.mi@gmail.com' ||
+           request.auth.token.email == 'neurocirujanosam@gmail.com') &&
+          tenantId == 'CCMI-DR-SAMIR'
+        ) ||
+        exists(/databases/$(database)/documents/tenants/$(tenantId)/members/$(request.auth.uid)) ||
+        (request.auth.token.email != null && exists(/databases/$(database)/documents/tenants/$(tenantId)/members/$(request.auth.token.email)))
+      );
+    }
+
+    // 4. Integridad de Escritura y Aislamiento de Tenant en el Body
+    // Evita que un payload del cliente inyecte un tenantId o patientTenantId ajeno
+    function isValidTenantData(tenantId) {
+      return (!('tenantId' in request.resource.data) || request.resource.data.tenantId == tenantId) &&
+             (!('patientTenantId' in request.resource.data) || request.resource.data.patientTenantId == tenantId);
+    }
+
+    // 5. Integridad de Identidad Médica en el Body
+    // Si el body incluye doctorUserId, no puede suplantar al médico autenticado si el token lo especifica
+    function isValidDoctorIdentity() {
+      return (!('doctorUserId' in request.resource.data) || 
+              request.auth.token.doctorUserId == null || 
+              request.resource.data.doctorUserId == request.auth.token.doctorUserId);
+    }
+
+    // 6. Aislamiento de Paciente
+    // Pacientes con prefijo de tenant foráneo (p.ej. EXT-) no pueden almacenarse en el tenant local
+    function isValidPatientBoundary(patientId) {
+      return (!('nationalId' in request.resource.data) || !request.resource.data.nationalId.matches('^EXT-.*')) &&
+             !patientId.matches('^EXT-.*');
+    }
+
+    // 7. Roles del Sistema y Acceso Administrativo/Médico (P0-4)
+    function isClinicalStaff() {
+      return request.auth != null && (
+        request.auth.token.role in ['ADMIN', 'CHIEF_MEDICAL_OFFICER', 'FACULTY_DOCTOR', 'MEDICO', 'DESARROLLADOR', 'CLINICAL_ASSISTANT', 'RECEPCION', 'SECRETARIA'] ||
+        (request.auth.token.email != null && (
+          request.auth.token.email == 'moucharrafiepc@gmail.com' || 
+          request.auth.token.email == 'afiftauficmoucharrafie@gmail.com' || 
+          request.auth.token.email == 'lennysalcantarat@gmail.com' ||
+          request.auth.token.email == 'samnaime@gmail.com' ||
+          request.auth.token.email == 'neurochirsami@gmail.com' ||
+          request.auth.token.email == 'cerebro.columna.mi@gmail.com' ||
+          request.auth.token.email == 'neurocirujanosam@gmail.com'
+        ))
+      );
+    }
+
+    function isDoctorOrStaff(targetDoctorUserId) {
+      return isClinicalStaff() && (
+        request.auth.token.role in ['ADMIN', 'CHIEF_MEDICAL_OFFICER', 'DESARROLLADOR', 'RECEPCION', 'SECRETARIA'] ||
+        request.auth.token.doctorUserId == targetDoctorUserId ||
+        request.auth.uid == targetDoctorUserId ||
+        request.auth.token.email == 'moucharrafiepc@gmail.com' ||
+        request.auth.token.email == 'afiftauficmoucharrafie@gmail.com' ||
+        request.auth.token.email == 'lennysalcantarat@gmail.com' ||
+        request.auth.token.email == 'samnaime@gmail.com' ||
+        request.auth.token.email == 'neurochirsami@gmail.com' ||
+        request.auth.token.email == 'cerebro.columna.mi@gmail.com' ||
+        request.auth.token.email == 'neurocirujanosam@gmail.com'
+      );
+    }
+
+    // 8. Privacidad de Paciente (P0-3)
+    // El paciente solo accede a sus propios registros; el personal clínico accede según su rol
+    function canAccessPatientData(targetPatientId) {
+      return isClinicalStaff() || (
+        request.auth.uid == targetPatientId ||
+        request.auth.token.patientId == targetPatientId ||
+        request.auth.token.cleanId == targetPatientId
+      );
+    }
+
+    // Health check y verificación técnica de conectividad del cliente
+    // Permite lectura pública únicamente en /test/{testId} para comprobar si Firestore responde
+    match /test/{testId} {
+      allow read: if true;
+      allow write: if isAuthorizedForTenant('CCMI-DR-SAMIR');
+    }
+
+    // Aislamiento Multi-Tenant Estricto (Dr. Samir Moucharrafie - CCMI)
+    // Se prohíbe taxativamente el acceso indiscriminado sin autenticación
+    match /tenants/{tenantId} {
+      // Acceso raíz al tenant condicionado a autenticación y autorización criptográfica
+      allow read: if isAuthorizedForTenant(tenantId);
+      allow write: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+
+      // Expediente Clínico de Pacientes (Patient360Record raíz)
+      match /patients/{patientId} {
+        allow read: if isAuthorizedForTenant(tenantId);
+        allow create, update: if isAuthorizedForTenant(tenantId) && 
+                                 isValidTenantData(tenantId) && 
+                                 isValidDoctorIdentity() && 
+                                 isValidPatientBoundary(patientId);
+        allow delete: if isAuthorizedForTenant(tenantId);
+
+        // Subcolección Física: Episodios Clínicos Longitudinales
+        match /episodes/{episodeId} {
+          allow read: if isAuthorizedForTenant(tenantId);
+          allow create, update: if isAuthorizedForTenant(tenantId) && 
+                                   isValidTenantData(tenantId) && 
+                                   isValidDoctorIdentity();
+          allow delete: if isAuthorizedForTenant(tenantId);
+        }
+
+        // Subcolección Física: Estudios de Imagen y Paraclínicos
+        match /imagingStudies/{studyId} {
+          allow read: if isAuthorizedForTenant(tenantId);
+          allow create, update: if isAuthorizedForTenant(tenantId) && 
+                                   isValidTenantData(tenantId) && 
+                                   isValidDoctorIdentity();
+          allow delete: if isAuthorizedForTenant(tenantId);
+        }
+
+        // Subcolección de Auditoría e Inmutabilidad (Append-only)
+        match /audit/{auditId} {
+          allow read: if isAuthorizedForTenant(tenantId);
+          allow create: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+          allow update, delete: if false; // Auditoría es inmutable
+        }
+
+        // Subcolecciones clínicas complementarias
+        match /{subcollection=**} {
+          allow read: if isAuthorizedForTenant(tenantId);
+          allow write: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+        }
+      }
+
+      // Miembros autorizados del tenant (control de acceso y sincronización multi-terminal)
+      match /members/{memberId} {
+        allow read: if isAuthorizedForTenant(tenantId);
+        allow write: if isAuthorizedForTenant(tenantId) && 
+                        (isClinicalStaff() || request.auth.token.email == 'moucharrafiepc@gmail.com' || request.auth.token.email == 'afiftauficmoucharrafie@gmail.com');
+      }
+
+      // Dispositivos autorizados de la clínica
+      match /devices/{deviceId} {
+        allow read, write: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+      }
+
+      // Configuraciones clínicas
+      match /settings/{docId} {
+        allow read, write: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+      }
+
+      // Papelería médica y calibración de plantillas (Fase 2)
+      match /stationery/{docId} {
+        allow read, write: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+      }
+
+      // Documentos médicos emitidos
+      match /issued_documents/{docId} {
+        allow read: if isAuthorizedForTenant(tenantId);
+        allow create: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+        allow update, delete: if false; // Documentos oficiales son inmutables tras emisión
+      }
+
+      // =========================================================================
+      // CORTEX AXIS — AGENDA CLÍNICA, CITAS Y HORARIOS (FASE 1)
+      // =========================================================================
+
+      // Citas médicas clínicas con aislamiento estricto de tenant (P0-2, P0-3, P0-4)
+      match /appointments/{appointmentId} {
+        // Lectura: Personal clínico o paciente dueño de la cita
+        allow read: if isAuthorizedForTenant(tenantId) && 
+                       (isClinicalStaff() || canAccessPatientData(resource.data.patientId));
+
+        // Creación: Personal clínico o paciente agendando para sí mismo
+        allow create: if isAuthorizedForTenant(tenantId) && 
+                         isValidTenantData(tenantId) &&
+                         request.resource.data.tenantId == tenantId &&
+                         request.resource.data.patientId != null &&
+                         request.resource.data.doctorUserId != null &&
+                         request.resource.data.date != null &&
+                         request.resource.data.startTime != null &&
+                         request.resource.data.status != null &&
+                         (isClinicalStaff() || canAccessPatientData(request.resource.data.patientId));
+
+        // Actualización: 
+        // 1. Prohibido mutar tenantId, patientId y doctorUserId
+        // 2. Personal clínico autorizado o paciente cancelando/reprogramando su propia cita
+        allow update: if isAuthorizedForTenant(tenantId) && 
+                         isValidTenantData(tenantId) &&
+                         request.resource.data.tenantId == resource.data.tenantId &&
+                         request.resource.data.patientId == resource.data.patientId &&
+                         request.resource.data.doctorUserId == resource.data.doctorUserId &&
+                         (
+                           isDoctorOrStaff(resource.data.doctorUserId) ||
+                           (canAccessPatientData(resource.data.patientId) && 
+                            request.resource.data.status in ['CANCELADA_PACIENTE', 'REPROGRAMADA'])
+                         );
+
+        // Eliminación física: Estrictamente restringida a directores o administradores
+        allow delete: if isAuthorizedForTenant(tenantId) && 
+                         (request.auth.token.role in ['ADMIN', 'CHIEF_MEDICAL_OFFICER', 'DESARROLLADOR'] ||
+                          request.auth.token.email == 'moucharrafiepc@gmail.com' ||
+                          request.auth.token.email == 'afiftauficmoucharrafie@gmail.com' ||
+                          request.auth.token.email == 'samnaime@gmail.com' ||
+                          request.auth.token.email == 'neurochirsami@gmail.com' ||
+                          request.auth.token.email == 'cerebro.columna.mi@gmail.com' ||
+                          request.auth.token.email == 'neurocirujanosam@gmail.com');
+      }
+
+      // Configuración de disponibilidad y horarios de facultativos
+      match /schedules/{scheduleConfigId} {
+        allow read: if isAuthorizedForTenant(tenantId);
+        allow create, update: if isAuthorizedForTenant(tenantId) && 
+                                 isValidTenantData(tenantId) &&
+                                 request.resource.data.tenantId == tenantId;
+        allow delete: if isAuthorizedForTenant(tenantId) && 
+                         (request.auth.token.role == 'ADMIN' || request.auth.token.role == 'CHIEF_MEDICAL_OFFICER');
+      }
+
+      // Bloqueos de agenda médica (Vacaciones, Cirugías, Congresos, Ausencias)
+      match /schedule_blocks/{blockId} {
+        allow read: if isAuthorizedForTenant(tenantId);
+        allow create, update: if isAuthorizedForTenant(tenantId) && 
+                                 isValidTenantData(tenantId) &&
+                                 request.resource.data.tenantId == tenantId;
+        allow delete: if isAuthorizedForTenant(tenantId);
+      }
+
+      // Colección de Auditoría del Tenant (Append-only e Inmutable - Bloque H)
+      match /auditEvents/{eventId} {
+        allow read: if isAuthorizedForTenant(tenantId);
+        allow create: if isAuthorizedForTenant(tenantId) && 
+                         isValidTenantData(tenantId) && 
+                         isValidDoctorIdentity();
+        allow update, delete: if false; // Auditoría es estrictamente inmutable
+      }
+
+      // =========================================================================
+      // CORTEX AXIS / CCMI — MONITOREO DE PRESENCIA DE USUARIOS EN TIEMPO REAL
+      // =========================================================================
+      match /user_presence/{presenceUserId} {
+        // Cualquier usuario clínico o técnico autorizado del tenant puede ver el estado de presencia
+        allow read: if isAuthorizedForTenant(tenantId);
+        // Cada usuario actualiza su propio registro de presencia o latido
+        allow create, update: if isAuthorizedForTenant(tenantId) && isValidTenantData(tenantId);
+        // Permite limpieza al cerrar sesión o por personal clínico
+        allow delete: if isAuthorizedForTenant(tenantId) && isClinicalStaff();
+      }
+
+      // =========================================================================
+      // CORTEX AXIS / CCMI — SINCRONIZACIÓN DE CALIBRACIONES Y AJUSTES EN NUBE
+      // =========================================================================
+      match /settings/{settingId} {
+        // Cualquier facultativo o personal autorizado del tenant puede leer las calibraciones
+        allow read: if isAuthorizedForTenant(tenantId);
+        // Permite guardar la matriz de calibración milimétrica en la nube Firestore
+        allow create, update: if isAuthorizedForTenant(tenantId);
+        allow delete: if isAuthorizedForTenant(tenantId) && isClinicalStaff();
+      }
+
+      // Papelería médica y plantillas oficiales del tenant
+      match /stationery/{docType} {
+        allow read: if isAuthorizedForTenant(tenantId);
+        allow create, update: if isAuthorizedForTenant(tenantId);
+        allow delete: if isAuthorizedForTenant(tenantId) && isClinicalStaff();
+      }
+    }
+
+    // Healthcheck de conectividad conforme al estándar de Firebase Skill
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Bloqueo estricto por defecto para cualquier otra colección raíz
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "patient.fullName": { "top": 120, "left": 60, "width": 320, "height": 30, "label": "Nombre" },
+  "patient.idNumber": { "top": 155, "left": 60, "width": 140, "height": 30, "label": "C.I." },
+  "patient.age": { "top": 155, "left": 250, "width": 130, "height": 30, "label": "Edad" },
+  "patient.date": { "top": 190, "left": 60, "width": 320, "height": 30, "label": "Fecha" },
+  "recipe.rxLeft": { "top": 240, "left": 60, "width": 320, "height": 850, "label": "Rp" },
+  "patient.fullNameRight": { "top": 120, "left": 415, "width": 320, "height": 30, "label": "Nombre" },
+  "patient.idNumberRight": { "top": 155, "left": 415, "width": 140, "height": 30, "label": "C.I." },
+  "patient.ageRight": { "top": 155, "left": 605, "width": 130, "height": 30, "label": "Edad" },
+  "patient.dateRight": { "top": 190, "left": 415, "width": 320, "height": 30, "label": "Fecha" },
+  "recipe.indicationsRight": { "top": 240, "left": 415, "width": 320, "height": 850, "label": "Indicaciones" }
+}

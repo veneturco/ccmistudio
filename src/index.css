@@ -1,0 +1,241 @@
+@import "tailwindcss";
+
+/* ========================================================================= */
+/* JERARQUÍA TIPOGRÁFICA UNIFICADA Y VARIABLES GLOBALES (:root)             */
+/* ========================================================================= */
+:root {
+  /* Familias Tipográficas */
+  --font-clinical-base: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-clinical-calligraphic: 'Dancing Script', cursive, serif;
+
+  /* Escala de Pesos para Lectura Clínica */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Colores de Contraste Tipográfico Clínico (WCAG AA/AAA) */
+  --text-clinical-primary: #0f172a;       /* Slate 900: Máximo contraste sobre fondos claros */
+  --text-clinical-secondary: #334155;     /* Slate 700: Subtítulos y descripciones legibles */
+  --text-clinical-muted: #64748b;         /* Slate 500: Metadatos y etiquetas secundarias */
+  --text-clinical-inverse: #f8fafc;       /* Slate 50: Texto sobre fondos oscuros o de acción */
+  --text-calligraphic-signature: #0c4a6e; /* Sky 900: Firma médica institucional con contraste */
+}
+
+/* Clases de Utilidad Tipográfica */
+.font-clinical {
+  font-family: var(--font-clinical-base);
+}
+
+.font-signature {
+  font-family: var(--font-clinical-calligraphic);
+}
+
+/* Typography & Smooth Rendering */
+html {
+  font-family: var(--font-clinical-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Mobile optimization & smooth scrolling */
+html, body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+  background-color: #060b16;
+  color: #f8fafc;
+}
+
+/* Safe area padding for mobile notches and home indicators */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+/* Subtle executive medical grid backdrop (Dark Stitch style) */
+.bg-medical-grid {
+  background-color: #060b16;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 0.75px, transparent 0.75px), radial-gradient(rgba(6, 182, 212, 0.08) 0.75px, #060b16 0.75px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+/* ========================================================================= */
+/* TEMA 'CLINICAL LIGHT' DE ALTO CONTRASTE (Jornada Diurna)                  */
+/* ========================================================================= */
+.theme-clinical-light {
+  color-scheme: light;
+}
+
+.theme-clinical-light body {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.theme-clinical-light .bg-medical-grid {
+  background-color: #f8fafc;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 0.75px, transparent 0.75px), radial-gradient(rgba(2, 132, 199, 0.08) 0.75px, #f8fafc 0.75px);
+}
+
+/* Modo de Contraste Reforzado */
+.clinical-high-contrast {
+  --text-clinical-primary: #000000;
+  --text-clinical-secondary: #0f172a;
+}
+
+.clinical-high-contrast input,
+.clinical-high-contrast textarea,
+.clinical-high-contrast select {
+  font-weight: 700 !important;
+}
+
+/* Modo de Fuente Ampliada */
+.clinical-font-large {
+  font-size: 104%;
+}
+
+/* Calming Subtle Breathe Animation for Clinical Voice & AI states */
+@keyframes calm-breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.animate-calm-breathe {
+  animation: calm-breathe 3s ease-in-out infinite;
+}
+
+/* ========================================================================= */
+/* ANIMACIONES CLÍNICAS DE ENTRADA SUAVE (FADE-IN & STAGGER TRANSLATE)       */
+/* ========================================================================= */
+@keyframes clinical-fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes clinical-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-clinical-fade-in {
+  animation: clinical-fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-clinical-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: clinical-shimmer 2s infinite;
+}
+
+.clinical-shimmer-light {
+  background: linear-gradient(90deg, rgba(226,232,240,0.4) 25%, rgba(241,245,249,0.9) 50%, rgba(226,232,240,0.4) 75%);
+  background-size: 200% 100%;
+  animation: clinical-shimmer 2s infinite;
+}
+
+/* Refined Card Hover Effects */
+.card-hover-elevated {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover-elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+/* Custom Refined Medical Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Hide app shell, sidebar, and non-printable elements */
+  #socs-sidebar,
+  header,
+  #btn-print-doc,
+  #btn-close-modal,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  #document-preview-modal-overlay {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  #document-preview-modal-card {
+    box-shadow: none !important;
+    border: none !important;
+    max-height: none !important;
+  }
+
+  #printable-medical-sheet,
+  #official-doc-print-area,
+  #recipe-official-sheet,
+  #constancia-official-content,
+  #informe-official-sheet,
+  #historia-official-sheet,
+  #lab-order-official-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: 210mm !important;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  img,
+  img[src*="templates"],
+  .master-bg-layer {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0mm;
+  }
+}

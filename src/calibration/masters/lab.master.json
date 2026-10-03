@@ -1,0 +1,2411 @@
+{
+  "masterId": "ORDEN_LAB-001",
+  "version": "9.0",
+  "documentType": "lab_order",
+  "status": "CALIBRATED",
+  "source": {
+    "backgroundPdf": "/templates/orden_lab_base.pdf",
+    "pageCount": 2,
+    "dimensionsMm": {
+      "width": 153.5,
+      "height": 215.8
+    }
+  },
+  "coordinateSystem": {
+    "unit": "mm",
+    "origin": "top-left",
+    "yAxis": "down"
+  },
+  "pageSize": {
+    "widthMm": 153.5,
+    "heightMm": 215.8,
+    "format": "MEDIA_CARTA"
+  },
+  "backgroundPdf": "/templates/orden_lab_base.pdf",
+  "pages": [
+    {
+      "pageIndex": 0,
+      "widthMm": 153.5,
+      "heightMm": 215.8,
+      "backgroundPdfPage": 0,
+      "elements": [
+        {
+          "id": "patient.fullName",
+          "pageIndex": 0,
+          "dataKey": "patient.fullName",
+          "type": "text",
+          "geometry": {
+            "xMm": 39.5,
+            "yMm": 39,
+            "widthMm": 102,
+            "heightMm": 5
+          },
+          "typography": {
+            "fontSizePt": 9.5,
+            "fontWeight": "bold",
+            "align": "center"
+          },
+          "xMm": 39.5,
+          "yMm": 39,
+          "widthMm": 102,
+          "heightMm": 5,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "center",
+          "overflow": "shrink"
+        },
+        {
+          "id": "patient.idNumber",
+          "pageIndex": 0,
+          "dataKey": "patient.idNumber",
+          "type": "text",
+          "geometry": {
+            "xMm": 25,
+            "yMm": 48.5,
+            "widthMm": 36,
+            "heightMm": 4.5
+          },
+          "typography": {
+            "fontSizePt": 9,
+            "fontWeight": "bold",
+            "align": "center"
+          },
+          "xMm": 25,
+          "yMm": 48.5,
+          "widthMm": 36,
+          "heightMm": 4.5,
+          "fontSizePt": 9,
+          "fontWeight": "bold",
+          "align": "center",
+          "overflow": "shrink"
+        },
+        {
+          "id": "patient.age",
+          "pageIndex": 0,
+          "dataKey": "patient.age",
+          "type": "text",
+          "geometry": {
+            "xMm": 76.5,
+            "yMm": 48.5,
+            "widthMm": 11.5,
+            "heightMm": 5
+          },
+          "typography": {
+            "fontSizePt": 8.5,
+            "fontWeight": "bold",
+            "align": "center"
+          },
+          "xMm": 76.5,
+          "yMm": 48.5,
+          "widthMm": 11.5,
+          "heightMm": 5,
+          "fontSizePt": 8.5,
+          "fontWeight": "bold",
+          "align": "center",
+          "overflow": "shrink"
+        },
+        {
+          "id": "patient.date",
+          "pageIndex": 0,
+          "dataKey": "document.date",
+          "type": "text",
+          "geometry": {
+            "xMm": 103,
+            "yMm": 48.5,
+            "widthMm": 34,
+            "heightMm": 5
+          },
+          "typography": {
+            "fontSizePt": 9,
+            "fontWeight": "bold",
+            "align": "center"
+          },
+          "xMm": 103,
+          "yMm": 48.5,
+          "widthMm": 34,
+          "heightMm": 5,
+          "fontSizePt": 9,
+          "fontWeight": "bold",
+          "align": "center",
+          "overflow": "shrink"
+        },
+        {
+          "id": "cb_hema",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hematologia_completa",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 62.17,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 62.17,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_plaq",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.plaquetas",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 65.3,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 65.3,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_retic",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.reticulocitos",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 68.83,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 68.83,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_vsg",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.vsg",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 71.96,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 71.96,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_eosin",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.eosinofilos",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 74.69,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 74.69,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_rh",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.grupo_rh",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 78.02,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 78.02,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_frotis",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.frotis",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 81.15,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 81.15,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_pt",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.pt",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 89.5,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 89.5,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ptt",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ptt",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 92.63,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 92.63,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_tsangria",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.tiempo_sangria",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 95.76,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 95.76,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_tretrac",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.tiempo_retraccion",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 99.1,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 99.1,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_fibrin",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.fibrinogeno",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 102.37,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 102.37,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_dimerod",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.dimero_d",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 11,
+            "yMm": 105.5,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 11,
+          "yMm": 105.5,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_glicemia",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.glicemia",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 113.33,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 113.33,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_glicemia_post",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.glicemia_post",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 116.46,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 116.46,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_curva_tol",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.curva_tolerancia",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 11,
+            "yMm": 119.3,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 11,
+          "yMm": 119.3,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_urea",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.urea",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 124.49,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 124.49,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_creatinina",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.creatinina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 127.62,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 127.62,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_acido_urico",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.acido_urico",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 130.75,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 130.75,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_colest",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.colesterol",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 134.28,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 134.28,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hdl",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hdl",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 137.41,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 137.41,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ldl",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ldl",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 140.67,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 140.67,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_trigli",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.trigliceridos",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 143.8,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 143.8,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_tgo",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.tgo",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 146.93,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 146.93,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_tgp",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.tgp",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 11,
+            "yMm": 150.1,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 11,
+          "yMm": 150.1,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ggt",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ggt",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 153.06,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 153.06,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_fosf_alc",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.fosfatasa_alcalina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 156.19,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 156.19,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ldh",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ldh",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 159.32,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 159.32,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_lipasa",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.lipasa",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 162.45,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 162.45,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_amilasa",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.amilasa",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 165.72,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 165.72,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_bilirrubina",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.bilirrubina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 168.71,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 168.71,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_calcio",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.calcio",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 171.84,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 171.84,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_fosforo",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.fosforo",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 174.98,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 174.98,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_magnesio",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.magnesio",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 178.11,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 178.11,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_sodio",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.sodio",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 11,
+            "yMm": 181.1,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 11,
+          "yMm": 181.1,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_potasio",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.potasio",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 184.56,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 184.56,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_cloro",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.cloro",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 187.57,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 187.57,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hierro",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hierro",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 10.94,
+            "yMm": 190.69,
+            "widthMm": 3.45,
+            "heightMm": 2
+          },
+          "xMm": 10.94,
+          "yMm": 190.69,
+          "widthMm": 3.45,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_tropo",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.troponina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.15,
+            "yMm": 62.39,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.15,
+          "yMm": 62.39,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ck",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ck",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.3,
+            "yMm": 65.3,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.3,
+          "yMm": 65.3,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ckmb",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ck_mb",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.15,
+            "yMm": 68.74,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.15,
+          "yMm": 68.74,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_pcr",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.pcr",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.07,
+            "yMm": 75.77,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.07,
+          "yMm": 75.77,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hcg",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.embarazo",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.07,
+            "yMm": 79.3,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.07,
+          "yMm": 79.3,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_vdrl",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.vdrl",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.07,
+            "yMm": 82.43,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.07,
+          "yMm": 82.43,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hiv",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hiv",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.07,
+            "yMm": 85.56,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.07,
+          "yMm": 85.56,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_asto",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.asto",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.07,
+            "yMm": 88.69,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.07,
+          "yMm": 88.69,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ratest",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ra_test",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.07,
+            "yMm": 92.02,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.07,
+          "yMm": 92.02,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_monotest",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.mono_test",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62.07,
+            "yMm": 94.79,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62.07,
+          "yMm": 94.79,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_fta",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.fta",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.8,
+            "yMm": 103.4,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.8,
+          "yMm": 103.4,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_cortisol",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.cortisol",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 106.66,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 106.66,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_lh",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.lh",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 109.8,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 109.8,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_fsh",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.fsh",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 112.93,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 112.93,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_prolactina",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.prolactina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 115.98,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 115.98,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_estradiol",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.estradiol",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.8,
+            "yMm": 118.9,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.8,
+          "yMm": 118.9,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_progesterona",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.progesterona",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62,
+            "yMm": 122.1,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62,
+          "yMm": 122.1,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_t3",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.t3",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 125.58,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 125.58,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_t4",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.t4",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 128.71,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 128.71,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_tsh",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.tsh",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 132.1,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 132.1,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_testosterona",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.testosterona",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 135.23,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 135.23,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_dhea",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.dhea_so4",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 138.36,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 138.36,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_cea",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.cea",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 141.49,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 141.49,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ca125",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ca125",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 144.63,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 144.63,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ca19_9",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ca19_9",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 147.89,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 147.89,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ca15_3",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ca15_3",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 150.89,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 150.89,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ca72_4",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ca72_4",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 154.28,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 154.28,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_curva_insul",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.curva_insulina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62,
+            "yMm": 157.6,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62,
+          "yMm": 157.6,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_citomegalo",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.citomegalovirus",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.87,
+            "yMm": 160.81,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.87,
+          "yMm": 160.81,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_epstein",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.epstein_barr",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.8,
+            "yMm": 163.9,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.8,
+          "yMm": 163.9,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_dengue",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.dengue",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62,
+            "yMm": 167.1,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62,
+          "yMm": 167.1,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_insul_basal",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.insulina_basal",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.8,
+            "yMm": 170.4,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.8,
+          "yMm": 170.4,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_insul_post",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.insulina_post",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.9,
+            "yMm": 173.59,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.9,
+          "yMm": 173.59,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hba1c",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hb_glicosilada",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.9,
+            "yMm": 176.72,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.9,
+          "yMm": 176.72,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_betahcg",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.beta_hcg",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.95,
+            "yMm": 179.87,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.95,
+          "yMm": 179.87,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_procalcit",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.procalcitonina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.9,
+            "yMm": 182.94,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.9,
+          "yMm": 182.94,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ferritina",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ferritina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 62,
+            "yMm": 186.1,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 62,
+          "yMm": 186.1,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_covid",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.covid",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 61.9,
+            "yMm": 189.27,
+            "widthMm": 3.27,
+            "heightMm": 2
+          },
+          "xMm": 61.9,
+          "yMm": 189.27,
+          "widthMm": 3.27,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hpylori",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.helicobacter",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 61.42,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 61.42,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hpylori_igg",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.helicobacter_igg",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 64.19,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 64.19,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hepa",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hepatitis_a",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.5,
+            "yMm": 67.1,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.5,
+          "yMm": 67.1,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hepb_sup",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hepatitis_b_sup",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 70.39,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 70.39,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hepb_core",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hepatitis_b_core",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 73.52,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 73.52,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_hepc",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.hepatitis_c",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 76.65,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 76.65,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_psa",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.psa",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 80.11,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 80.11,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_toxo",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.toxoplasma",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 83.24,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 83.24,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ige",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.ige",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 86.37,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 86.37,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_valproico",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.valproico",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 89.5,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 89.5,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_fenobarb",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.fenobarbital",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 92.58,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 92.58,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_carbamazepina",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.carbamazepina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.5,
+            "yMm": 95.6,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.5,
+          "yMm": 95.6,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_cocaina",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.cocaina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 98.84,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 98.84,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_canabino",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.canabinoides",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.68,
+            "yMm": 101.97,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.68,
+          "yMm": 101.97,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_orina",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.orina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 110.12,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 110.12,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_elec_ur",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.electrolitos_urinarios",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 113.25,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 113.25,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_ca_cr",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.calcio_creatinina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 116.38,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 116.38,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_p_cr",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.fosforo_creatinina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 119.51,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 119.51,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_au_cr",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.acido_urico_creatinina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 122.64,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 122.64,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_reab_fosf",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.reabsorcion_fosforo",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 106,
+            "yMm": 125.6,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 106,
+          "yMm": 125.6,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_depur_cr",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.depuracion_creatinina",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 128.99,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 128.99,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_prot_24",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.proteinuria_24h",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 132.22,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 132.22,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_heces",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.heces",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 140.13,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 140.13,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_leugrama",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.leugrama",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.5,
+            "yMm": 143.1,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.5,
+          "yMm": 143.1,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_sudan",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.sudan_iii",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.73,
+            "yMm": 146.26,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.73,
+          "yMm": 146.26,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_azucares",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.azucares_reductores",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.72,
+            "yMm": 149.3,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.72,
+          "yMm": 149.3,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_sangre_oc",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.sangre_oculta",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.72,
+            "yMm": 152.43,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.72,
+          "yMm": 152.43,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_urocultivo",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.urocultivo",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 164.33,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 164.33,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "cb_cultivo_ab",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.cultivo_antibiograma",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.7,
+            "yMm": 167.33,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.7,
+          "yMm": 167.33,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "de_texto",
+          "pageIndex": 0,
+          "dataKey": "clinical.de_texto",
+          "type": "text",
+          "geometry": {
+            "xMm": 114,
+            "yMm": 172,
+            "widthMm": 28,
+            "heightMm": 3.5
+          },
+          "typography": {
+            "fontSizePt": 7,
+            "fontWeight": "bold",
+            "align": "left"
+          },
+          "xMm": 114,
+          "yMm": 172,
+          "widthMm": 28,
+          "heightMm": 3.5,
+          "fontSizePt": 7,
+          "fontWeight": "bold",
+          "align": "left",
+          "overflow": "shrink"
+        },
+        {
+          "id": "cb_bk",
+          "pageIndex": 0,
+          "dataKey": "clinical.cb.bk",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 105.72,
+            "yMm": 173.2,
+            "widthMm": 3.5,
+            "heightMm": 2
+          },
+          "xMm": 105.72,
+          "yMm": 173.2,
+          "widthMm": 3.5,
+          "heightMm": 2,
+          "markStyle": "X",
+          "fontSizePt": 7.5,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "otrosEstudiosTexto",
+          "pageIndex": 0,
+          "dataKey": "clinical.otrosEstudiosTexto",
+          "type": "multilineText",
+          "geometry": {
+            "xMm": 109,
+            "yMm": 182,
+            "widthMm": 35,
+            "heightMm": 13.5
+          },
+          "typography": {
+            "fontSizePt": 7.5,
+            "fontWeight": "normal",
+            "align": "left",
+            "lineHeightPt": 9.8
+          },
+          "xMm": 109,
+          "yMm": 182,
+          "widthMm": 35,
+          "heightMm": 13.5,
+          "fontSizePt": 7.5,
+          "lineHeightPt": 9.8,
+          "fontWeight": "normal",
+          "maxLines": 3,
+          "overflow": "shrink"
+        }
+      ]
+    },
+    {
+      "pageIndex": 1,
+      "widthMm": 153.5,
+      "heightMm": 215.8,
+      "backgroundPdfPage": 1,
+      "elements": [
+        {
+          "id": "orden_p2.patientName",
+          "pageIndex": 1,
+          "dataKey": "patient.fullName",
+          "type": "text",
+          "geometry": {
+            "xMm": 41.5,
+            "yMm": 37.5,
+            "widthMm": 98.0,
+            "heightMm": 5.5
+          },
+          "typography": {
+            "fontSizePt": 9.5,
+            "fontWeight": "bold",
+            "align": "left"
+          },
+          "xMm": 41.5,
+          "yMm": 37.5,
+          "widthMm": 98.0,
+          "heightMm": 5.5,
+          "fontSizePt": 9.5,
+          "fontWeight": "bold",
+          "align": "left",
+          "overflow": "shrink"
+        },
+        {
+          "id": "orden_p2.diagnosis",
+          "pageIndex": 1,
+          "dataKey": "clinical.diagnosisPrincipal",
+          "type": "multilineText",
+          "geometry": {
+            "xMm": 16.0,
+            "yMm": 52.0,
+            "widthMm": 122.0,
+            "heightMm": 22.0
+          },
+          "typography": {
+            "fontSizePt": 9.0,
+            "fontWeight": "normal",
+            "align": "left",
+            "lineHeightPt": 19.0
+          },
+          "xMm": 16.0,
+          "yMm": 52.0,
+          "widthMm": 122.0,
+          "heightMm": 22.0,
+          "fontSizePt": 9.0,
+          "lineHeightPt": 19.0,
+          "fontWeight": "normal",
+          "maxLines": 3,
+          "overflow": "shrink"
+        },
+        {
+          "id": "orden_p2.radiologia",
+          "pageIndex": 1,
+          "dataKey": "clinical.checkbox.radiologia",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 19.1,
+            "yMm": 81.8,
+            "widthMm": 8.8,
+            "heightMm": 8.6
+          },
+          "xMm": 19.1,
+          "yMm": 81.8,
+          "widthMm": 8.8,
+          "heightMm": 8.6,
+          "markStyle": "X",
+          "fontSizePt": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "orden_p2.tac_cerebral",
+          "pageIndex": 1,
+          "dataKey": "clinical.checkbox.tac",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 19.1,
+            "yMm": 96.6,
+            "widthMm": 8.8,
+            "heightMm": 8.6
+          },
+          "xMm": 19.1,
+          "yMm": 96.6,
+          "widthMm": 8.8,
+          "heightMm": 8.6,
+          "markStyle": "X",
+          "fontSizePt": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "orden_p2.rmn",
+          "pageIndex": 1,
+          "dataKey": "clinical.checkbox.rmn",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 19.1,
+            "yMm": 111.4,
+            "widthMm": 8.8,
+            "heightMm": 8.6
+          },
+          "xMm": 19.1,
+          "yMm": 111.4,
+          "widthMm": 8.8,
+          "heightMm": 8.6,
+          "markStyle": "X",
+          "fontSizePt": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "orden_p2.eeg",
+          "pageIndex": 1,
+          "dataKey": "clinical.checkbox.eeg",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 19.1,
+            "yMm": 126.4,
+            "widthMm": 8.8,
+            "heightMm": 8.6
+          },
+          "xMm": 19.1,
+          "yMm": 126.4,
+          "widthMm": 8.8,
+          "heightMm": 8.6,
+          "markStyle": "X",
+          "fontSizePt": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "orden_p2.emg",
+          "pageIndex": 1,
+          "dataKey": "clinical.checkbox.emg",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 19.1,
+            "yMm": 141.2,
+            "widthMm": 8.8,
+            "heightMm": 8.6
+          },
+          "xMm": 19.1,
+          "yMm": 141.2,
+          "widthMm": 8.8,
+          "heightMm": 8.6,
+          "markStyle": "X",
+          "fontSizePt": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "orden_p2.pess",
+          "pageIndex": 1,
+          "dataKey": "clinical.checkbox.pess",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 19.1,
+            "yMm": 156.2,
+            "widthMm": 8.8,
+            "heightMm": 8.6
+          },
+          "xMm": 19.1,
+          "yMm": 156.2,
+          "widthMm": 8.8,
+          "heightMm": 8.6,
+          "markStyle": "X",
+          "fontSizePt": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "orden_p2.valoracion",
+          "pageIndex": 1,
+          "dataKey": "clinical.checkbox.valoracion",
+          "type": "checkbox",
+          "geometry": {
+            "xMm": 19.1,
+            "yMm": 171.0,
+            "widthMm": 8.8,
+            "heightMm": 8.6
+          },
+          "xMm": 19.1,
+          "yMm": 171.0,
+          "widthMm": 8.8,
+          "heightMm": 8.6,
+          "markStyle": "X",
+          "fontSizePt": 11,
+          "fontWeight": "bold"
+        },
+        {
+          "id": "orden_p2.doctor_stamp",
+          "pageIndex": 1,
+          "type": "stamp",
+          "assetKey": "doctor_stamp_signature",
+          "opacity": 0.92,
+          "geometry": {
+            "xMm": 55,
+            "yMm": 175,
+            "widthMm": 44,
+            "heightMm": 24
+          },
+          "xMm": 55,
+          "yMm": 175,
+          "widthMm": 44,
+          "heightMm": 24
+        }
+      ]
+    }
+  ]
+}

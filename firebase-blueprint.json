@@ -1,0 +1,269 @@
+{
+  "entities": {
+    "Patient": {
+      "title": "Patient",
+      "description": "Ficha médica y estado documental del paciente del Dr. Samir Moucharrafie (CCMI)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Identificador único de la ficha" },
+        "nationalId": { "type": "string", "description": "Cédula de identidad formateada" },
+        "cleanId": { "type": "string", "description": "Cédula limpia solo dígitos" },
+        "fullName": { "type": "string", "description": "Nombre completo del paciente" },
+        "age": { "type": "string", "description": "Edad" },
+        "phone": { "type": "string", "description": "Teléfono o WhatsApp" },
+        "address": { "type": "string", "description": "Dirección residencial" },
+        "lastConsultationDate": { "type": "string", "description": "Fecha de última consulta" },
+        "lastDiagnosis": { "type": "string", "description": "Último diagnóstico emitido" },
+        "documentStates": { "type": "object", "description": "Estado de los 5 documentos clínicos oficiales" },
+        "auditLog": { "type": "array", "description": "Historial de modificaciones del paciente" },
+        "updatedAt": { "type": "string", "description": "Marca de tiempo ISO de última modificación" },
+        "createdAt": { "type": "string", "description": "Marca de tiempo ISO de creación" },
+        "deviceId": { "type": "string", "description": "ID del dispositivo emisor" },
+        "biologicalProfile": { "type": "object", "description": "Perfil biológico (grupo sanguíneo, alergias, comorbilidades, cirugías)" },
+        "episodes": { "type": "array", "description": "Historial de episodios y consultas clínicas longitudinales" },
+        "studies": { "type": "array", "description": "Estudios de neuroimagen y paraclínicos" },
+        "activeMedications": { "type": "array", "description": "Fármacos activos del paciente" },
+        "version": { "type": "number", "description": "Número de versión incremental de la historia" },
+        "isArchived": { "type": "boolean", "description": "Flag de borrado no destructivo / archivado clínico" },
+        "archivedAt": { "type": "string", "description": "Fecha y hora de archivado" }
+      },
+      "required": ["id", "nationalId", "fullName", "updatedAt"]
+    },
+    "ClinicalEpisode": {
+      "title": "ClinicalEpisode",
+      "description": "Episodio clínico longitudinal con anamnesis, examen físico, diagnósticos CIE, prescripciones y grabaciones",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID del episodio" },
+        "timestamp": { "type": "string", "description": "Timestamp ISO 8601" },
+        "type": { "type": "string", "description": "Tipo de episodio (CONSULTA_INICIAL, CONTROL_POSTOP, EVOLUCION, PROCEDIMIENTO_QUIRURGICO, EMERGENCIA)" },
+        "reasonForVisit": { "type": "string", "description": "Motivo de consulta" },
+        "anamnesis": { "type": "string", "description": "Enfermedad actual detallada" },
+        "physicalExam": { "type": "object", "description": "Examen neurológico y escala EVA" },
+        "diagnoses": { "type": "array", "description": "Diagnósticos con código CIE y flag isPrimary" },
+        "prescriptions": { "type": "array", "description": "Prescripciones farmacológicas con posología y estado" },
+        "orderedStudies": { "type": "array", "description": "Estudios solicitados" },
+        "documentIdsIssued": { "type": "array", "description": "IDs de documentos emitidos vinculados" },
+        "audioRecordings": { "type": "array", "description": "Grabaciones y transcripciones de dictado" },
+        "authorDoctor": { "type": "string", "description": "Médico autor" }
+      },
+      "required": ["id", "timestamp", "type", "reasonForVisit", "authorDoctor"]
+    },
+    "ImagingStudy": {
+      "title": "ImagingStudy",
+      "description": "Estudios radiológicos de columna/cráneo y paraclínicos",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID del estudio" },
+        "date": { "type": "string", "description": "Fecha del estudio" },
+        "type": { "type": "string", "description": "Modalidad (RMN_LUMBAR, RMN_CERVICAL, etc.)" },
+        "institution": { "type": "string", "description": "Centro radiológico / laboratorio" },
+        "reportSummary": { "type": "string", "description": "Informe del radiólogo o especialista" },
+        "keyFindings": { "type": "array", "description": "Hallazgos principales por nivel vertebral" },
+        "attachments": { "type": "array", "description": "Archivos o imágenes adjuntas" }
+      },
+      "required": ["id", "date", "type", "reportSummary"]
+    },
+    "Device": {
+      "title": "Device",
+      "description": "Dispositivo autorizado para emisión clínica (Teléfono, PC, Laptop)",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID del dispositivo" },
+        "name": { "type": "string", "description": "Nombre descriptivo del dispositivo" },
+        "platform": { "type": "string", "description": "Plataforma (mobile, desktop, tablet)" },
+        "lastActive": { "type": "string", "description": "Última actividad" },
+        "registeredAt": { "type": "string", "description": "Fecha de registro" }
+      },
+      "required": ["id", "name", "lastActive"]
+    },
+    "IssuedDocument": {
+      "title": "IssuedDocument",
+      "description": "Registro de documentos PDF emitidos y compartidos",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID del documento" },
+        "patientId": { "type": "string", "description": "ID o Cédula del paciente" },
+        "docType": { "type": "string", "description": "Tipo de documento (RECIPES, LABS, etc.)" },
+        "fileName": { "type": "string", "description": "Nombre del archivo PDF" },
+        "publicToken": { "type": "string", "description": "Token de enlace seguro 72h" },
+        "issuedAt": { "type": "string", "description": "Fecha y hora de emisión" },
+        "deviceId": { "type": "string", "description": "Dispositivo emisor" }
+      },
+      "required": ["id", "patientId", "docType", "issuedAt"]
+    },
+    "ClinicalAppointment": {
+      "title": "ClinicalAppointment",
+      "description": "Cita médica clínica multi-tenant con máquina de estados, control de asistencia y trazabilidad",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID único de la cita (UUID)" },
+        "tenantId": { "type": "string", "description": "Tenant institucional (ej. CCMI-DR-SAMIR)" },
+        "doctorUserId": { "type": "string", "description": "ID del facultativo asignado" },
+        "doctorName": { "type": "string", "description": "Nombre del médico" },
+        "specialty": { "type": "string", "description": "Especialidad médica" },
+        "patientId": { "type": "string", "description": "ID canónico del paciente (Cédula/cleanId)" },
+        "patientFullName": { "type": "string", "description": "Nombre completo del paciente" },
+        "patientPhone": { "type": "string", "description": "Teléfono de contacto" },
+        "patientEmail": { "type": "string", "description": "Correo electrónico del paciente" },
+        "patientNationalId": { "type": "string", "description": "Cédula formateada" },
+        "date": { "type": "string", "description": "Fecha de la cita YYYY-MM-DD" },
+        "startTime": { "type": "string", "description": "Hora de inicio HH:mm" },
+        "endTime": { "type": "string", "description": "Hora de culminación HH:mm" },
+        "durationMinutes": { "type": "number", "description": "Duración en minutos" },
+        "timezone": { "type": "string", "description": "Zona horaria" },
+        "modality": { "type": "string", "description": "Modalidad (PRESENCIAL, TELEMEDICINA, DOMICILIARIA)" },
+        "appointmentType": { "type": "string", "description": "Tipo de consulta clínica" },
+        "reasonForVisit": { "type": "string", "description": "Motivo manifestado" },
+        "origin": { "type": "string", "description": "Canal de origen de la reserva" },
+        "status": { "type": "string", "description": "Estado del ciclo de vida de la cita" },
+        "stateHistory": { "type": "array", "description": "Historial inmutable de transiciones de estado" },
+        "clinicalEpisodeId": { "type": "string", "description": "Enlace a episodio clínico generado" },
+        "createdAt": { "type": "string", "description": "Timestamp ISO 8601 de creación" },
+        "updatedAt": { "type": "string", "description": "Timestamp ISO 8601 de actualización" },
+        "version": { "type": "number", "description": "Versión para concurrencia optimista" }
+      },
+      "required": ["id", "tenantId", "doctorUserId", "patientId", "date", "startTime", "endTime", "status", "modality"]
+    },
+    "DoctorScheduleConfig": {
+      "title": "DoctorScheduleConfig",
+      "description": "Configuración de horarios de atención, modalidades y duración de slots por especialista",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID de la configuración de agenda" },
+        "tenantId": { "type": "string", "description": "Tenant institucional" },
+        "doctorUserId": { "type": "string", "description": "ID del médico" },
+        "doctorName": { "type": "string", "description": "Nombre del médico" },
+        "specialtyId": { "type": "string", "description": "Especialidad médica" },
+        "isActive": { "type": "boolean", "description": "Flag de disponibilidad activa" },
+        "timeSlotIntervalMinutes": { "type": "number", "description": "Intervalo estándar por turno" },
+        "workingDays": { "type": "array", "description": "Días de la semana y rangos de atención" },
+        "allowedModalities": { "type": "array", "description": "Modalidades autorizadas" },
+        "allowedAppointmentTypes": { "type": "array", "description": "Tipos de cita autorizados" },
+        "telemedicineEnabled": { "type": "boolean", "description": "Flag de telemedicina" },
+        "advanceBookingDaysMax": { "type": "number", "description": "Antelación máxima en días" },
+        "minCancelHoursNotice": { "type": "number", "description": "Horas mínimas de preaviso para cancelación" },
+        "updatedAt": { "type": "string", "description": "Timestamp ISO 8601 de actualización" }
+      },
+      "required": ["id", "tenantId", "doctorUserId", "workingDays", "timeSlotIntervalMinutes"]
+    },
+    "ScheduleBlock": {
+      "title": "ScheduleBlock",
+      "description": "Bloqueo de agenda médica por vacaciones, congresos, cirugías o ausencias",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "ID único del bloqueo" },
+        "tenantId": { "type": "string", "description": "Tenant institucional" },
+        "doctorUserId": { "type": "string", "description": "Médico afectado" },
+        "title": { "type": "string", "description": "Motivo del bloqueo" },
+        "blockType": { "type": "string", "description": "Tipo de bloqueo" },
+        "startDate": { "type": "string", "description": "Fecha inicial YYYY-MM-DD" },
+        "startTime": { "type": "string", "description": "Hora inicial HH:mm" },
+        "endDate": { "type": "string", "description": "Fecha final YYYY-MM-DD" },
+        "endTime": { "type": "string", "description": "Hora final HH:mm" },
+        "isAllDay": { "type": "boolean", "description": "Si bloquea todo el día" },
+        "createdAt": { "type": "string", "description": "Timestamp de creación" },
+        "createdBy": { "type": "string", "description": "Usuario creador" }
+      },
+      "required": ["id", "tenantId", "doctorUserId", "title", "blockType", "startDate", "endDate"]
+    },
+    "UserPresence": {
+      "title": "UserPresence",
+      "description": "Estado de presencia y actividad en tiempo real de los usuarios clínicos del tenant",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase UID del usuario" },
+        "identifier": { "type": "string", "description": "Email o identificador en el directorio" },
+        "displayName": { "type": "string", "description": "Nombre visible del usuario" },
+        "email": { "type": "string", "description": "Correo electrónico institucional" },
+        "role": { "type": "string", "description": "Rol clínico o técnico asignado" },
+        "tenantId": { "type": "string", "description": "Tenant asignado (CCMI-DR-SAMIR)" },
+        "state": { "type": "string", "description": "Estado reportado: online u offline" },
+        "lastSeen": { "type": "number", "description": "Marca de tiempo Unix en ms del último latido de presencia" },
+        "updatedAt": { "type": "string", "description": "Timestamp ISO 8601 de última actualización" },
+        "clientSessionId": { "type": "string", "description": "Identificador único de la sesión del navegador" },
+        "userAgent": { "type": "string", "description": "Agente de usuario / navegador" }
+      },
+      "required": ["uid", "identifier", "tenantId", "state", "lastSeen"]
+    },
+    "TenantSetting": {
+      "title": "TenantSetting",
+      "description": "Configuraciones globales y matriz de calibración milimétrica sincronizada en la nube",
+      "type": "object",
+      "properties": {
+        "map": { "type": "string", "description": "Matriz de coordenadas JSON serializada para los 5 documentos médicos" },
+        "updatedAt": { "type": "string", "description": "Marca de tiempo de actualización" }
+      }
+    },
+    "TenantStationery": {
+      "title": "TenantStationery",
+      "description": "Papelería médica oficial o personalizada almacenada en Firestore",
+      "type": "object",
+      "properties": {
+        "docType": { "type": "string", "description": "Tipo de documento (RECIPES, INFORME, ORDEN_LAB, CONSTANCIA, HISTORIA)" },
+        "dataUrl": { "type": "string", "description": "Fondo rasterizado en base64 para renderizado instantáneo" },
+        "updatedAt": { "type": "string", "description": "Marca de tiempo de actualización" }
+      }
+    },
+    "AuthorizedMember": {
+      "title": "AuthorizedMember",
+      "description": "Usuario autorizado en el directorio institucional de CORTEX AXIS / CCMI",
+      "type": "object",
+      "properties": {
+        "identifier": { "type": "string", "description": "Email o UID del usuario en minúsculas" },
+        "displayName": { "type": "string", "description": "Nombre completo institucional" },
+        "role": { "type": "string", "description": "Rol asignado (MEDICO, DESARROLLADOR, SECRETARIA, etc.)" },
+        "tenantId": { "type": "string", "description": "Tenant institucional (ej. CCMI-DR-SAMIR)" },
+        "createdAt": { "type": "string", "description": "Fecha de registro o creación" },
+        "isActive": { "type": "boolean", "description": "Si la cuenta está activa o suspendida" },
+        "updatedAt": { "type": "string", "description": "Timestamp de última modificación" },
+        "aliases": { "type": "array", "description": "Lista de correos electrónicos o identificadores secundarios/alias autorizados para esta misma cuenta" },
+        "primaryIdentifier": { "type": "string", "description": "Identificador primario al que apunta este registro si es un alias" },
+        "isAlias": { "type": "boolean", "description": "Indica si el documento actúa como puntero alias a una cuenta principal" }
+      },
+      "required": ["identifier", "displayName", "role", "tenantId", "isActive"]
+    }
+  },
+  "firestore": {
+    "/tenants/{tenantId}/members/{memberId}": {
+      "schema": { "$ref": "#/entities/AuthorizedMember" },
+      "description": "Directorio institucional de cuentas autorizadas con sincronización en la nube en tiempo real"
+    },
+    "/tenants/{tenantId}/patients/{patientId}": {
+      "schema": { "$ref": "#/entities/Patient" },
+      "description": "Colección de fichas clínicas de pacientes por clínica/especialista"
+    },
+    "/tenants/{tenantId}/devices/{deviceId}": {
+      "schema": { "$ref": "#/entities/Device" },
+      "description": "Dispositivos clínicos vinculados a la cuenta del especialista"
+    },
+    "/tenants/{tenantId}/issued_documents/{docId}": {
+      "schema": { "$ref": "#/entities/IssuedDocument" },
+      "description": "Historial de documentos médicos emitidos para auditoría"
+    },
+    "/tenants/{tenantId}/appointments/{appointmentId}": {
+      "schema": { "$ref": "#/entities/ClinicalAppointment" },
+      "description": "Citas médicas clínicas programadas, confirmadas y atendidas en el tenant"
+    },
+    "/tenants/{tenantId}/schedules/{scheduleConfigId}": {
+      "schema": { "$ref": "#/entities/DoctorScheduleConfig" },
+      "description": "Configuraciones de horarios y disponibilidad por facultativo"
+    },
+    "/tenants/{tenantId}/schedule_blocks/{blockId}": {
+      "schema": { "$ref": "#/entities/ScheduleBlock" },
+      "description": "Bloqueos de agenda médica, vacaciones y ausencias justificadas"
+    },
+    "/tenants/{tenantId}/user_presence/{presenceUserId}": {
+      "schema": { "$ref": "#/entities/UserPresence" },
+      "description": "Presencia y latidos de actividad en tiempo real de los usuarios autorizados"
+    },
+    "/tenants/{tenantId}/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/TenantSetting" },
+      "description": "Ajustes globales y matriz de calibración milimétrica sincronizada en la nube"
+    },
+    "/tenants/{tenantId}/stationery/{docType}": {
+      "schema": { "$ref": "#/entities/TenantStationery" },
+      "description": "Plantillas de papelería médica oficial sincronizadas en la nube"
+    }
+  }
+}
