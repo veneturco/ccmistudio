@@ -526,8 +526,8 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     onPatientChange?.(patient);
   }, [patient, onPatientChange]);
 
-  // Modo de Vista Móvil: 'card' (Ficha de Bolsillo para Celular) o 'sheet' (Hoja A4 Física Calibrada)
-  const [mobileViewMode, setMobileViewMode] = useState<'card' | 'sheet'>('card');
+  // Modo de Vista Móvil: 'sheet' (Hoja A4 Física Calibrada por defecto) o 'card' (Ficha de Bolsillo)
+  const [mobileViewMode, setMobileViewMode] = useState<'card' | 'sheet'>('sheet');
 
   // ==========================================
   // ESTADOS DE LOS 5 DOCUMENTOS OFICIALES
@@ -2311,7 +2311,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       {/* ============================================================ */}
       {/* 4. LIENZO A4 VECTORIAL / OVERLAY CON MEDIDAS EXACTAS (794x1123px) */}
       {/* ============================================================ */}
-      <div className={`relative print:p-0 my-2 ${mobileViewMode === 'card' ? 'hidden print:block' : 'block'}`}>
+      <div className={`relative print:p-0 my-2 ${mobileViewMode === 'card' ? 'hidden md:block print:block' : 'block'}`}>
         {activeDoc === 'ORDEN_LAB' ? (
           <OfficialLabOrderTwoPageSheet
             key={`lab-order-sheet-${calibVersion}`}

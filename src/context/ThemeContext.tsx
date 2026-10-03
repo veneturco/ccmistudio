@@ -34,8 +34,8 @@ const STORAGE_KEY = 'ccmi_user_settings_v2';
 const LEGACY_STORAGE_KEY = 'ccmi_user_settings_v1';
 
 const DEFAULT_SETTINGS: UserSettings = {
-  preference: 'auto_schedule',
-  theme: 'clinical_light',
+  preference: 'dark',
+  theme: 'dark',
   highContrast: false,
   fontSize: 'normal',
   reducedMotion: false,
@@ -86,7 +86,7 @@ const loadSettingsFromStorage = (): UserSettings => {
 
       return {
         preference,
-        theme: 'clinical_light',
+        theme: activeTheme || 'dark',
         highContrast: Boolean(parsed.highContrast),
         fontSize: parsed.fontSize === 'large' ? 'large' : 'normal',
         reducedMotion: Boolean(parsed.reducedMotion),
@@ -111,12 +111,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [settings, setSettings] = useState<UserSettings>(() => {
-    const s = loadSettingsFromStorage();
-    s.theme = 'clinical_light';
-    s.preference = 'clinical_light';
-    return s;
-  });
+  const [settings, setSettings] = useState<UserSettings>(loadSettingsFromStorage);
 
   // Temporizador para comprobar la hora en segundo plano si está activa la Opción 1 (auto_schedule)
   useEffect(() => {

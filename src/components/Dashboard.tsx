@@ -29,6 +29,7 @@ import {
   ShieldCheck,
   CheckCircle2, Activity,
   Zap,
+  ChevronDown,
   LogOut
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
@@ -204,8 +205,9 @@ export const Dashboard: React.FC = () => {
   const [customBgs, setCustomBgs] = useState<Record<string, string>>({});
   const [notificationToast, setNotificationToast] = useState<string | null>(null);
 
-  // Sistema de Widgets de Acceso Rápido Clínico
-  const [showWidgetsHub, setShowWidgetsHub] = useState<boolean>(true);
+  // Sistema de Widgets de Acceso Rápido Clínico (Oculto por defecto para no saturar)
+  const [showWidgetsHub, setShowWidgetsHub] = useState<boolean>(false);
+  const [toolsMenuOpen, setToolsMenuOpen] = useState<boolean>(false);
   const [activePresetData, setActivePresetData] = useState<any>(undefined);
 
   // Persistir historial al actualizar
@@ -427,71 +429,73 @@ export const Dashboard: React.FC = () => {
             </button>
 
             {/* Opción G: Botón Directo a Herramientas Técnicas de Papelería (Solo Médico/Admin) */}
+            {/* Menú de Herramientas Clínicas / Ajustes Avanzados */}
             {!isSecretary && (
-              <button
-                type="button"
-                onClick={() => setIsTechModalOpen(true)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 transition cursor-pointer shadow-xs"
-                title="Opción G: Herramientas Técnicas (Calibrador Milimétrico, Subir Fondos Escaneados, Ver PDFs Originales y Sincronización Celular)"
-              >
-                <Settings className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="hidden sm:inline">Técnico (G)</span>
-              </button>
-            )}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setToolsMenuOpen(!toolsMenuOpen)}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 transition cursor-pointer shadow-xs"
+                  title="Herramientas técnicas, personal, sello, cotizador y tarjeta"
+                >
+                  <Settings className="w-3.5 h-3.5 text-cyan-400" />
+                  <span className="hidden sm:inline">Herramientas</span>
+                  <ChevronDown className="w-3 h-3 text-cyan-400" />
+                </button>
 
-            {/* Gestión de Personal y Accesos Multi-Doctor (Solo Médico/Admin) */}
-            {!isSecretary && (
-              <button
-                type="button"
-                onClick={() => setIsStaffModalOpen(true)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-purple-950/70 hover:bg-purple-900/80 text-purple-300 border border-purple-500/40 transition cursor-pointer shadow-xs"
-                title="Gestión de Personal Médico y Accesos (Autorizar correos de doctores y secretarias)"
-              >
-                <Users className="w-3.5 h-3.5 text-purple-400" />
-                <span className="hidden sm:inline">Personal</span>
-              </button>
-            )}
+                {toolsMenuOpen && (
+                  <div 
+                    className="absolute right-0 mt-2 w-52 bg-[#09152b] border border-cyan-500/30 rounded-xl shadow-2xl p-1.5 z-50 animate-fade-in text-xs space-y-1 font-sans"
+                    onClick={() => setToolsMenuOpen(false)}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setIsTechModalOpen(true)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-cyan-950/60 hover:text-cyan-300 font-bold transition text-left cursor-pointer"
+                    >
+                      <Settings className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span>Técnico & Calibración (G)</span>
+                    </button>
 
-            {/* Extractor de Sello y Firma Digital */}
-            {!isSecretary && (
-              <button
-                type="button"
-                onClick={() => setIsStampModalOpen(true)}
-                className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 transition cursor-pointer shadow-xs"
-                title="Extractor Inteligente de Sello y Firma Médica con Transparencia"
-              >
-                <Stamp className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="hidden xl:inline">Sello</span>
-              </button>
-            )}
+                    <button
+                      type="button"
+                      onClick={() => setIsStaffModalOpen(true)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-purple-950/60 hover:text-purple-300 font-bold transition text-left cursor-pointer"
+                    >
+                      <Users className="w-4 h-4 text-purple-400 shrink-0" />
+                      <span>Gestión de Personal</span>
+                    </button>
 
-            {/* Cotizador Logístico (Solo Médico/Admin) */}
-            {!isSecretary && (
-              <button
-                type="button"
-                onClick={() => setActiveTab(activeTab === 'quoter' ? 'portal' : 'quoter')}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
-                  activeTab === 'quoter'
-                    ? 'bg-emerald-600 text-white border-emerald-400 shadow-sm'
-                    : 'bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 border-emerald-700/50'
-                }`}
-                title="Cotizador Logístico Quirúrgico Synapsis"
-              >
-                <Boxes className="w-3.5 h-3.5" />
-                <span className="hidden xl:inline">Cotizador</span>
-              </button>
-            )}
+                    <button
+                      type="button"
+                      onClick={() => setIsStampModalOpen(true)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-cyan-950/60 hover:text-cyan-300 font-bold transition text-left cursor-pointer"
+                    >
+                      <Stamp className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span>Sello & Firma Médica</span>
+                    </button>
 
-            {/* Tarjeta Dr. Samir */}
-            <button
-              type="button"
-              onClick={() => setIsCardModalOpen(true)}
-              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-cyan-600/90 hover:bg-cyan-500 text-white font-bold text-xs shadow-sm transition cursor-pointer"
-              title="Tarjeta de Presentación con QR y Sedes"
-            >
-              <CreditCard className="w-3.5 h-3.5" />
-              <span className="hidden xl:inline">Tarjeta</span>
-            </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab(activeTab === 'quoter' ? 'portal' : 'quoter')}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-emerald-950/60 hover:text-emerald-300 font-bold transition text-left cursor-pointer"
+                    >
+                      <Boxes className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <span>Cotizador Quirúrgico</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsCardModalOpen(true)}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-blue-950/60 hover:text-cyan-300 font-bold transition text-left cursor-pointer"
+                    >
+                      <CreditCard className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <span>Tarjeta de Presentación</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Selector Rápido Día / Noche */}
             <button
