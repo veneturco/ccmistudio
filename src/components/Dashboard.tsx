@@ -272,15 +272,22 @@ export const Dashboard: React.FC = () => {
   return (
     <div 
       id="socs-dashboard-root" 
-      className={`min-h-screen flex flex-col font-sans transition-colors duration-200 pb-20 md:pb-0 ${
-        isClinicalLight ? 'bg-slate-100/90 text-slate-900' : 'bg-[#060c1c] text-slate-100'
+      className={`min-h-screen flex flex-col font-sans transition-colors duration-200 pb-20 md:pb-0 relative ${
+        isClinicalLight ? 'bg-slate-50 text-slate-900' : 'bg-[#030712] text-slate-100'
       }`}
     >
-      {/* Banner de Modo Quirófano / Hospital sin Cobertura */}
-      <OfflineOperatingRoomBanner />
+      {/* 2026 Ambient Aurora Background */}
+      {!isClinicalLight && (
+        <div className="fixed inset-0 z-0 pointer-events-none bg-aurora opacity-30 mix-blend-screen" />
+      )}
 
-      {/* Banner / Prompt de Instalación PWA en Celular */}
-      <PwaInstallPrompt />
+      {/* Main Content Wrapper (Above Background) */}
+      <div className="relative z-10 flex flex-col flex-1">
+        {/* Banner de Modo Quirófano / Hospital sin Cobertura */}
+        <OfflineOperatingRoomBanner />
+
+        {/* Banner / Prompt de Instalación PWA en Celular */}
+        <PwaInstallPrompt />
 
       {/* 1. TOP EXECUTIVE CLINICAL BAR (APPLE PRO MINIMALIST) */}
       <header className={`border-b sticky top-0 z-40 transition-colors duration-200 backdrop-blur-xl ${
@@ -1014,6 +1021,7 @@ export const Dashboard: React.FC = () => {
         historyCount={documentsHistory.length}
         userRole={user?.role}
       />
+      </div> {/* Closing relative wrapper */}
     </div>
   );
 };

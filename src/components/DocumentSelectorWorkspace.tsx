@@ -2136,9 +2136,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             getHighlightClass={getHighlightClass}
           />
         ) : (
-          <div
-            id="official-doc-print-area"
-            className="relative bg-white text-slate-900 shadow-[0_20px_60px_-15px_rgba(15,46,84,0.15),0_0_1px_1px_rgba(15,46,84,0.08)] rounded-xs overflow-hidden print:m-0 print:shadow-none print:w-full print:border-none print:rounded-none select-text transition-shadow"
+          <div className="group relative transition-all duration-500 ease-out hover:-translate-y-2">
+            {/* Premium 2026 Ambient Glow behind the document on hover */}
+            <div className="absolute -inset-2 bg-gradient-to-br from-cyan-400/20 via-blue-500/10 to-purple-500/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 print:hidden" />
+            
+            <div
+              id="official-doc-print-area"
+              className="relative bg-white text-slate-900 shadow-[0_20px_60px_-15px_rgba(15,46,84,0.15),0_0_1px_1px_rgba(15,46,84,0.08)] group-hover:shadow-[0_40px_80px_-20px_rgba(15,46,84,0.3),0_0_2px_1px_rgba(15,46,84,0.15)] rounded-md overflow-hidden print:m-0 print:shadow-none print:w-full print:border-none print:rounded-none select-text transition-all duration-500 z-10"
             style={{
               width: '794px',
               height: '1123px',
@@ -2770,7 +2774,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             )}
           </div>
         )}
-
+          </div>
           </div>
         )}
       </div>
