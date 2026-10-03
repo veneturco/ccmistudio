@@ -1601,7 +1601,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       {/* ============================================================ */}
       <div 
         id="unified-clinical-bottom-dock"
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-4xl w-[96%] sm:w-auto bg-[#0b1528]/95 backdrop-blur-2xl border border-cyan-500/30 shadow-2xl shadow-cyan-950/50 rounded-full p-1.5 sm:p-2 px-3 sm:px-4 flex items-center justify-between sm:justify-center gap-2 sm:gap-3 ring-1 ring-cyan-500/20 print:hidden"
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-4xl w-[96%] sm:w-auto bg-white backdrop-blur-2xl border border-slate-200 shadow-xl rounded-full p-1.5 sm:p-2 px-3 sm:px-4 flex items-center justify-between sm:justify-center gap-2 sm:gap-3 print:hidden text-slate-900"
       >
         {/* Módulo de Dictado Clínico Integrado */}
         <ClinicalDictationCapsule
@@ -1641,7 +1641,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         <button
           type="button"
           onClick={() => setIsQrHandoffOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold bg-cyan-950/80 hover:bg-cyan-900/90 text-cyan-300 border border-cyan-500/40 shadow-md shadow-cyan-950/40 transition cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 shadow-sm transition cursor-pointer active:scale-95"
           title="Transferir documento instantáneamente al celular del paciente o secretaría mediante Código QR"
         >
           <QrCode className="w-3.5 h-3.5 text-cyan-400" />
@@ -1652,7 +1652,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         <button
           type="button"
           onClick={() => setIsTimelineOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold bg-blue-950/80 hover:bg-blue-900/90 text-blue-200 border border-blue-500/40 shadow-md shadow-blue-950/40 transition cursor-pointer active:scale-95"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm transition cursor-pointer active:scale-95"
           title="Ver consultas anteriores de este paciente y re-emitir tratamientos previos con 1 clic"
         >
           <History className="w-3.5 h-3.5 text-cyan-300" />
@@ -1663,7 +1663,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         <button
           type="button"
           onClick={handleSaveToStorage}
-          className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700 hover:border-cyan-400/40 transition cursor-pointer active:scale-95"
+          className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 shadow-sm transition cursor-pointer active:scale-95"
           title="Guardar ficha médica y estado de los 5 documentos en el historial local"
         >
           <Save className="w-3.5 h-3.5 text-cyan-400" />
