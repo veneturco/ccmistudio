@@ -18,7 +18,7 @@ import { TemplateRegistry } from '../calibration/TemplateRegistry';
 import { VectorOverlayEngineV2, OverlayRenderResult } from '../calibration/VectorOverlayEngineV2';
 import { SemanticDataMapperV2, ClinicalWorkspaceContext } from '../calibration/SemanticDataMapperV2';
 import { downloadBlob, formatWhatsAppPhone, buildWhatsAppMessage, sharePdfToWhatsApp } from './pdfExportHelpers';
-import { getCustomTemplateOriginalPdf } from './templateStorage';
+import { getCustomTemplateOriginalPdf, getCustomTemplate } from './templateStorage';
 import { PDFTemplatePreloader } from './PDFTemplatePreloader';
 
 export interface DocumentPipelineRequest {
@@ -28,6 +28,7 @@ export interface DocumentPipelineRequest {
   doctorStampBase64?: string;
   template?: MasterTemplateV2;
   templateBytes?: Uint8Array;
+  customBgImage?: string | null;
 }
 
 export interface DocumentPipelineResponse {
@@ -41,14 +42,94 @@ export interface DocumentPipelineResponse {
   injectedCount: number;
 }
 
+function dataUrlToBytes(dataUrl: string): Uint8Array | null {
+  try {
+    if (!dataUrl || typeof dataUrl !== 'string') return null;
+    const base64Index = dataUrl.indexOf(';base64,');
+    if (base64Index !== -1) {
+      const b64 = dataUrl.slice(base64Index + 8);
+      const binaryString = atob(b64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      return bytes;
+    }
+  } catch (e) {
+    console.warn('[PDFDocumentPipelineV2] Error convirtiendo DataURL a bytes:', e);
+  }
+  return null;
+}
+
 export class PDFDocumentPipelineV2 {
   /**
    * Carga el buffer del PDF o imagen base inmutable.
-   * Prioridad 1: Si el usuario cargó un PDF oficial válido en IndexedDB con cabecera %PDF.
+   * Prioridad 0: Fondo maestro explícito pasado en la petición (DataURL o URL).
+   * Prioridad 1: Plantilla física personalizada en IndexedDB / localStorage.
    * Prioridad 2: Archivo PDF maestro oficial (/templates/*.pdf).
    * Prioridad 3: Imagen oficial de alta resolución 300 DPI (/templates/*.jpg).
    */
-  private static async loadOriginalPdf(path: string, documentType?: string): Promise<Uint8Array> {
+  private static async loadOriginalPdf(path: string, documentType?: string, customBgImage?: string | null): Promise<Uint8Array> {
+    // 0. Si se pasó una imagen o fondo maestro directo (DataURL o URL) en la petición
+    if (customBgImage) {
+      const directBytes = dataUrlToBytes(customBgImage);
+      if (directBytes && directBytes.length > 500) {
+        return directBytes;
+      }
+      try {
+        const resp = await fetch(customBgImage);
+        if (resp.ok) {
+          const buf = await resp.arrayBuffer();
+          const bytes = new Uint8Array(buf);
+          if (bytes.length > 500) return bytes;
+        }
+      } catch (err) {
+        console.warn('[PDFDocumentPipelineV2] Error fetching customBgImage:', err);
+      }
+    }
+
+    // 1. Revisar si el usuario tiene una plantilla personalizada en IndexedDB / localStorage
+    if (documentType) {
+      const rawType = documentType.toLowerCase().trim();
+      try {
+        // A. Revisar si tiene PDF oficial subido en IndexedDB
+        const storedPdf = await getCustomTemplateOriginalPdf(documentType);
+        if (
+          storedPdf &&
+          storedPdf.length > 10000 &&
+          storedPdf[0] === 0x25 &&
+          storedPdf[1] === 0x50 &&
+          storedPdf[2] === 0x44 &&
+          storedPdf[3] === 0x46
+        ) {
+          return storedPdf;
+        }
+
+        // B. Revisar si tiene Imagen escaneada/DataURL personalizada en IndexedDB o localStorage
+        const customImgDataUrl =
+          (await getCustomTemplate(documentType)) ||
+          (await getCustomTemplate(rawType)) ||
+          (typeof localStorage !== 'undefined'
+            ? localStorage.getItem(`custom_tpl_${documentType}`) || localStorage.getItem(`custom_tpl_${rawType}`)
+            : null);
+
+        if (customImgDataUrl) {
+          const customBytes = dataUrlToBytes(customImgDataUrl);
+          if (customBytes && customBytes.length > 500) {
+            return customBytes;
+          }
+          if (typeof customImgDataUrl === 'string' && customImgDataUrl.startsWith('http')) {
+            const resp = await fetch(customImgDataUrl);
+            if (resp.ok) {
+              const buf = await resp.arrayBuffer();
+              return new Uint8Array(buf);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn(`[PDFDocumentPipelineV2] Error buscando plantilla personalizada para ${documentType}:`, err);
+      }
+    }
     const rawType = (documentType || '').toLowerCase().trim();
     
     // Mapeo exhaustivo y tolerante de nombres a archivos maestros oficiales
@@ -192,8 +273,8 @@ export class PDFDocumentPipelineV2 {
       throw new Error(`No existe un MasterTemplateV2 registrado para el tipo '${request.documentType}'`);
     }
 
-    // 1. Cargar el PDF maestro original (Bytes directos, IndexedDB o ruta estática)
-    const originalPdfBytes = request.templateBytes || (await this.loadOriginalPdf(template.source.backgroundPdf, request.documentType));
+    // 1. Cargar el PDF maestro original (Bytes directos, customBgImage, IndexedDB o ruta estática)
+    const originalPdfBytes = request.templateBytes || (await this.loadOriginalPdf(template.source.backgroundPdf, request.documentType, request.customBgImage));
 
     // 2. Mapear datos semánticos del paciente
     const semanticDictionary = SemanticDataMapperV2.mapToSemanticDictionary(request.context);

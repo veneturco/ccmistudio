@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import { DocType } from '../types';
 import { MasterTemplateV2, OverlayElement } from '../calibration/types/MasterTemplateV2';
-import { getMasterTemplateV2, setMasterTemplateV2 } from '../calibration/MasterRegistryV2';
+import { getMasterTemplateV2, setMasterTemplateV2, saveCalibrationsMap, CALIBRATOR_STORAGE_KEY } from '../calibration/MasterRegistryV2';
 import { CalibrationEngine } from '../calibration/CalibrationEngine';
 import { generateCanonicalDocumentPDF } from '../utils/pdfExport';
 import { saveCustomTemplate, getCustomTemplate, deleteCustomTemplate } from '../utils/templateStorage';
@@ -197,12 +197,21 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
     setTimeout(() => setSaveStatus(null), 3000);
   };
 
+  // Cache de sesión de las plantillas editadas para que no se pierdan al cambiar de pestaña
+  const sessionTemplatesRef = useRef<Record<string, MasterTemplateV2>>({});
+
   // Cargar master al seleccionar documento
   useEffect(() => {
+    // Si ya fue editado en esta sesión, recuperar el objeto editado
+    if (sessionTemplatesRef.current[selectedDoc]) {
+      setTemplate(sessionTemplatesRef.current[selectedDoc]);
+      return;
+    }
     const master = getMasterTemplateV2(selectedDoc);
     if (master) {
-      // Clonar profundamente para edición en memoria
-      setTemplate(JSON.parse(JSON.stringify(master)));
+      const cloned = JSON.parse(JSON.stringify(master));
+      sessionTemplatesRef.current[selectedDoc] = cloned;
+      setTemplate(cloned);
     }
   }, [selectedDoc]);
 
@@ -213,6 +222,102 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
   const applySnap = (val: number, step: number): number => {
     if (step <= 0) return Number(val.toFixed(1));
     return Number((Math.round(val / step) * step).toFixed(1));
+  };
+
+  // Función universal para persistir las calibraciones de una plantilla en el almacenamiento permanente
+  const persistCalibrationsForTemplate = (tpl: MasterTemplateV2, docType: string) => {
+    if (!tpl || !tpl.pages || !tpl.pages[0]) return;
+    try {
+      const raw = typeof window !== 'undefined' ? localStorage.getItem(CALIBRATOR_STORAGE_KEY) : null;
+      let map: Record<string, any> = {};
+      if (raw) {
+        try {
+          map = JSON.parse(raw);
+        } catch {
+          map = {};
+        }
+      }
+
+      const docKeyLower = docType.toLowerCase().trim();
+      const masterKey = (tpl.documentType || docType).toLowerCase().trim();
+
+      const pageElementsMap: Record<number, any[]> = {};
+      (tpl.pages || []).forEach((pg, pIdx) => {
+        pageElementsMap[pIdx] = (pg.elements || []).map((el: any) => {
+          const geom = el.geometry || {
+            xMm: el.xMm || 20,
+            yMm: el.yMm || 20,
+            widthMm: el.widthMm || 40,
+            heightMm: el.heightMm || 6,
+          };
+          return {
+            id: el.id,
+            dataKey: el.dataKey || el.id,
+            type: el.type || 'text',
+            geometry: geom,
+            xMm: geom.xMm,
+            yMm: geom.yMm,
+            widthMm: geom.widthMm,
+            heightMm: geom.heightMm,
+            fontSizePt: el.typography?.fontSizePt ?? el.fontSizePt ?? 9.5,
+            fontWeight: el.typography?.fontWeight ?? el.fontWeight ?? 'bold',
+            align: el.typography?.align ?? el.align ?? 'left',
+            lineHeightPt: el.typography?.lineHeightPt ?? el.lineHeightPt,
+            markStyle: el.markStyle,
+          };
+        });
+      });
+
+      // Registrar bajo todas las variantes de nombres y alias para máxima compatibilidad
+      map[docType] = pageElementsMap;
+      map[docKeyLower] = pageElementsMap;
+      map[masterKey] = pageElementsMap;
+      if (masterKey === 'recipe' || docKeyLower === 'recipes' || docKeyLower === 'recipe') {
+        map['recipes'] = pageElementsMap;
+        map['recipe'] = pageElementsMap;
+        map['RECIPES'] = pageElementsMap;
+      }
+      if (masterKey === 'lab_order' || docKeyLower.includes('lab') || docKeyLower.includes('orden')) {
+        map['orden_lab'] = pageElementsMap;
+        map['lab_order'] = pageElementsMap;
+        map['ORDEN_LAB'] = pageElementsMap;
+      }
+      if (masterKey === 'report' || docKeyLower.includes('informe') || docKeyLower.includes('report')) {
+        map['informe'] = pageElementsMap;
+        map['report'] = pageElementsMap;
+        map['INFORME'] = pageElementsMap;
+      }
+      if (masterKey === 'certificate' || docKeyLower.includes('constancia') || docKeyLower.includes('cert')) {
+        map['constancia'] = pageElementsMap;
+        map['certificate'] = pageElementsMap;
+        map['CONSTANCIA'] = pageElementsMap;
+      }
+      if (masterKey === 'history' || docKeyLower.includes('hist')) {
+        map['historia'] = pageElementsMap;
+        map['history'] = pageElementsMap;
+        map['HISTORIA'] = pageElementsMap;
+      }
+
+      saveCalibrationsMap(map, docType);
+      setMasterTemplateV2(docType, tpl);
+      setMasterTemplateV2(docKeyLower, tpl);
+      setMasterTemplateV2(masterKey, tpl);
+      if (tpl.masterId) {
+        setMasterTemplateV2(tpl.masterId, tpl);
+      }
+    } catch (e) {
+      console.warn('[LiveCoordinateCalibratorModal] Error persistiendo calibración:', e);
+    }
+  };
+
+  // Manejo de cambio de pestaña de documento asegurando guardar el progreso actual
+  const handleSelectDocTab = (tabId: DocType) => {
+    if (template) {
+      sessionTemplatesRef.current[selectedDoc] = template;
+      persistCalibrationsForTemplate(template, selectedDoc);
+    }
+    setSelectedDoc(tabId);
+    setSelectedElementId(null);
   };
 
   // Manejo de movimiento del mouse sobre el canvas
@@ -253,7 +358,7 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
         }
 
         // Si es récipe y la simetría bilateral está activa: mover el gemelo derecho
-        if (selectedDoc === 'recipes' && symmetricTalon) {
+        if (selectedDoc === 'RECIPES' && symmetricTalon) {
           if (selectedElementId === 'left_patient_name' && el.id === 'right_patient_name') {
             return { ...el, geometry: { ...(el.geometry || {}), xMm: newX + 104.0, yMm: newY } };
           }
@@ -274,7 +379,7 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
         return el;
       });
 
-      setTemplate({
+      const updatedTemplate = {
         ...template,
         pages: [
           {
@@ -282,7 +387,9 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
             elements: updatedElements,
           },
         ],
-      });
+      };
+      setTemplate(updatedTemplate);
+      sessionTemplatesRef.current[selectedDoc] = updatedTemplate;
     }
   };
 
@@ -309,21 +416,31 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
 
   // Restablecer a Matriz Oficial de Fábrica (v11)
   const handleResetToFactory = () => {
-    // Forzar la carga limpia del master en MasterRegistryV2
+    delete sessionTemplatesRef.current[selectedDoc];
     const master = getMasterTemplateV2(selectedDoc);
     if (master) {
-      setTemplate(JSON.parse(JSON.stringify(master)));
-      setSaveStatus('¡Restablecido a la Matriz Canónica Oficial v11!');
+      const cloned = JSON.parse(JSON.stringify(master));
+      setTemplate(cloned);
+      sessionTemplatesRef.current[selectedDoc] = cloned;
+      persistCalibrationsForTemplate(cloned, selectedDoc);
+      setSaveStatus('¡Restablecido a la Matriz Canónica Oficial!');
       setTimeout(() => setSaveStatus(null), 3000);
     }
   };
 
-  // Guardar y Aplicar al Sistema
+  // Guardar y Aplicar al Sistema Permanentemente
   const handleApplyChanges = () => {
     if (!template) return;
-    setMasterTemplateV2(template.id, template);
 
-    setSaveStatus('¡Calibración milimétrica aplicada y guardada en el sistema!');
+    // 1. Persistir todas las plantillas editadas en la sesión
+    Object.entries(sessionTemplatesRef.current).forEach(([dType, tpl]) => {
+      persistCalibrationsForTemplate(tpl, dType);
+    });
+
+    // 2. Persistir la plantilla activa
+    persistCalibrationsForTemplate(template, selectedDoc);
+
+    setSaveStatus('✓ ¡Calibración milimétrica guardada y aplicada exitosamente!');
     if (onApplyCoordinates) onApplyCoordinates();
     setTimeout(() => {
       setSaveStatus(null);
@@ -331,10 +448,14 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
     }, 1200);
   };
 
-  // Descargar prueba PDF rápida
+  // Descargar prueba PDF rápida con el fondo maestro real
   const handleTestPdf = async () => {
     if (!template) return;
     try {
+      setSaveStatus('Generando PDF de prueba con fondo maestro oficial...');
+      // Asegurar que las coordenadas actuales estén persistidas
+      persistCalibrationsForTemplate(template, selectedDoc);
+
       const dummyPatient = activeDocument?.patient || {
         fullName: 'Dr. Samir Moucharrafie',
         idNumber: 'V-12.887.723',
@@ -366,7 +487,8 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
         docTypeKey,
         dummyPatient,
         dummyBundle as any,
-        `Calibracion_${selectedDoc}.pdf`
+        `Calibracion_${selectedDoc}.pdf`,
+        activeBgImage // <- Pasa el fondo maestro directamente (DataURL o URL)
       );
       const url = URL.createObjectURL(result.blob);
       const a = document.createElement('a');
@@ -374,8 +496,11 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
       a.download = `Calibracion_${selectedDoc}.pdf`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setSaveStatus('✓ PDF descargado con fondo maestro oficial');
+      setTimeout(() => setSaveStatus(null), 3000);
     } catch (err: any) {
       console.error('Error probando PDF:', err);
+      setSaveStatus('Error al generar PDF: ' + (err?.message || 'Error'));
     }
   };
 
@@ -414,10 +539,7 @@ export const LiveCoordinateCalibratorModal: React.FC<LiveCoordinateCalibratorMod
             {DOC_TABS.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => {
-                  setSelectedDoc(tab.id);
-                  setSelectedElementId(null);
-                }}
+                onClick={() => handleSelectDocTab(tab.id)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                   selectedDoc === tab.id
                     ? 'bg-cyan-600 text-white shadow-xs'

@@ -91,7 +91,8 @@ export interface ClinicalDataBundle {
 export async function createOfficialRecipePdf(
   patient: { fullName?: string; idNumber?: string; age?: string | number; date?: string },
   recipeData: { rxLeft?: string; indicationsRight?: string },
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
   const context: ClinicalWorkspaceContext = {
     patient: {
@@ -109,15 +110,17 @@ export async function createOfficialRecipePdf(
     documentType: 'recipe',
     context,
     customFileName,
+    customBgImage,
   });
 }
 
 export async function exportOfficialRecipePDF(
   patient: { fullName?: string; idNumber?: string; age?: string | number; date?: string },
   recipeData: { rxLeft?: string; indicationsRight?: string },
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
-  const result = await createOfficialRecipePdf(patient, recipeData, customFileName);
+  const result = await createOfficialRecipePdf(patient, recipeData, customFileName, customBgImage);
   downloadBlob(result.pdfBytes, result.fileName);
   return result;
 }
@@ -126,7 +129,8 @@ export async function createOfficialLabOrderPdf(
   patient: { fullName?: string; idNumber?: string; age?: string | number; date?: string; phone?: string; address?: string },
   orderData: LabOrderExportOptions | Record<string, any>,
   presumptiveDx: string = '',
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
   const context: ClinicalWorkspaceContext = {
     patient: {
@@ -149,6 +153,7 @@ export async function createOfficialLabOrderPdf(
     documentType: 'lab_order',
     context,
     customFileName,
+    customBgImage,
   });
 }
 
@@ -172,7 +177,8 @@ export async function exportOfficialLabOrderPDF(
 export async function createOfficialInformePdf(
   patient: { fullName?: string; idNumber?: string; age?: string | number; date?: string },
   reportData: { content?: string; diagnosis?: string; bodyText?: string } | string,
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
   const bodyText = typeof reportData === 'string'
     ? reportData
@@ -197,15 +203,17 @@ export async function createOfficialInformePdf(
     documentType: 'report',
     context,
     customFileName,
+    customBgImage,
   });
 }
 
 export async function exportOfficialInformePDF(
   patient: { fullName?: string; idNumber?: string; age?: string | number; date?: string },
   reportData: { content?: string; diagnosis?: string; bodyText?: string } | string,
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
-  const result = await createOfficialInformePdf(patient, reportData, customFileName);
+  const result = await createOfficialInformePdf(patient, reportData, customFileName, customBgImage);
   downloadBlob(result.pdfBytes, result.fileName);
   return result;
 }
@@ -227,7 +235,8 @@ export async function createOfficialConstanciaPdf(
     isPaciente?: boolean;
     isFamiliar?: boolean;
   },
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
   const context: ClinicalWorkspaceContext = {
     patient: {
@@ -261,6 +270,7 @@ export async function createOfficialConstanciaPdf(
     documentType: 'certificate',
     context,
     customFileName,
+    customBgImage,
   });
 }
 
@@ -279,9 +289,10 @@ export async function exportOfficialConstanciaPDF(
     requestMonth?: string;
     requestYear?: string;
   },
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
-  const result = await createOfficialConstanciaPdf(patient, certificateData, customFileName);
+  const result = await createOfficialConstanciaPdf(patient, certificateData, customFileName, customBgImage);
   downloadBlob(result.pdfBytes, result.fileName);
   return result;
 }
@@ -298,7 +309,8 @@ export async function createOfficialHistoriaPdf(
     dx?: string;
     diagnostico?: string;
   },
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
   const context: ClinicalWorkspaceContext = {
     patient: {
@@ -323,6 +335,7 @@ export async function createOfficialHistoriaPdf(
     documentType: 'history',
     context,
     customFileName,
+    customBgImage,
   });
 }
 
@@ -352,7 +365,8 @@ export async function generateCanonicalDocumentPDF(
   docKey: DocType,
   patient: PatientData,
   bundle: ClinicalDataBundle,
-  customFileName?: string
+  customFileName?: string,
+  customBgImage?: string | null
 ): Promise<DocumentPipelineResponse> {
   switch (docKey) {
     case 'RECIPES':
@@ -367,7 +381,8 @@ export async function generateCanonicalDocumentPDF(
           rxLeft: bundle.recipeData?.rxLeft || bundle.recipeData?.pharmacy,
           indicationsRight: bundle.recipeData?.indicationsRight || bundle.recipeData?.patientIndications,
         },
-        customFileName
+        customFileName,
+        customBgImage
       );
 
     case 'ORDEN_LAB':
@@ -385,7 +400,8 @@ export async function generateCanonicalDocumentPDF(
           otherExams: bundle.labData?.otherExams || '',
         },
         bundle.labData?.presumptiveDx || '',
-        customFileName
+        customFileName,
+        customBgImage
       );
 
     case 'INFORME':
@@ -399,7 +415,8 @@ export async function generateCanonicalDocumentPDF(
         {
           bodyText: bundle.informeData?.bodyText,
         },
-        customFileName
+        customFileName,
+        customBgImage
       );
 
     case 'CONSTANCIA':
@@ -424,7 +441,8 @@ export async function generateCanonicalDocumentPDF(
           requestMonth: bundle.constanciaData?.requestMonth,
           requestYear: bundle.constanciaData?.requestYear,
         },
-        customFileName
+        customFileName,
+        customBgImage
       );
 
     case 'HISTORIA':
@@ -444,7 +462,8 @@ export async function generateCanonicalDocumentPDF(
           examenNeurologico: bundle.historiaData?.examenNeurologico || bundle.historiaData?.neuroExam,
           diagnostico: bundle.historiaData?.diagnostico || bundle.historiaData?.dx,
         },
-        customFileName
+        customFileName,
+        customBgImage
       );
 
     default:
