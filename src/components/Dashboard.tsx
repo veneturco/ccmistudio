@@ -27,7 +27,7 @@ import {
   Calendar as CalendarIcon,
   Settings,
   ShieldCheck,
-  CheckCircle2,
+  CheckCircle2, Activity,
   Zap,
   LogOut
 } from 'lucide-react';
