@@ -744,42 +744,9 @@ export const Dashboard: React.FC = () => {
         {activeTab === 'analytics' && (
           <AnalyticsDashboard />
         )}
-{/* PESTAÑA: ESTACIÓN OFICIAL DE PAPELERÍA A4 */}
+        {/* PESTAÑA: ESTACIÓN OFICIAL DE PAPELERÍA A4 */}
         {activeTab === 'workspace' && (
-          <div className="w-full space-y-3">
-            <div className="flex items-center justify-between bg-white dark:bg-[#091328] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-              <div className="flex items-center gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('portal')}
-                  className="text-blue-700 dark:text-cyan-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
-                >
-                  <Home className="w-3.5 h-3.5" />
-                  <span>Portal CMI</span>
-                </button>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-slate-600 dark:text-slate-300 font-medium">Estación de Papelería Médica Oficial A4</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('dictation_ai')}
-                  className="px-3 py-1 bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 rounded-lg text-xs font-bold cursor-pointer transition flex items-center gap-1"
-                >
-                  <Mic className="w-3 h-3" />
-                  <span>Ir a Dictado IA</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('agenda')}
-                  className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg text-xs font-bold cursor-pointer transition flex items-center gap-1"
-                >
-                  <CalendarIcon className="w-3 h-3" />
-                  <span>Ver Agenda</span>
-                </button>
-              </div>
-            </div>
-
+          <div className="w-full">
             <DocumentSelectorWorkspace 
               initialDocType={selectedDoc}
               initialPatient={activePatientData}
