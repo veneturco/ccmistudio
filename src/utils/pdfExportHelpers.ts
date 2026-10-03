@@ -213,12 +213,7 @@ export function buildWhatsAppMessage(opts: SharePdfOptions, shareUrl?: string): 
   return encodeURIComponent(`${greeting}\n\n${templateBody}${linkInfo}${footer}`);
 }
 // ===============================================================
-:`;
-  const docInfo = `Le adjuntamos su *${opts.docTitle || 'Documento Médico'}* emitido por el *Dr. Samir Moucharrafie Naime* (CCMI).`;
-  const linkInfo = shareUrl ? `\n\nPuede ver y descargar su documento oficial aquí:\n${shareUrl}` : '';
-  const footer = `\n\n_Instituto de Cirugía de Columna Mínimamente Invasiva (CCMI)_\n_Caracas, Venezuela_`;
-  return encodeURIComponent(`${greeting}\n\n${docInfo}${linkInfo}${footer}`);
-}
+
 
 export function sharePdfToWhatsApp(phone: string, text: string): void {
   const cleanPhone = formatWhatsAppPhone(phone);
