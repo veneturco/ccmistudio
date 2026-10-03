@@ -1293,21 +1293,21 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     }
   };
 
-  // Autocompletado inteligente al cambiar la cédula
-  const handleCedulaChange = (rawVal: string) => {
-    setPatient((prev) => ({ ...prev, idNumber: rawVal }));
-    const cleanCedula = rawVal.trim();
-    if (cleanCedula.length >= 4) {
-      const match = getPatientByCedula(cleanCedula);
-      if (match && match.nationalId !== patient.idNumber) {
-        setFoundPatientAlert(match);
+    const handleCedulaChange = (rawVal: string) => {
+      setPatient((prev) => ({ ...prev, idNumber: rawVal }));
+      const cleanCedula = rawVal.trim();
+      if (cleanCedula.length >= 4) {
+        const match = getPatientByCedula(cleanCedula);
+        // Only show alert if we found a match and the typed value isn't already the full ID
+        if (match && match.nationalId !== rawVal) {
+          setFoundPatientAlert(match);
+        } else {
+          setFoundPatientAlert(null);
+        }
       } else {
         setFoundPatientAlert(null);
       }
-    } else {
-      setFoundPatientAlert(null);
-    }
-  };
+    };
 
   // Cargar paciente encontrado
   const handleAcceptFoundPatient = (p: PatientRecord) => {
@@ -1663,7 +1663,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           </div>
 
           {/* Right: Actions Cluster (SAMI Dictado, Imprimir, Compartir, ⋯ Más) */}
-          <div className="flex items-center gap-1.5 shrink-0 relative overflow-x-auto scrollbar-none max-w-full">
+          <div className="flex items-center gap-1.5 shrink-0 relative flex-wrap justify-end">
             {/* Dictado SAMI / Cápsula integrada */}
             <ClinicalDictationCapsule
               onSyncAllDocuments={handleSyncAllDocuments}

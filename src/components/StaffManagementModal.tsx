@@ -141,6 +141,9 @@ export const StaffManagementModal: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   };
 
+  const currentUserRole = members.find(m => m.email.toLowerCase() === user?.email?.toLowerCase())?.role;
+  const isSuperAdmin = currentUserRole === 'ADMINISTRADOR' || currentUserRole === 'DESARROLLADOR' || user?.email === 'moucharrafiepc@gmail.com';
+
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in print:hidden"
@@ -200,97 +203,99 @@ export const StaffManagementModal: React.FC<Props> = ({ isOpen, onClose }) => {
         <div className="p-6 overflow-y-auto space-y-6 flex-1">
           
           {/* Formulario para Agregar Nuevo Miembro */}
-          <div className="p-4.5 rounded-2xl bg-[#0e1b33] border border-cyan-500/30 shadow-inner">
-            <h3 className="text-xs font-black uppercase tracking-wider text-cyan-300 flex items-center gap-2 mb-3">
-              <UserPlus className="w-4 h-4" />
-              <span>Autorizar Nuevo Doctor o Personal</span>
-            </h3>
+          {isSuperAdmin && (
+            <div className="p-4.5 rounded-2xl bg-[#0e1b33] border border-cyan-500/30 shadow-inner">
+              <h3 className="text-xs font-black uppercase tracking-wider text-cyan-300 flex items-center gap-2 mb-3">
+                <UserPlus className="w-4 h-4" />
+                <span>Autorizar Nuevo Doctor o Personal</span>
+              </h3>
 
-            <form onSubmit={handleAddMember} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div>
-                <label className="text-[11px] font-bold text-slate-300 block mb-1">
-                  Correo Google (Gmail) *
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="doctor@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-                />
-              </div>
+              <form onSubmit={handleAddMember} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div>
+                  <label className="text-[11px] font-bold text-slate-300 block mb-1">
+                    Correo Google (Gmail) *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="doctor@gmail.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                  />
+                </div>
 
-              <div>
-                <label className="text-[11px] font-bold text-slate-300 block mb-1">
-                  Nombre Completo *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Dr. Carlos Mendoza"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-                />
-              </div>
+                <div>
+                  <label className="text-[11px] font-bold text-slate-300 block mb-1">
+                    Nombre Completo *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Dr. Carlos Mendoza"
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                  />
+                </div>
 
-              <div>
-                <label className="text-[11px] font-bold text-slate-300 block mb-1">
-                  Rol en el Sistema
-                </label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value as SynapsisRole)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-cyan-300 font-bold focus:outline-none focus:border-cyan-400"
-                >
-                  <option value="MEDICO">🩺 Médico (Acceso Clínico)</option>
-                  <option value="SECRETARIA">📋 Secretaría / Citas</option>
-                  <option value="ADMINISTRADOR">⚙️ Administrador</option>
-                  <option value="DESARROLLADOR">💻 Desarrollador</option>
-                  <option value="RECEPCION">🏢 Recepción</option>
-                </select>
-              </div>
+                <div>
+                  <label className="text-[11px] font-bold text-slate-300 block mb-1">
+                    Rol en el Sistema
+                  </label>
+                  <select
+                    value={role}
+                    onChange={(e) => setRole(e.target.value as SynapsisRole)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-cyan-300 font-bold focus:outline-none focus:border-cyan-400"
+                  >
+                    <option value="MEDICO">🩺 Médico (Acceso Clínico)</option>
+                    <option value="SECRETARIA">📋 Secretaría / Citas</option>
+                    <option value="ADMINISTRADOR">⚙️ Administrador</option>
+                    <option value="DESARROLLADOR">💻 Desarrollador</option>
+                    <option value="RECEPCION">🏢 Recepción</option>
+                  </select>
+                </div>
 
-              <div>
-                <label className="text-[11px] font-bold text-slate-300 block mb-1">
-                  Especialidad / Cargo
-                </label>
-                <input
-                  type="text"
-                  placeholder="Ej: Neurocirugía / Traumatología"
-                  value={specialty}
-                  onChange={(e) => setSpecialty(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-                />
-              </div>
+                <div>
+                  <label className="text-[11px] font-bold text-slate-300 block mb-1">
+                    Especialidad / Cargo
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Neurocirugía / Traumatología"
+                    value={specialty}
+                    onChange={(e) => setSpecialty(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                  />
+                </div>
 
-              <div className="sm:col-span-2 lg:col-span-4 flex items-center justify-between pt-2">
-                <span className="text-[10px] text-slate-400 flex items-center gap-1.5">
-                  <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
-                  El nuevo personal podrá ingresar inmediatamente desde su celular con su cuenta de Google.
-                </span>
+                <div className="sm:col-span-2 lg:col-span-4 flex items-center justify-between pt-2">
+                  <span className="text-[10px] text-slate-400 flex items-center gap-1.5">
+                    <Smartphone className="w-3.5 h-3.5 text-cyan-400" />
+                    El nuevo personal podrá ingresar inmediatamente desde su celular con su cuenta de Google.
+                  </span>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black text-xs shadow-lg shadow-cyan-950/50 transition cursor-pointer active:scale-95 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>Sincronizando...</span>
-                    </>
-                  ) : (
-                    <>
-                      <UserPlus className="w-3.5 h-3.5" />
-                      <span>Autorizar Personal</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black text-xs shadow-lg shadow-cyan-950/50 transition cursor-pointer active:scale-95 disabled:opacity-50"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        <span>Sincronizando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-3.5 h-3.5" />
+                        <span>Autorizar Personal</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
 
           {/* Lista de Personal Autorizado */}
           <div className="space-y-3">
@@ -349,7 +354,7 @@ export const StaffManagementModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       </div>
                     </div>
 
-                    {!isPrimaryDoctor && (
+                    {isSuperAdmin && !isPrimaryDoctor && (
                       <button
                         type="button"
                         onClick={() => handleRemoveMember(m.email, m.displayName)}

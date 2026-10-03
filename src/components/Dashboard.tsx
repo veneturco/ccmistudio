@@ -312,64 +312,64 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Navegación Principal Modular: Segmented Control Estilo Apple */}
-          <div className={`hidden md:flex items-center p-1 rounded-xl border gap-0.5 ${
-            isClinicalLight ? 'bg-slate-100/90 border-slate-200' : 'bg-[#040c1a]/90 border-slate-800'
+          {/* Navegación Principal Modular: Ultra-Premium Segmented Control (Glassmorphism 2.0) */}
+          <div className={`hidden md:flex items-center p-1.5 rounded-2xl border gap-1 shadow-inner ${
+            isClinicalLight ? 'bg-white/60 backdrop-blur-xl border-slate-200/60' : 'bg-[#060d1d]/80 backdrop-blur-2xl border-white/5'
           }`}>
             <button
               type="button"
               onClick={() => setActiveTab('workspace')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer relative overflow-hidden ${
                 activeTab === 'workspace'
                   ? isClinicalLight
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-950/40'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gradient-to-r from-blue-600/90 to-cyan-500/90 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] ring-1 ring-white/10 scale-100'
                   : isClinicalLight
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  ? 'text-slate-500 hover:text-blue-600 hover:bg-blue-50/80 hover:scale-105 active:scale-95'
+                  : 'text-slate-400 hover:text-cyan-300 hover:bg-white/5 hover:scale-105 active:scale-95'
               }`}
               title="Estación de Papelería A4 y Récipes Oficiales"
             >
-              <FileText className="w-3.5 h-3.5" />
+              <FileText className={`w-4 h-4 transition-transform duration-300 ${activeTab !== 'workspace' && 'group-hover:rotate-6'}`} />
               <span>Papelería A4</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('agenda')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer relative overflow-hidden ${
                 activeTab === 'agenda'
                   ? isClinicalLight
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'bg-emerald-600 text-white shadow-md'
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'bg-gradient-to-r from-emerald-500/90 to-teal-400/90 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)] ring-1 ring-white/10 scale-100'
                   : isClinicalLight
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  ? 'text-slate-500 hover:text-emerald-600 hover:bg-emerald-50/80 hover:scale-105 active:scale-95'
+                  : 'text-slate-400 hover:text-emerald-300 hover:bg-white/5 hover:scale-105 active:scale-95'
               }`}
               title="Agenda Quirúrgica y Consultas Médicas"
             >
-              <CalendarIcon className="w-3.5 h-3.5" />
+              <CalendarIcon className={`w-4 h-4 transition-transform duration-300 ${activeTab !== 'agenda' && 'group-hover:scale-110 group-hover:-translate-y-0.5'}`} />
               <span>Agenda</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('history')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer relative overflow-hidden ${
                 activeTab === 'history'
                   ? isClinicalLight
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-slate-700 text-white shadow-md'
+                    ? 'bg-slate-900 text-white shadow-md'
+                    : 'bg-gradient-to-r from-slate-700 to-slate-600 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] ring-1 ring-white/10 scale-100'
                   : isClinicalLight
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/80 hover:scale-105 active:scale-95'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5 hover:scale-105 active:scale-95'
               }`}
               title="Historial de Documentos Emitidos"
             >
-              <History className="w-3.5 h-3.5" />
+              <History className={`w-4 h-4 transition-transform duration-300 ${activeTab !== 'history' && 'group-hover:-rotate-90'}`} />
               <span>Historial</span>
               {documentsHistory.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                   {documentsHistory.length}
                 </span>
               )}
@@ -378,18 +378,18 @@ export const Dashboard: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab('portal')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer relative overflow-hidden ${
                 activeTab === 'portal'
                   ? isClinicalLight
-                    ? 'bg-cyan-700 text-white shadow-xs'
-                    : 'bg-cyan-700 text-white shadow-md'
+                    ? 'bg-indigo-600 text-white shadow-md'
+                    : 'bg-gradient-to-r from-indigo-500/90 to-purple-500/90 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)] ring-1 ring-white/10 scale-100'
                   : isClinicalLight
-                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                  ? 'text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/80 hover:scale-105 active:scale-95'
+                  : 'text-slate-400 hover:text-indigo-300 hover:bg-white/5 hover:scale-105 active:scale-95'
               }`}
               title="Portal CMI de Especialidades"
             >
-              <Home className="w-3.5 h-3.5" />
+              <Home className={`w-4 h-4 transition-transform duration-300 ${activeTab !== 'portal' && 'group-hover:scale-110'}`} />
               <span>Portal</span>
             </button>
           </div>

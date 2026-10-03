@@ -69,20 +69,27 @@ export class StaffDirectoryService {
       this.unsubscribeFirestore = onSnapshot(
         query(membersCol),
         (snapshot) => {
-          snapshot.docs.forEach((docSnap) => {
-            const data = docSnap.data() as AuthorizedPersonnel;
-            if (data && data.email) {
-              this.cachedMembers.set(data.email.trim().toLowerCase(), {
-                email: data.email.trim().toLowerCase(),
-                displayName: data.displayName || data.email,
-                role: data.role || 'MEDICO',
-                specialty: data.specialty || '',
-                description: data.description || '',
-              });
-            }
-          });
-          this.saveToLocalStorage();
-          this.notifyListeners();
+          if (snapshot.empty) {
+            console.log('[STAFF IAM] Firestore vacío. Autopoblando con directorio estático...');
+            Object.values(AUTHORIZED_PERSONNEL_DIRECTORY).forEach(person => {
+              this.addOrUpdateMember(person).catch(e => console.warn(e));
+            });
+          } else {
+            snapshot.docs.forEach((docSnap) => {
+              const data = docSnap.data() as AuthorizedPersonnel;
+              if (data && data.email) {
+                this.cachedMembers.set(data.email.trim().toLowerCase(), {
+                  email: data.email.trim().toLowerCase(),
+                  displayName: data.displayName || data.email,
+                  role: data.role || 'MEDICO',
+                  specialty: data.specialty || '',
+                  description: data.description || '',
+                });
+              }
+            });
+            this.saveToLocalStorage();
+            this.notifyListeners();
+          }
         },
         (error) => {
           console.warn('[STAFF IAM] Modo offline o reglas restringidas en members:', error.message);

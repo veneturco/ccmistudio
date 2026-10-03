@@ -113,8 +113,8 @@ END:VCARD`;
           <div className="flex-1 flex flex-row relative">
             {/* Left Column: Portrait & Brand Spine */}
             <div className="w-[36%] bg-gradient-to-b from-white via-slate-50 to-blue-50/30 p-3 sm:p-4 flex flex-col items-center justify-between border-r border-slate-100 relative overflow-hidden">
-              <div className="w-full flex justify-start">
-                <BrandLogo size={44} variant="card-vertical" />
+              <div className="w-full flex justify-center mb-2">
+                <BrandLogo size={130} variant="card-vertical" />
               </div>
 
               {/* Avatar Ilustrativo Dr. Samir */}
@@ -204,16 +204,18 @@ END:VCARD`;
           <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-400/10 rounded-full blur-2xl pointer-events-none" />
 
           {/* Top: Logo & Title */}
-          <div className="flex flex-col items-center text-center space-y-2 relative z-10">
-            <BrandLogo size={60} variant="card-vertical" />
+          <div className="flex flex-col items-center text-center space-y-3 relative z-10">
+            <div className="bg-white/95 p-3 rounded-2xl shadow-lg shadow-black/20">
+              <BrandLogo size={140} variant="card-vertical" />
+            </div>
             <div>
-              <h2 className="text-base sm:text-lg font-black text-white tracking-tight leading-tight">
-                Cerebro Y Columna Mínimamente Invasivo
-              </h2>
-              <p className="text-xs font-bold text-cyan-300 mt-1">
-                Dr. Samir Moucharrafie Naime | Neurocirujano
+              <p className="text-xs sm:text-sm font-black text-white tracking-wider uppercase mt-1">
+                Dr. Samir Moucharrafie Naime
               </p>
-              <p className="text-[11px] text-blue-200 font-medium">
+              <p className="text-[11px] text-cyan-300 font-bold uppercase tracking-widest mt-0.5">
+                Neurocirujano
+              </p>
+              <p className="text-[10px] text-blue-200 font-medium tracking-wide mt-1">
                 Director | Más de 22 años de experiencia (Francia)
               </p>
             </div>

@@ -637,28 +637,30 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
       {/* 5. MODAL PARA CREAR NUEVA CITA */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#030914]/80 backdrop-blur-xl animate-fade-in"
           onClick={() => setIsModalOpen(false)}
         >
           <div
-            className="w-full max-w-lg bg-white dark:bg-[#0c162e] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden"
+            className="w-full max-w-lg bg-white dark:bg-[#081021]/95 dark:backdrop-blur-3xl rounded-[2rem] border border-slate-200 dark:border-blue-500/20 shadow-[0_0_60px_-15px_rgba(59,130,246,0.15)] overflow-hidden dark:ring-1 dark:ring-white/5 transform transition-all scale-100"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
+            <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-transparent relative">
+              {/* Subtle background glow for header */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-full bg-blue-500/5 blur-xl pointer-events-none" />
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30">
                   <CalendarIcon className="w-4 h-4" />
                 </div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white">
+                <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight">
                   Programar Cita Médica
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white transition cursor-pointer"
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/5 transition-all cursor-pointer relative z-10"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
@@ -673,7 +675,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                   placeholder="Ej. Carlos Mendoza Silva"
                   value={formData.patientName}
                   onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2.5 rounded-2xl text-sm bg-slate-100 dark:bg-[#0b1426] text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 outline-none focus:border-blue-500 dark:focus:border-blue-500/50 dark:focus:ring-2 dark:focus:ring-blue-500/20 transition-all shadow-inner hover:border-slate-300 dark:hover:border-white/10"
                 />
               </div>
 
@@ -687,7 +689,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                     placeholder="Ej. 16.482.903"
                     value={formData.patientNationalId}
                     onChange={(e) => setFormData({ ...formData, patientNationalId: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-500 font-mono"
+                    className="w-full px-4 py-2.5 rounded-2xl text-sm bg-slate-100 dark:bg-[#0b1426] text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 outline-none focus:border-blue-500 dark:focus:border-blue-500/50 dark:focus:ring-2 dark:focus:ring-blue-500/20 transition-all shadow-inner hover:border-slate-300 dark:hover:border-white/10 font-mono"
                   />
                 </div>
                 <div>
@@ -699,7 +701,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                     placeholder="Ej. 0424-912.83.41"
                     value={formData.patientPhone}
                     onChange={(e) => setFormData({ ...formData, patientPhone: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-500 font-mono"
+                    className="w-full px-4 py-2.5 rounded-2xl text-sm bg-slate-100 dark:bg-[#0b1426] text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 outline-none focus:border-blue-500 dark:focus:border-blue-500/50 dark:focus:ring-2 dark:focus:ring-blue-500/20 transition-all shadow-inner hover:border-slate-300 dark:hover:border-white/10 font-mono"
                   />
                 </div>
               </div>
@@ -714,7 +716,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                     required
                     value={formData.startTime}
                     onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-500 font-mono"
+                    className="w-full px-4 py-2.5 rounded-2xl text-sm bg-slate-100 dark:bg-[#0b1426] text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 outline-none focus:border-blue-500 dark:focus:border-blue-500/50 dark:focus:ring-2 dark:focus:ring-blue-500/20 transition-all shadow-inner hover:border-slate-300 dark:hover:border-white/10 font-mono"
                   />
                 </div>
                 <div>
@@ -724,7 +726,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value as AppointmentType })}
-                    className="w-full px-3.5 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-500 font-semibold cursor-pointer"
+                    className="w-full px-4 py-2.5 rounded-2xl text-sm bg-slate-100 dark:bg-[#0b1426] text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 outline-none focus:border-blue-500 dark:focus:border-blue-500/50 dark:focus:ring-2 dark:focus:ring-blue-500/20 transition-all shadow-inner hover:border-slate-300 dark:hover:border-white/10 font-semibold cursor-pointer"
                   >
                     <option value="PRIMERA_VEZ">Primera Vez</option>
                     <option value="CONTROL">Control</option>
@@ -744,7 +746,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                   placeholder="Ej. Hernia discal lumbar L5-S1, evaluación quirúrgica..."
                   value={formData.reasonForVisit}
                   onChange={(e) => setFormData({ ...formData, reasonForVisit: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl text-sm bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-blue-500 resize-none"
+                  className="w-full px-4 py-2.5 rounded-2xl text-sm bg-slate-100 dark:bg-[#0b1426] text-slate-900 dark:text-white border border-slate-200 dark:border-white/5 outline-none focus:border-blue-500 dark:focus:border-blue-500/50 dark:focus:ring-2 dark:focus:ring-blue-500/20 transition-all shadow-inner hover:border-slate-300 dark:hover:border-white/10 resize-none"
                 />
               </div>
 
@@ -758,7 +760,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl text-xs font-black bg-blue-600 hover:bg-blue-500 text-white shadow-md transition cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl text-sm font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] active:scale-95 transition-all duration-300 cursor-pointer"
                 >
                   Guardar Cita
                 </button>
@@ -770,3 +772,5 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
     </div>
   );
 };
+
+

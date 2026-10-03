@@ -36,36 +36,10 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 
   if (variant === 'card-vertical') {
     return (
-      <div className={`flex flex-col items-center text-center select-none ${className}`}>
-        {/* Emblem */}
-        <div style={{ width: dimension, height: dimension }} className="relative shrink-0 mb-2">
+      <div className={`flex flex-col items-center justify-center text-center select-none w-full ${className}`}>
+        {/* Emblem (Now acting as the full logo since the image contains the text) */}
+        <div style={{ width: dimension, height: dimension, maxWidth: '100%' }} className="relative shrink-0 mb-2 flex items-center justify-center">
           {emblemNode}
-        </div>
-
-        {/* CMI Stylized Brand */}
-        <div className="flex flex-col items-center">
-          <div className="relative">
-            {/* Swoosh Arc */}
-            <svg viewBox="0 0 120 30" className="w-24 h-4 mb-[-6px] overflow-visible">
-              <path
-                d="M 10 24 C 30 6, 80 6, 110 22"
-                fill="none"
-                stroke="#1b4f8c"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="text-3xl font-black tracking-tight text-[#0a3c74] font-sans">
-              CMI
-            </span>
-          </div>
-
-          <span className="text-[11px] font-black tracking-[0.18em] text-[#0a3c74] uppercase mt-0.5">
-            CEREBRO Y COLUMNA
-          </span>
-          <span className="text-[9px] font-bold tracking-[0.22em] text-[#2c6cb0] uppercase">
-            MÍNIMAMENTE INVASIVA
-          </span>
         </div>
       </div>
     );
