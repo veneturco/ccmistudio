@@ -70,8 +70,8 @@ class LRUCache<K, V> {
   }
 }
 
-// In-Memory Fast LRU Cache to prevent OOM
-const memoryAssetCache = new LRUCache<string, { full: string; lqip?: string; decoded?: boolean }>(30);
+// In-Memory Fast LRU Cache to prevent OOM (acotado a 6 plantillas maestras simultáneas)
+const memoryAssetCache = new LRUCache<string, { full: string; lqip?: string; decoded?: boolean }>(6);
 
 /**
  * Check if the browser supports WebP canvas export

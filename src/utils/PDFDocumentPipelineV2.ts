@@ -254,29 +254,32 @@ export class PDFDocumentPipelineV2 {
     const response = await this.generateDocument(request);
     if (typeof window !== 'undefined') {
       const blobUrl = URL.createObjectURL(response.blob);
-      const iframe = document.createElement('iframe');
-      iframe.style.position = 'fixed';
-      iframe.style.right = '0';
-      iframe.style.bottom = '0';
-      iframe.style.width = '0';
-      iframe.style.height = '0';
-      iframe.style.border = '0';
+      let iframe = document.getElementById('ccmi-dedicated-print-iframe') as HTMLIFrameElement | null;
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = 'ccmi-dedicated-print-iframe';
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
+      }
+      const prevBlobUrl = iframe.dataset.blobUrl;
+      if (prevBlobUrl) {
+        URL.revokeObjectURL(prevBlobUrl);
+      }
+      iframe.dataset.blobUrl = blobUrl;
       iframe.src = blobUrl;
-      document.body.appendChild(iframe);
       iframe.onload = () => {
         try {
-          iframe.contentWindow?.focus();
-          iframe.contentWindow?.print();
+          iframe?.contentWindow?.focus();
+          iframe?.contentWindow?.print();
         } catch (err) {
           console.warn('Fallback de impresión nativa:', err);
           window.print();
         }
-        setTimeout(() => {
-          try {
-            document.body.removeChild(iframe);
-            URL.revokeObjectURL(blobUrl);
-          } catch {}
-        }, 60000);
       };
     }
     return response;

@@ -104,11 +104,14 @@ export interface PatientRecord {
 const STORAGE_KEY = 'socs_ccmi_patients_v2';
 const ENCRYPTION_KEY = 'ccmi-secure-clinical-key-2026';
 
-// Usamos cifrado síncrono nativo (Base64 + URI) para no depender de librerías externas (crypto-js)
-// dado el bloqueo de red que está presentando el registro de npm.
 function encryptData(data: string): string {
   try {
-    return btoa(encodeURIComponent(data));
+    const encoded = encodeURIComponent(data);
+    let result = '';
+    for (let i = 0; i < encoded.length; i++) {
+      result += String.fromCharCode(encoded.charCodeAt(i) ^ ENCRYPTION_KEY.charCodeAt(i % ENCRYPTION_KEY.length));
+    }
+    return 'enc_v2:' + btoa(result);
   } catch {
     return data;
   }
@@ -116,9 +119,22 @@ function encryptData(data: string): string {
 
 function decryptData(data: string): string {
   try {
-    return decodeURIComponent(atob(data));
+    if (data.startsWith('enc_v2:')) {
+      const raw = atob(data.slice(7));
+      let result = '';
+      for (let i = 0; i < raw.length; i++) {
+        result += String.fromCharCode(raw.charCodeAt(i) ^ ENCRYPTION_KEY.charCodeAt(i % ENCRYPTION_KEY.length));
+      }
+      return decodeURIComponent(result);
+    }
+    // Compatibilidad retroactiva con Base64 previo o texto plano
+    try {
+      return decodeURIComponent(atob(data));
+    } catch {
+      return data;
+    }
   } catch (e) {
-    return data; // Retorna los datos originales si no estaban codificados
+    return data;
   }
 }
 

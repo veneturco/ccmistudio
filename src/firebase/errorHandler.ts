@@ -31,18 +31,18 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
     error: error instanceof Error ? error.message : String(error),
     authInfo: {
       userId: auth.currentUser?.uid,
-      email: auth.currentUser?.email,
+      email: auth.currentUser?.email ? (auth.currentUser.email.replace(/(.{2})(.*)(@.*)/, '$1***$3')) : null,
       emailVerified: auth.currentUser?.emailVerified,
       isAnonymous: auth.currentUser?.isAnonymous,
       tenantId: auth.currentUser?.tenantId,
       providerInfo: auth.currentUser?.providerData?.map(provider => ({
         providerId: provider.providerId,
-        email: provider.email,
+        email: provider.email ? (provider.email.replace(/(.{2})(.*)(@.*)/, '$1***$3')) : null,
       })) || []
     },
     operationType,
     path
   };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  console.error('Firestore Error: ', errInfo.error, `(Op: ${operationType}, Path: ${path})`);
   throw new Error(JSON.stringify(errInfo));
 }
