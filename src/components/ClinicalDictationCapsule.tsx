@@ -193,7 +193,13 @@ export const ClinicalDictationCapsule: React.FC<Props> = ({
         setPendingLegacyData(result.data || null);
         const payloadToConfirm = result.proposal?.payload || result.data?.payload || result.data;
         if (payloadToConfirm) {
-          handleConfirmProposal(payloadToConfirm);
+          onSyncAllDocuments(payloadToConfirm);
+          setCapsuleState('success');
+          setStatusMessage('✓ Consulta estructurada con éxito en los 5 documentos');
+          setTimeout(() => {
+            setStatusMessage(null);
+            setCapsuleState('idle');
+          }, 4500);
         }
 
         if (onOpenProposalReview) {
@@ -570,7 +576,7 @@ export const ClinicalDictationCapsule: React.FC<Props> = ({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleConfirmProposal(newProposal.payload);
+                  setShowReviewModal(true);
                 }}
                 className="ml-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-2 py-0.5 rounded-full text-[10px] flex items-center gap-1 cursor-pointer transition shadow-xs"
                 title="Abrir revisión y autorizar consulta"

@@ -32,8 +32,20 @@ function getElGeo(
     align?: string;
   }
 ) {
-  const xMm = el?.geometry?.xMm ?? el?.xMm ?? fallback.xMm;
-  const yMm = el?.geometry?.yMm ?? el?.yMm ?? fallback.yMm;
+  let xMm = el?.geometry?.xMm ?? el?.xMm ?? fallback.xMm;
+  let yMm = el?.geometry?.yMm ?? el?.yMm ?? fallback.yMm;
+  
+  // Anti-corruption clamp: Patient boxes and Rx bodies should never be in the header area (< 45mm)
+  if (fallback.yMm >= 50 && (yMm < 45 || yMm > 120)) {
+    yMm = fallback.yMm;
+  }
+  if (fallback.xMm < 105 && xMm >= 105) {
+    xMm = fallback.xMm;
+  }
+  if (fallback.xMm >= 105 && xMm < 105) {
+    xMm = fallback.xMm;
+  }
+
   const widthMm = el?.geometry?.widthMm ?? el?.widthMm ?? fallback.widthMm;
   const heightMm = el?.geometry?.heightMm ?? el?.heightMm ?? fallback.heightMm;
   const fontSizePt = el?.typography?.fontSizePt ?? el?.fontSizePt ?? fallback.fontSizePt ?? 9.5;
@@ -140,7 +152,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.fullName || ''}
         onChange={(e) => onUpdatePatient('fullName', e.target.value)}
-        placeholder="NOMBRE DEL PACIENTE"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gLeftName.xMm * MM_TO_PX_X}px`,
@@ -159,7 +171,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.idNumber || ''}
         onChange={(e) => onUpdatePatient('idNumber', e.target.value)}
-        placeholder="V-00.000.000"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gLeftId.xMm * MM_TO_PX_X}px`,
@@ -178,7 +190,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.age || ''}
         onChange={(e) => onUpdatePatient('age', e.target.value)}
-        placeholder="Edad"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gLeftAge.xMm * MM_TO_PX_X}px`,
@@ -197,7 +209,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.date || ''}
         onChange={(e) => onUpdatePatient('date', e.target.value)}
-        placeholder="DD/MM/AAAA"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gLeftDate.xMm * MM_TO_PX_X}px`,
@@ -215,7 +227,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
       <textarea
         value={recipeData.rxLeft || ''}
         onChange={(e) => onUpdateRecipeData('rxLeft', e.target.value)}
-        placeholder="Rp. Prescripción farmacológica (Fármaco, concentración, presentación y cantidad)..."
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gLeftRx.xMm * MM_TO_PX_X}px`,
@@ -255,7 +267,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.fullName || ''}
         onChange={(e) => onUpdatePatient('fullName', e.target.value)}
-        placeholder="NOMBRE DEL PACIENTE"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gRightName.xMm * MM_TO_PX_X}px`,
@@ -274,7 +286,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.idNumber || ''}
         onChange={(e) => onUpdatePatient('idNumber', e.target.value)}
-        placeholder="V-00.000.000"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gRightId.xMm * MM_TO_PX_X}px`,
@@ -293,7 +305,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.age || ''}
         onChange={(e) => onUpdatePatient('age', e.target.value)}
-        placeholder="Edad"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gRightAge.xMm * MM_TO_PX_X}px`,
@@ -312,7 +324,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         type="text"
         value={patient.date || ''}
         onChange={(e) => onUpdatePatient('date', e.target.value)}
-        placeholder="DD/MM/AAAA"
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gRightDate.xMm * MM_TO_PX_X}px`,
@@ -330,7 +342,7 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
       <textarea
         value={recipeData.indicationsRight || ''}
         onChange={(e) => onUpdateRecipeData('indicationsRight', e.target.value)}
-        placeholder="Indicaciones terapéuticas detalladas (Dosis, vía de administración, frecuencia, duración y recomendaciones)..."
+        placeholder=""
         style={{
           position: 'absolute',
           left: `${gRightIndications.xMm * MM_TO_PX_X}px`,

@@ -482,7 +482,7 @@ export const MASTER_REGISTRY_V2: Record<string, MasterTemplateV2> = {
   'lab_order-001': LAB_ORDER_MASTER_V2,
 };
 
-export const CALIBRATOR_STORAGE_KEY = 'calibrator_elements_map_v10';
+export const CALIBRATOR_STORAGE_KEY = 'calibrator_elements_map_v12';
 
 /**
  * Restablece las calibraciones guardadas en localStorage a los valores de fábrica
@@ -646,6 +646,48 @@ export function hydrateTemplateWithSavedCalibrations(template: MasterTemplateV2)
             yMm = 66.0;
             xMm = 18.0;
             widthMm = 175.0;
+          }
+        }
+
+        // Auto-corrección forense de desfase para Récipe si fue guardado con coordenadas corruptas
+        if (docTypeLower === 'recipe' || masterIdLower.includes('recipe')) {
+          const isLeft = el.id?.startsWith('left_') || (el.geometry?.xMm ?? el.xMm ?? 0) < 105;
+          if (isLeft) {
+            if ((el.id === 'left_patient_name' || el.id === 'left_name' || el.dataKey === 'patient.fullName') && (yMm < 45 || yMm > 70)) {
+              yMm = 56.5;
+              xMm = 25.0;
+              widthMm = 75.0;
+            } else if ((el.id === 'left_patient_id' || el.id === 'left_id' || el.dataKey === 'patient.idNumber') && (yMm < 45 || yMm > 75)) {
+              yMm = 60.5;
+              xMm = 15.0;
+              widthMm = 32.0;
+            } else if ((el.id === 'left_patient_age' || el.id === 'left_age' || el.dataKey === 'patient.age') && (yMm < 45 || yMm > 75)) {
+              yMm = 60.5;
+              xMm = 51.0;
+              widthMm = 18.0;
+            } else if ((el.id === 'left_date' || el.id === 'left_patient_date' || el.dataKey === 'document.date') && (yMm < 45 || yMm > 75)) {
+              yMm = 60.5;
+              xMm = 74.0;
+              widthMm = 25.0;
+            }
+          } else {
+            if ((el.id === 'right_patient_name' || el.id === 'right_name' || el.dataKey === 'patient.fullName') && (yMm < 45 || yMm > 70)) {
+              yMm = 56.5;
+              xMm = 129.0;
+              widthMm = 75.0;
+            } else if ((el.id === 'right_patient_id' || el.id === 'right_id' || el.dataKey === 'patient.idNumber') && (yMm < 45 || yMm > 75)) {
+              yMm = 60.5;
+              xMm = 119.0;
+              widthMm = 32.0;
+            } else if ((el.id === 'right_patient_age' || el.id === 'right_age' || el.dataKey === 'patient.age') && (yMm < 45 || yMm > 75)) {
+              yMm = 60.5;
+              xMm = 155.0;
+              widthMm = 18.0;
+            } else if ((el.id === 'right_date' || el.id === 'right_patient_date' || el.dataKey === 'document.date') && (yMm < 45 || yMm > 75)) {
+              yMm = 60.5;
+              xMm = 178.0;
+              widthMm = 25.0;
+            }
           }
         }
 
