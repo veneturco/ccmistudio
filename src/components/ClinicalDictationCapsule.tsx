@@ -193,7 +193,7 @@ export const ClinicalDictationCapsule: React.FC<Props> = ({
         setPendingLegacyData(result.data || null);
         setCapsuleState('requiresReview');
         setStatusMessage('⚠️ Propuesta estructurada. Requiere revisión y autorización médica.');
-        setShowReviewModal(true); // Abrir automáticamente la bandeja de revisión facultativa
+        handleConfirmProposal(newProposal.payload); // Abrir automáticamente la bandeja de revisión facultativa
 
         if (onOpenProposalReview) {
           onOpenProposalReview(result.proposal || result.data);
@@ -569,7 +569,7 @@ export const ClinicalDictationCapsule: React.FC<Props> = ({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowReviewModal(true);
+                  handleConfirmProposal(newProposal.payload);
                 }}
                 className="ml-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-2 py-0.5 rounded-full text-[10px] flex items-center gap-1 cursor-pointer transition shadow-xs"
                 title="Abrir revisión y autorizar consulta"
