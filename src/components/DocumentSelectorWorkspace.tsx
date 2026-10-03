@@ -1251,7 +1251,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         },
       };
 
-      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName);
+      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName, customBgs[activeDoc] || null);
       const blobUrl = URL.createObjectURL(result.blob);
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
@@ -1394,7 +1394,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         },
       };
 
-      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName);
+      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName, customBgs[activeDoc] || null);
       downloadBlob(result.pdfBytes, result.fileName);
       const reviewNotice = result.requiresReview ? ' (Nota: El documento requiere revisión)' : '';
       setSaveStatus(`PDF oficial de ${def.label} generado exitosamente sobre PDF original${reviewNotice}`);
@@ -1632,9 +1632,9 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           : 'bg-[#0d162a]/95 border-slate-800 text-white shadow-2xl'
       }`}>
         {/* ROW 1: SEGMENTED DOCUMENT PICKER + ACTIONS CLUSTER */}
-        <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center justify-between gap-2 flex-wrap md:flex-nowrap">
           {/* Left: Apple Segmented Control para los 5 Documentos Oficiales */}
-          <div className={`flex items-center p-1 rounded-xl border max-w-full overflow-x-auto scrollbar-none gap-0.5 shrink-0 ${
+          <div className={`flex items-center p-1 rounded-xl border max-w-full overflow-x-auto scrollbar-none gap-0.5 shrink min-w-0 ${
             isClinicalLight ? 'bg-slate-100/90 border-slate-200' : 'bg-[#060e1f] border-slate-800'
           }`}>
             {tabs.map((tab) => {
@@ -1644,7 +1644,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveDoc(tab.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 shrink-0 ${
                     isActive
                       ? isClinicalLight
                         ? 'bg-blue-600 text-white shadow-xs'
@@ -1656,14 +1656,14 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   title={tab.label}
                 >
                   <span className="shrink-0">{tab.icon}</span>
-                  <span className="hidden sm:inline">{tab.label.split(' ')[0]}</span>
+                  <span className="hidden lg:inline">{tab.label.split(' ')[0]}</span>
                 </button>
               );
             })}
           </div>
 
           {/* Right: Actions Cluster (SAMI Dictado, Imprimir, Compartir, ⋯ Más) */}
-          <div className="flex items-center gap-1.5 shrink-0 relative">
+          <div className="flex items-center gap-1.5 shrink-0 relative overflow-x-auto scrollbar-none max-w-full">
             {/* Dictado SAMI / Cápsula integrada */}
             <ClinicalDictationCapsule
               onSyncAllDocuments={handleSyncAllDocuments}
@@ -1677,15 +1677,15 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             <button
               type="button"
               onClick={handleDirectPrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-sm transition active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-sm transition active:scale-95 cursor-pointer shrink-0"
               title="Imprimir documento oficial en hoja A4 (Ctrl + P)"
             >
               <Printer className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Imprimir</span>
+              <span className="hidden xl:inline">Imprimir</span>
             </button>
 
             {/* Compartir (Apple Share Sheet) */}
-            <div className="relative" ref={shareMenuRef}>
+            <div className="relative shrink-0" ref={shareMenuRef}>
               <button
                 type="button"
                 onClick={() => setIsShareMenuOpen(!isShareMenuOpen)}
@@ -1697,7 +1697,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 title="Compartir por WhatsApp, descargar PDF o transferir por QR"
               >
                 <Share2 className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Compartir</span>
+                <span className="hidden xl:inline">Compartir</span>
               </button>
 
               {/* Popover Compartir estilo Apple */}
@@ -1773,7 +1773,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             </div>
 
             {/* Menú '⋯ Más' (Dropdown de herramientas secundarias) */}
-            <div className="relative" ref={moreMenuRef}>
+            <div className="relative shrink-0" ref={moreMenuRef}>
               <button
                 type="button"
                 onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}

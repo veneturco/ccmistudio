@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   QrCode, 
@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { OfficialQrCode } from './OfficialQrCode';
 import { DocType, PatientData } from '../types';
+import { generateCanonicalDocumentPDF, ClinicalDataBundle } from '../utils/pdfExport';
+import { uploadPdfForSharing } from '../utils/pdfExportHelpers';
 
 interface Props {
   isOpen: boolean;
@@ -20,6 +22,8 @@ interface Props {
   pdfUrl?: string | null;
   patient: PatientData;
   activeDoc: DocType;
+  clinicalDataBundle?: ClinicalDataBundle;
+  customBgImage?: string | null;
 }
 
 export const PatientQrHandoffModal: React.FC<Props> = ({
@@ -28,15 +32,47 @@ export const PatientQrHandoffModal: React.FC<Props> = ({
   pdfUrl,
   patient,
   activeDoc,
+  clinicalDataBundle,
+  customBgImage,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [publicUrl, setPublicUrl] = useState<string | null>(pdfUrl || null);
+  const [status, setStatus] = useState<'idle' | 'working' | 'ready' | 'error'>('idle');
+
+  // Genera el PDF oficial con master y lo publica en un enlace público (sin login)
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    (async () => {
+      setStatus('working');
+      setPublicUrl(null);
+      try {
+        const safe = (patient.fullName || 'Paciente').replace(/[^a-zA-Z0-9]+/g, '_');
+        const fileName = `${activeDoc}_${safe}.pdf`;
+        const result = await generateCanonicalDocumentPDF(activeDoc, patient, clinicalDataBundle || {}, fileName, customBgImage || null);
+        const up: any = await uploadPdfForSharing(result.pdfBytes, fileName, {
+          patientName: patient.fullName || 'Paciente',
+          docTitle: `${activeDoc} Oficial (Dr. Samir Moucharrafie)`,
+        });
+        if (cancelled) return;
+        const url = up?.shareUrl || up?.directPdfUrl;
+        if (!url) throw new Error('sin enlace');
+        setPublicUrl(url.startsWith('http') ? url : `${window.location.origin}${url}`);
+        setStatus('ready');
+      } catch (e) {
+        console.warn('[QR] Error publicando documento:', e);
+        if (!cancelled) setStatus('error');
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isOpen, activeDoc]);
 
   if (!isOpen) return null;
 
-  // URL fallback si no hay URL remota generada
-  const targetUrl = pdfUrl || (typeof window !== 'undefined' ? `${window.location.origin}/shared_docs/rec_${patient.idNumber || 'doc'}.pdf` : '');
+  const targetUrl = publicUrl || '';
 
   const handleCopyLink = () => {
+    if (!targetUrl) return;
     navigator.clipboard.writeText(targetUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
@@ -87,11 +123,14 @@ export const PatientQrHandoffModal: React.FC<Props> = ({
           </div>
 
           {/* Contenedor del Código QR */}
-          <div className="p-4 rounded-2xl bg-white shadow-2xl inline-block mx-auto border-4 border-cyan-500/40">
-            <OfficialQrCode 
-              value={targetUrl} 
-              size={200} 
-            />
+          <div className="p-4 rounded-2xl bg-white shadow-2xl inline-block mx-auto border-4 border-cyan-500/40 min-w-[232px] min-h-[232px]">
+            {status === 'ready' && targetUrl ? (
+              <OfficialQrCode value={targetUrl} size={200} />
+            ) : (
+              <div className="w-[200px] h-[200px] flex items-center justify-center text-xs font-bold text-slate-700 text-center">
+                {status === 'error' ? 'No se pudo publicar el documento. Intente de nuevo.' : 'Generando documento oficial con master…'}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center justify-center gap-2 text-[11px] text-slate-400">

@@ -156,6 +156,24 @@ export class PDFDocumentPipelineV2 {
       defaultImg = defaultPdf.replace(/\.pdf$/i, '_bg.jpg');
     }
 
+    // PRIORIDAD MAESTRA: la misma imagen oficial que se ve en la vista previa en pantalla.
+    // Los *_base.pdf estáticos son plantillas vectoriales sin el arte del master, por eso salían "vacíos".
+    if (typeof window !== 'undefined') {
+      for (const url of [defaultImg, `${window.location.origin}${defaultImg}`]) {
+        try {
+          const r = await fetch(url, { cache: 'force-cache' });
+          if (r.ok) {
+            const b = new Uint8Array(await r.arrayBuffer());
+            const jpg = b.length > 1000 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff;
+            const png = b.length > 1000 && b[0] === 0x89 && b[1] === 0x50;
+            if (jpg || png) return b;
+          }
+        } catch {
+          // siguiente candidato
+        }
+      }
+    }
+
     // 0. Cache en memoria RAM viva (Pilar 5: Optimización < 50ms)
     try {
       const cached = await PDFTemplatePreloader.getOrFetch(defaultPdf);
