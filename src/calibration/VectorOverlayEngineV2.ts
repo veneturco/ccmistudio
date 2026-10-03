@@ -305,8 +305,8 @@ export class VectorOverlayEngineV2 {
         if (element.id && (element.id === 'left_patient_id' || element.id === 'right_patient_id') && (rawGeom.yMm < 56.0 || rawGeom.yMm === 0)) {
           rawGeom.yMm = 60.5;
         }
-        if (element.id && (element.id === 'left_patient_name' || element.id === 'right_patient_name') && rawGeom.yMm < 48.0) {
-          rawGeom.yMm = 52.0;
+        if (element.id && (element.id === 'left_patient_name' || element.id === 'right_patient_name') && rawGeom.yMm < 54.0) {
+          rawGeom.yMm = 56.5;
         }
         if (element.id && (element.id === 'left_rx_body' || element.id === 'right_indications_body') && rawGeom.yMm < 75.0) {
           rawGeom.yMm = 78.0;

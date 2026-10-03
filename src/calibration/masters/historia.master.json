@@ -2,36 +2,38 @@
   "masterId": "HISTORY-001",
   "version": "2.0",
   "documentType": "history",
-  "pageSize": { "widthMm": 215.9, "heightMm": 279.4, "format": "Letter Vertical" },
+  "pageSize": { "widthMm": 210.0, "heightMm": 297.0, "format": "A4 Portrait" },
   "backgroundPdf": "/templates/historia_base.pdf",
   "status": "CALIBRATED",
   "lockedRegions": [
-    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 215.9, "heightMm": 41.79 },
-    { "id": "footer_brand", "xMm": 0, "yMm": 269.55, "widthMm": 215.9, "heightMm": 9.85 }
+    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 210.0, "heightMm": 42.0 },
+    { "id": "footer_brand", "xMm": 0, "yMm": 265.0, "widthMm": 210.0, "heightMm": 32.0 }
   ],
   "pages": [
     {
       "pageIndex": 0,
-      "widthMm": 215.9,
-      "heightMm": 279.4,
+      "widthMm": 210.0,
+      "heightMm": 297.0,
+      "backgroundPdfPage": 0,
       "elements": [
-        { "id": "patient.fullName", "dataKey": "patient.fullName", "type": "text", "xMm": 35.0, "yMm": 43.5, "widthMm": 105.0, "heightMm": 5.5, "fontSizePt": 10.5, "fontWeight": "bold" },
-        { "id": "patient.idNumber", "dataKey": "patient.idNumber", "type": "text", "xMm": 155.0, "yMm": 43.5, "widthMm": 45.0, "heightMm": 5.5, "fontSizePt": 10.5, "fontWeight": "bold" },
-        
-        { "id": "patient.age", "dataKey": "patient.age", "type": "text", "xMm": 25.0, "yMm": 52.0, "widthMm": 25.0, "heightMm": 5.5, "fontSizePt": 10.5, "fontWeight": "bold" },
-        { "id": "patient.phone", "dataKey": "patient.phone", "type": "text", "xMm": 70.0, "yMm": 52.0, "widthMm": 40.0, "heightMm": 5.5, "fontSizePt": 10.5, "fontWeight": "bold" },
-        { "id": "patient.address", "dataKey": "patient.address", "type": "text", "xMm": 130.0, "yMm": 52.0, "widthMm": 72.0, "heightMm": 5.5, "fontSizePt": 9.5, "fontWeight": "bold", "overflow": "shrink" },
+        { "id": "patient.fullName", "dataKey": "patient.fullName", "type": "text", "xMm": 53.0, "yMm": 44.5, "widthMm": 131.0, "heightMm": 7.0, "fontSizePt": 10.0, "fontWeight": "bold" },
+        { "id": "patient.age", "dataKey": "patient.age", "type": "text", "xMm": 40.0, "yMm": 53.5, "widthMm": 37.0, "heightMm": 7.0, "fontSizePt": 10.0, "fontWeight": "bold" },
+        { "id": "patient.address", "dataKey": "patient.address", "type": "text", "xMm": 105.0, "yMm": 53.5, "widthMm": 79.0, "heightMm": 7.0, "fontSizePt": 9.5, "fontWeight": "bold", "overflow": "shrink" },
+        { "id": "patient.phone", "dataKey": "patient.phone", "type": "text", "xMm": 40.0, "yMm": 63.0, "widthMm": 37.0, "heightMm": 7.0, "fontSizePt": 10.0, "fontWeight": "bold" },
+        { "id": "patient.idNumber", "dataKey": "patient.idNumber", "type": "text", "xMm": 105.0, "yMm": 63.0, "widthMm": 79.0, "heightMm": 7.0, "fontSizePt": 10.0, "fontWeight": "bold" },
 
-        { "id": "historia.motivo", "dataKey": "clinicalHistory.consultReason", "type": "multilineText", "xMm": 12.0, "yMm": 71.0, "widthMm": 192.0, "heightMm": 17.0, "fontSizePt": 10.5, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
-        
-        { "id": "historia.enfermedad", "dataKey": "clinicalHistory.currentIllness", "type": "multilineText", "xMm": 12.0, "yMm": 95.0, "widthMm": 192.0, "heightMm": 31.0, "fontSizePt": 10.5, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
-        
-        { "id": "historia.antecedentes", "dataKey": "clinicalHistory.background", "type": "multilineText", "xMm": 12.0, "yMm": 134.0, "widthMm": 192.0, "heightMm": 38.0, "fontSizePt": 10.5, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
-        
-        { "id": "historia.examen", "dataKey": "clinicalHistory.neuroExam", "type": "multilineText", "xMm": 12.0, "yMm": 180.0, "widthMm": 192.0, "heightMm": 38.0, "fontSizePt": 10.5, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
-        
-        { "id": "historia.diagnostico", "dataKey": "clinicalHistory.diagnosis", "type": "multilineText", "xMm": 12.0, "yMm": 226.0, "widthMm": 192.0, "heightMm": 32.0, "fontSizePt": 11.0, "lineHeightPt": 14.5, "fontWeight": "bold", "align": "left", "overflow": "shrink" }
+        { "id": "historia.motivo", "dataKey": "clinicalHistory.consultReason", "type": "multilineText", "xMm": 22.0, "yMm": 78.0, "widthMm": 166.0, "heightMm": 18.0, "fontSizePt": 10.0, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
+        { "id": "historia.enfermedad", "dataKey": "clinicalHistory.currentIllness", "type": "multilineText", "xMm": 22.0, "yMm": 105.0, "widthMm": 166.0, "heightMm": 32.0, "fontSizePt": 10.0, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
+        { "id": "historia.antecedentes", "dataKey": "clinicalHistory.background", "type": "multilineText", "xMm": 22.0, "yMm": 147.0, "widthMm": 166.0, "heightMm": 26.0, "fontSizePt": 10.0, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
+        { "id": "historia.examen", "dataKey": "clinicalHistory.neuroExam", "type": "multilineText", "xMm": 22.0, "yMm": 183.0, "widthMm": 166.0, "heightMm": 32.0, "fontSizePt": 10.0, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
+        { "id": "historia.diagnostico", "dataKey": "clinicalHistory.diagnosis", "type": "multilineText", "xMm": 22.0, "yMm": 225.0, "widthMm": 166.0, "heightMm": 20.0, "fontSizePt": 10.5, "lineHeightPt": 14.5, "fontWeight": "bold", "align": "left", "overflow": "shrink" }
       ]
     }
-  ]
+  ],
+  "metadata": {
+    "name": "Historia Clínica Oficial (Samir)",
+    "description": "Expediente clínico integral institucional A4.",
+    "calibratedBy": "Dr. Samir Moucharrafie Naime",
+    "calibrationVersion": "v12.0-a4-canonical"
+  }
 }

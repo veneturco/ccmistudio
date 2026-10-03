@@ -2,29 +2,34 @@
   "masterId": "INFORME-001",
   "version": "2.0",
   "documentType": "report",
-  "pageSize": { "widthMm": 153.5, "heightMm": 215.8, "format": "Media Carta Vertical" },
+  "pageSize": {
+    "widthMm": 210.0,
+    "heightMm": 297.0,
+    "format": "A4 Portrait"
+  },
   "backgroundPdf": "/templates/informe_base.pdf",
   "pageIndex": 0,
   "status": "CALIBRATED",
   "lockedRegions": [
-    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 153.5, "heightMm": 37.37 },
-    { "id": "footer_brand", "xMm": 0, "yMm": 200.0, "widthMm": 153.5, "heightMm": 15.8 }
+    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 210.0, "heightMm": 37.0 },
+    { "id": "footer_brand", "xMm": 0, "yMm": 275.0, "widthMm": 210.0, "heightMm": 22.0 }
   ],
   "pages": [
     {
       "pageIndex": 0,
-      "widthMm": 153.5,
-      "heightMm": 215.8,
+      "widthMm": 210.0,
+      "heightMm": 297.0,
+      "backgroundPdfPage": 0,
       "elements": [
         {
           "type": "text",
-          "id": "patient.fullName",
+          "id": "inf_patient_name",
           "dataKey": "patient.fullName",
-          "xMm": 40.0,
-          "yMm": 40.0,
-          "widthMm": 90.0,
-          "heightMm": 5.5,
-          "fontSizePt": 9.0,
+          "xMm": 65.5,
+          "yMm": 38.0,
+          "widthMm": 116.0,
+          "heightMm": 6.0,
+          "fontSizePt": 9.5,
           "fontWeight": "bold",
           "align": "left",
           "maxLines": 1,
@@ -32,135 +37,89 @@
         },
         {
           "type": "text",
-          "id": "patient.idNumber",
+          "id": "inf_patient_id",
           "dataKey": "patient.idNumber",
-          "xMm": 32.0,
-          "yMm": 49.0,
-          "widthMm": 28.0,
-          "heightMm": 5.5,
-          "fontSizePt": 9.0,
+          "xMm": 46.0,
+          "yMm": 47.0,
+          "widthMm": 40.0,
+          "heightMm": 6.0,
+          "fontSizePt": 9.5,
           "fontWeight": "bold",
           "align": "left",
           "maxLines": 1
         },
         {
           "type": "text",
-          "id": "patient.age",
+          "id": "inf_patient_age",
           "dataKey": "patient.age",
-          "xMm": 76.0,
-          "yMm": 49.0,
-          "widthMm": 10.0,
-          "heightMm": 5.5,
-          "fontSizePt": 9.0,
+          "xMm": 105.0,
+          "yMm": 47.0,
+          "widthMm": 25.0,
+          "heightMm": 6.0,
+          "fontSizePt": 9.5,
           "fontWeight": "bold",
           "align": "left",
           "maxLines": 1
         },
         {
           "type": "text",
-          "id": "patient.date",
+          "id": "inf_date",
           "dataKey": "document.date",
-          "xMm": 102.0,
-          "yMm": 49.0,
-          "widthMm": 28.0,
-          "heightMm": 5.5,
-          "fontSizePt": 9.0,
+          "xMm": 140.5,
+          "yMm": 47.0,
+          "widthMm": 35.0,
+          "heightMm": 6.0,
+          "fontSizePt": 9.5,
           "fontWeight": "bold",
           "align": "left",
           "maxLines": 1
         },
         {
           "type": "multilineText",
-          "id": "informe.bodyText",
+          "id": "inf_diagnosis",
+          "dataKey": "clinical.diagnosisPrincipal",
+          "xMm": 18.0,
+          "yMm": 58.0,
+          "widthMm": 175.0,
+          "heightMm": 7.0,
+          "fontSizePt": 10.0,
+          "fontWeight": "bold",
+          "align": "left",
+          "maxLines": 2,
+          "overflow": "shrink"
+        },
+        {
+          "type": "multilineText",
+          "id": "inf_content",
           "dataKey": "clinical.clinicalReport",
-          "xMm": 15.0,
-          "yMm": 62.0,
-          "widthMm": 124.0,
-          "heightMm": 125.0,
+          "xMm": 18.0,
+          "yMm": 66.0,
+          "widthMm": 175.0,
+          "heightMm": 165.0,
           "fontSizePt": 9.5,
-          "lineHeightPt": 15.0,
+          "lineHeightPt": 14.5,
           "fontWeight": "normal",
           "align": "left",
-          "maxLines": 25,
+          "maxLines": 35,
           "overflow": "shrink"
         },
         {
           "type": "stamp",
-          "id": "stamp",
+          "id": "inf_stamp",
           "dataKey": "doctor_stamp_signature",
-          "xMm": 95.0,
-          "yMm": 178.0,
-          "widthMm": 43.0,
-          "heightMm": 20.0,
-          "opacity": 0.90
+          "xMm": 85.0,
+          "yMm": 225.0,
+          "widthMm": 45.0,
+          "heightMm": 25.0,
+          "opacity": 0.95
         }
       ]
     }
   ],
-  "editableFields": {
-    "patientHeader": {
-      "fullName": {
-        "xMm": 40.0,
-        "yMm": 40.0,
-        "widthMm": 90.0,
-        "heightMm": 5.5,
-        "fontSizePt": 9.0,
-        "fontWeight": "bold",
-        "align": "left",
-        "maxLines": 1,
-        "overflow": "shrink"
-      },
-      "idNumber": {
-        "xMm": 32.0,
-        "yMm": 49.0,
-        "widthMm": 28.0,
-        "heightMm": 5.5,
-        "fontSizePt": 9.0,
-        "fontWeight": "bold",
-        "align": "left",
-        "maxLines": 1
-      },
-      "age": {
-        "xMm": 76.0,
-        "yMm": 49.0,
-        "widthMm": 10.0,
-        "heightMm": 5.5,
-        "fontSizePt": 9.0,
-        "fontWeight": "bold",
-        "align": "left",
-        "maxLines": 1
-      },
-      "date": {
-        "xMm": 102.0,
-        "yMm": 49.0,
-        "widthMm": 28.0,
-        "heightMm": 5.5,
-        "fontSizePt": 9.0,
-        "fontWeight": "bold",
-        "align": "left",
-        "maxLines": 1
-      }
-    },
-    "body": {
-      "bodyText": {
-        "xMm": 15.0,
-        "yMm": 62.0,
-        "widthMm": 124.0,
-        "heightMm": 125.0,
-        "fontSizePt": 9.5,
-        "lineHeightPt": 15.0,
-        "fontWeight": "normal",
-        "align": "left",
-        "maxLines": 25,
-        "overflow": "shrink"
-      }
-    },
-    "doctorStamp": {
-      "xMm": 95.0,
-      "yMm": 178.0,
-      "widthMm": 43.0,
-      "heightMm": 20.0,
-      "opacity": 0.90
-    }
+  "metadata": {
+    "name": "Informe Médico Neuroquirúrgico Oficial (Samir)",
+    "description": "Informe clínico formal institucional A4 con cabecera y pie inmutables.",
+    "calibratedBy": "Dr. Samir Moucharrafie Naime",
+    "calibrationVersion": "v12.0-a4-canonical"
   }
 }

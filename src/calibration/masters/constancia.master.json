@@ -2,40 +2,47 @@
   "masterId": "CERTIFICATE-001",
   "version": "2.0",
   "documentType": "certificate",
-  "pageSize": { "widthMm": 215.8, "heightMm": 153.5, "format": "Media Carta Horizontal" },
+  "pageSize": { "widthMm": 210.0, "heightMm": 297.0, "format": "A4 Portrait" },
   "backgroundPdf": "/templates/constancia_base.pdf",
   "status": "CALIBRATED",
   "lockedRegions": [
-    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 215.8, "heightMm": 40.8 },
-    { "id": "footer_brand", "xMm": 0, "yMm": 135.0, "widthMm": 215.8, "heightMm": 18.5 }
+    { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 210.0, "heightMm": 45.0 },
+    { "id": "footer_brand", "xMm": 0, "yMm": 265.0, "widthMm": 210.0, "heightMm": 32.0 }
   ],
   "pages": [
     {
       "pageIndex": 0,
-      "widthMm": 215.8,
-      "heightMm": 153.5,
+      "widthMm": 210.0,
+      "heightMm": 297.0,
+      "backgroundPdfPage": 0,
       "elements": [
-        { "id": "patient.fullName", "dataKey": "patient.fullName", "type": "text", "xMm": 35.0, "yMm": 43.5, "widthMm": 100.0, "heightMm": 5.5, "fontSizePt": 10.0, "fontWeight": "bold" },
-        { "id": "patient.idNumber", "dataKey": "patient.idNumber", "type": "text", "xMm": 152.0, "yMm": 43.5, "widthMm": 46.0, "heightMm": 5.5, "fontSizePt": 10.0, "fontWeight": "bold" },
+        { "id": "patient.fullName", "dataKey": "patient.fullName", "type": "text", "xMm": 35.0, "yMm": 52.0, "widthMm": 110.0, "heightMm": 6.0, "fontSizePt": 10.0, "fontWeight": "bold" },
+        { "id": "patient.idNumber", "dataKey": "patient.idNumber", "type": "text", "xMm": 152.0, "yMm": 52.0, "widthMm": 44.0, "heightMm": 6.0, "fontSizePt": 10.0, "fontWeight": "bold" },
         
-        { "id": "constancia.cond_paciente", "dataKey": "clinical.checkbox.paciente", "type": "checkbox", "xMm": 53.5, "yMm": 53.5, "widthMm": 3.8, "heightMm": 3.8, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
-        { "id": "constancia.cond_familiar", "dataKey": "clinical.checkbox.familiar", "type": "checkbox", "xMm": 67.4, "yMm": 53.5, "widthMm": 3.8, "heightMm": 3.8, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
-        { "id": "constancia.attendedDate", "dataKey": "constancia.attendedDate", "type": "text", "xMm": 95.0, "yMm": 54.0, "widthMm": 35.0, "heightMm": 5.5, "fontSizePt": 10.0, "fontWeight": "bold" },
+        { "id": "constancia.cond_paciente", "dataKey": "clinical.checkbox.paciente", "type": "checkbox", "xMm": 53.5, "yMm": 66.0, "widthMm": 4.0, "heightMm": 4.0, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
+        { "id": "constancia.cond_familiar", "dataKey": "clinical.checkbox.familiar", "type": "checkbox", "xMm": 72.0, "yMm": 66.0, "widthMm": 4.0, "heightMm": 4.0, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
+        { "id": "constancia.attendedDate", "dataKey": "constancia.attendedDate", "type": "text", "xMm": 105.0, "yMm": 66.0, "widthMm": 38.0, "heightMm": 6.0, "fontSizePt": 10.0, "fontWeight": "bold" },
 
-        { "id": "constancia.reposo_si", "dataKey": "clinical.checkbox.reposo_si", "type": "checkbox", "xMm": 53.5, "yMm": 67.0, "widthMm": 3.8, "heightMm": 3.8, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
-        { "id": "constancia.reposo_no", "dataKey": "clinical.checkbox.reposo_no", "type": "checkbox", "xMm": 67.4, "yMm": 67.0, "widthMm": 3.8, "heightMm": 3.8, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
-        { "id": "constancia.restDays", "dataKey": "constancia.restDaysWords", "type": "text", "xMm": 88.0, "yMm": 64.5, "widthMm": 26.0, "heightMm": 5.5, "fontSizePt": 9.5, "fontWeight": "bold" },
-        { "id": "constancia.restFrom", "dataKey": "constancia.restFrom", "type": "text", "xMm": 133.0, "yMm": 64.5, "widthMm": 26.0, "heightMm": 5.5, "fontSizePt": 9.5, "fontWeight": "bold" },
-        { "id": "constancia.restTo", "dataKey": "constancia.restTo", "type": "text", "xMm": 173.0, "yMm": 64.5, "widthMm": 26.0, "heightMm": 5.5, "fontSizePt": 9.5, "fontWeight": "bold" },
+        { "id": "constancia.reposo_si", "dataKey": "clinical.checkbox.reposo_si", "type": "checkbox", "xMm": 53.5, "yMm": 80.0, "widthMm": 4.0, "heightMm": 4.0, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
+        { "id": "constancia.reposo_no", "dataKey": "clinical.checkbox.reposo_no", "type": "checkbox", "xMm": 72.0, "yMm": 80.0, "widthMm": 4.0, "heightMm": 4.0, "markStyle": "X", "fontSizePt": 11.0, "fontWeight": "bold" },
+        { "id": "constancia.restDays", "dataKey": "constancia.restDaysWords", "type": "text", "xMm": 90.0, "yMm": 79.0, "widthMm": 30.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold" },
+        { "id": "constancia.restFrom", "dataKey": "constancia.restFrom", "type": "text", "xMm": 130.0, "yMm": 79.0, "widthMm": 30.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold" },
+        { "id": "constancia.restTo", "dataKey": "constancia.restTo", "type": "text", "xMm": 168.0, "yMm": 79.0, "widthMm": 30.0, "heightMm": 6.0, "fontSizePt": 9.5, "fontWeight": "bold" },
 
-        { "id": "constancia.idx", "dataKey": "constancia.idx", "type": "multilineText", "xMm": 16.0, "yMm": 75.0, "widthMm": 184.0, "heightMm": 25.0, "fontSizePt": 10.0, "lineHeightPt": 14.0, "align": "justify", "overflow": "shrink" },
+        { "id": "constancia.idx", "dataKey": "constancia.idx", "type": "multilineText", "xMm": 20.0, "yMm": 95.0, "widthMm": 170.0, "heightMm": 40.0, "fontSizePt": 10.0, "lineHeightPt": 15.0, "align": "justify", "overflow": "shrink" },
 
-        { "id": "constancia.requestDay", "dataKey": "constancia.requestDay", "type": "text", "xMm": 98.0, "yMm": 105.0, "widthMm": 11.5, "heightMm": 5.0, "fontSizePt": 10.0, "fontWeight": "bold", "align": "center" },
-        { "id": "constancia.requestMonth", "dataKey": "constancia.requestMonth", "type": "text", "xMm": 128.5, "yMm": 105.0, "widthMm": 28.0, "heightMm": 5.0, "fontSizePt": 10.0, "fontWeight": "bold", "align": "center" },
-        { "id": "constancia.requestYear", "dataKey": "constancia.requestYear", "type": "text", "xMm": 169.5, "yMm": 105.0, "widthMm": 22.5, "heightMm": 5.0, "fontSizePt": 10.0, "fontWeight": "bold", "align": "center" },
+        { "id": "constancia.requestDay", "dataKey": "constancia.requestDay", "type": "text", "xMm": 95.0, "yMm": 145.0, "widthMm": 15.0, "heightMm": 6.0, "fontSizePt": 10.0, "fontWeight": "bold", "align": "center" },
+        { "id": "constancia.requestMonth", "dataKey": "constancia.requestMonth", "type": "text", "xMm": 125.0, "yMm": 145.0, "widthMm": 35.0, "heightMm": 6.0, "fontSizePt": 10.0, "fontWeight": "bold", "align": "center" },
+        { "id": "constancia.requestYear", "dataKey": "constancia.requestYear", "type": "text", "xMm": 170.0, "yMm": 145.0, "widthMm": 25.0, "heightMm": 6.0, "fontSizePt": 10.0, "fontWeight": "bold", "align": "center" },
         
-        { "id": "constancia.doctorStamp", "dataKey": "doctor_stamp_signature", "type": "stamp", "xMm": 86.0, "yMm": 114.0, "widthMm": 43.0, "heightMm": 20.0, "opacity": 0.90 }
+        { "id": "constancia.doctorStamp", "dataKey": "doctor_stamp_signature", "type": "stamp", "xMm": 85.0, "yMm": 160.0, "widthMm": 45.0, "heightMm": 22.0, "opacity": 0.90 }
       ]
     }
-  ]
+  ],
+  "metadata": {
+    "name": "Constancia Médica de Reposo Oficial (Samir)",
+    "description": "Certificado de reposo y asistencia institucional A4.",
+    "calibratedBy": "Dr. Samir Moucharrafie Naime",
+    "calibrationVersion": "v12.0-a4-canonical"
+  }
 }
