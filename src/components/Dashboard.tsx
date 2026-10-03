@@ -282,185 +282,231 @@ export const Dashboard: React.FC = () => {
       {/* Banner / Prompt de Instalación PWA en Celular */}
       <PwaInstallPrompt />
 
-      {/* 1. TOP EXECUTIVE CLINICAL BAR */}
-      <header className={`text-white border-b sticky top-0 z-40 shadow-md transition-colors duration-200 ${
-        isClinicalLight ? 'bg-[#0b3366] border-blue-900/60 shadow-blue-950/20' : 'bg-[#092347] border-blue-950/80 shadow-md'
+      {/* 1. TOP EXECUTIVE CLINICAL BAR (APPLE PRO MINIMALIST) */}
+      <header className={`border-b sticky top-0 z-40 transition-colors duration-200 backdrop-blur-xl ${
+        isClinicalLight ? 'bg-white/90 border-slate-200/90 text-slate-900 shadow-xs' : 'bg-[#061226]/90 border-blue-950/80 text-white shadow-md'
       }`}>
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2 sm:gap-4">
           
-          {/* Logo e Identidad del Doctor */}
+          {/* Logo e Identidad CcMi Studio */}
           <div 
             onClick={() => setActiveTab('portal')}
             className="flex items-center gap-2.5 shrink-0 cursor-pointer group"
-            title="Ir al Portal Institucional CMI"
+            title="Ir al Portal Institucional CcMi"
           >
-            <div className="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-md group-hover:ring-2 group-hover:ring-cyan-400 transition">
-              <BrandLogo size={32} />
+            <div className={`w-9 h-9 rounded-xl p-1 flex items-center justify-center shadow-xs transition group-hover:scale-105 border ${
+              isClinicalLight ? 'bg-slate-50 border-slate-200' : 'bg-[#0d1e3d] border-cyan-500/30'
+            }`}>
+              <BrandLogo size={26} />
             </div>
             
-            <div className="hidden lg:block">
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm tracking-tight text-white group-hover:text-cyan-300 transition">
-                  Dr. Samir Moucharrafie
-                </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/30 text-cyan-300 font-semibold border border-blue-400/20">
-                  Orinokia Piso 2
-                </span>
-              </div>
-              <p className="text-[11px] text-blue-200/90 font-medium">
-                Neurocirugía • Columna Mínimamente Invasiva
-              </p>
+            <div className="flex flex-col">
+              <span className={`font-black text-sm tracking-tight transition ${
+                isClinicalLight ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-cyan-300'
+              }`}>
+                CcMi Studio
+              </span>
+              <span className="text-[10px] text-slate-400 font-medium hidden sm:inline leading-none">
+                Dr. Samir Moucharrafie
+              </span>
             </div>
           </div>
 
-          {/* Navegación Principal Modular: Portal | Papelería A4 | Dictado IA (A) | Agenda (D) | Historial (B) */}
-          <div className="hidden md:flex items-center bg-[#061833] p-1 rounded-xl border border-blue-900/60 gap-1 overflow-x-auto">
-            {/* 1. Portal CMI */}
-            <button
-              type="button"
-              onClick={() => setActiveTab('portal')}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                activeTab === 'portal'
-                  ? 'bg-cyan-600 text-white shadow-sm ring-1 ring-cyan-300'
-                  : 'text-cyan-300 hover:text-white hover:bg-blue-900/40'
-              }`}
-              title="Portal CMI de Especialidades Médicas"
-            >
-              <Home className="w-3.5 h-3.5" />
-              <span>Portal</span>
-            </button>
-
-            {/* 2. Papelería A4 (Documentos Oficiales) */}
+          {/* Navegación Principal Modular: Segmented Control Estilo Apple */}
+          <div className={`hidden md:flex items-center p-1 rounded-xl border gap-0.5 ${
+            isClinicalLight ? 'bg-slate-100/90 border-slate-200' : 'bg-[#040c1a]/90 border-slate-800'
+          }`}>
             <button
               type="button"
               onClick={() => setActiveTab('workspace')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
                 activeTab === 'workspace'
-                  ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-300'
-                  : 'text-slate-300 hover:text-white hover:bg-blue-900/40'
+                  ? isClinicalLight
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-cyan-950/40'
+                  : isClinicalLight
+                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
-              title="Estación de Trabajo Oficial de Papelería A4"
+              title="Estación de Papelería A4 y Récipes Oficiales"
             >
-              <FileText className="w-3.5 h-3.5 text-cyan-300" />
+              <FileText className="w-3.5 h-3.5" />
               <span>Papelería A4</span>
             </button>
 
-            {/* 3. Opción A: Formulario de Dictado y Procesamiento IA (MedicalForm) - Solo Médico/Admin */}
-            {!isSecretary && (
-              <button
-                type="button"
-                onClick={() => setActiveTab('dictation_ai')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition cursor-pointer ${
-                  activeTab === 'dictation_ai'
-                    ? 'bg-purple-600 text-white shadow-sm ring-1 ring-purple-300'
-                    : 'text-purple-300 hover:text-white hover:bg-purple-900/40'
-                }`}
-                title="Opción A: Formulario Rápido de Dictado por Voz y Procesamiento IA con Gemini"
-              >
-                <Mic className="w-3.5 h-3.5 text-purple-300 animate-pulse" />
-                <span>Dictado IA</span>
-              </button>
-            )}
-
-            {/* 4. Opción D: Agenda Quirúrgica y Citas Médicas */}
             <button
               type="button"
               onClick={() => setActiveTab('agenda')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
                 activeTab === 'agenda'
-                  ? 'bg-emerald-600 text-white shadow-sm ring-1 ring-emerald-300'
-                  : 'text-emerald-300 hover:text-white hover:bg-emerald-900/40'
+                  ? isClinicalLight
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'bg-emerald-600 text-white shadow-md'
+                  : isClinicalLight
+                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
-              title="Opción D: Agenda Quirúrgica y Control de Citas Médicas en Orinokia"
+              title="Agenda Quirúrgica y Consultas Médicas"
             >
-              <CalendarIcon className="w-3.5 h-3.5 text-emerald-300" />
+              <CalendarIcon className="w-3.5 h-3.5" />
               <span>Agenda</span>
             </button>
 
-            {/* 5. Opción B: Historial de Documentos Emitidos */}
             <button
               type="button"
               onClick={() => setActiveTab('history')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
                 activeTab === 'history'
-                  ? 'bg-white text-[#092347] font-black shadow-sm ring-1 ring-cyan-300'
-                  : 'text-slate-300 hover:text-white hover:bg-blue-900/40'
+                  ? isClinicalLight
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-slate-700 text-white shadow-md'
+                  : isClinicalLight
+                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
               }`}
-              title="Opción B: Historial de Documentos y Récipes Emitidos"
+              title="Historial de Documentos Emitidos"
             >
-              <History className="w-3.5 h-3.5 text-cyan-400" />
+              <History className="w-3.5 h-3.5" />
               <span>Historial</span>
-              <span className="px-1.5 py-0.2 bg-blue-950 text-cyan-300 rounded text-[10px] font-mono">
-                {documentsHistory.length}
-              </span>
-            </button>
-            {/* OPCIÓN ANALYTICS */}
-            <button
-              type="button"
-              onClick={() => setActiveTab('analytics')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
-                activeTab === 'analytics'
-                  ? 'bg-amber-600 text-white shadow-sm ring-1 ring-amber-300'
-                  : 'text-amber-300 hover:text-white hover:bg-amber-900/40'
-              }`}
-              title="Dashboard Analítico y Estadístico"
-            >
-              <Activity className="w-3.5 h-3.5 text-amber-300" />
-              <span>Estadísticas</span>
+              {documentsHistory.length > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                  {documentsHistory.length}
+                </span>
+              )}
             </button>
 
+            <button
+              type="button"
+              onClick={() => setActiveTab('portal')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                activeTab === 'portal'
+                  ? isClinicalLight
+                    ? 'bg-cyan-700 text-white shadow-xs'
+                    : 'bg-cyan-700 text-white shadow-md'
+                  : isClinicalLight
+                  ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+              title="Portal CMI de Especialidades"
+            >
+              <Home className="w-3.5 h-3.5" />
+              <span>Portal</span>
+            </button>
           </div>
 
-          {/* Acciones Rápidas & Herramientas */}
+          {/* Utilidades Apple Pro (Luz/Oscuro, Cloud, Herramientas, Usuario) */}
           <div className="flex items-center gap-1.5 sm:gap-2">
-            {/* Sistema de Widgets de Acceso Rápido Clínico */}
+            {/* Modo Iluminación Diurna / Oscura (Icono 32x32) */}
             <button
               type="button"
-              onClick={() => setShowWidgetsHub(!showWidgetsHub)}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer shadow-xs ${
-                showWidgetsHub
-                  ? 'bg-cyan-500 text-slate-950 border-cyan-400 font-black shadow-cyan-900/30'
-                  : 'bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border-cyan-500/30'
+              onClick={toggleTheme}
+              className={`w-8 h-8 rounded-xl flex items-center justify-center border transition cursor-pointer active:scale-95 ${
+                isClinicalLight
+                  ? 'bg-slate-100 hover:bg-slate-200 text-amber-600 border-slate-300'
+                  : 'bg-[#091833] hover:bg-slate-800 text-cyan-300 border-slate-700'
               }`}
-              title="Mostrar u ocultar los Widgets de Acceso Rápido Clínico"
+              title={isClinicalLight ? 'Cambiar a Modo Oscuro' : "Cambiar a Modo 'Clinical Light'"}
             >
-              <Zap className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Widgets</span>
+              {isClinicalLight ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
-            {/* Opción G: Botón Directo a Herramientas Técnicas de Papelería (Solo Médico/Admin) */}
-            {/* Menú de Herramientas Clínicas / Ajustes Avanzados */}
+            {/* Indicador de Estado Cloud Firestore (Minimal) */}
+            <CloudStatusIndicator variant="minimal" />
+
+            {/* Menú de Herramientas Clínicas & Sistema (Popover Consolidado) */}
             {!isSecretary && (
               <div className="relative">
                 <button
                   type="button"
                   onClick={() => setToolsMenuOpen(!toolsMenuOpen)}
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 transition cursor-pointer shadow-xs"
-                  title="Herramientas técnicas, personal, sello, cotizador y tarjeta"
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer shadow-xs active:scale-95 ${
+                    toolsMenuOpen
+                      ? 'bg-cyan-500 text-slate-950 border-cyan-400'
+                      : isClinicalLight
+                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                      : 'bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border-cyan-500/30'
+                  }`}
+                  title="Herramientas técnicas, personal, sello, cotizador y ajustes"
                 >
-                  <Settings className="w-3.5 h-3.5 text-cyan-400" />
+                  <Settings className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Herramientas</span>
-                  <ChevronDown className="w-3 h-3 text-cyan-400" />
+                  <ChevronDown className="w-3 h-3 opacity-60" />
                 </button>
 
                 {toolsMenuOpen && (
                   <div 
-                    className="absolute right-0 mt-2 w-52 bg-[#09152b] border border-cyan-500/30 rounded-xl shadow-2xl p-1.5 z-50 animate-fade-in text-xs space-y-1 font-sans"
+                    className={`absolute right-0 mt-2 w-60 rounded-2xl p-2 shadow-2xl z-50 animate-fade-in border font-sans text-xs space-y-1 ${
+                      isClinicalLight
+                        ? 'bg-white border-slate-200 text-slate-800 shadow-slate-400/40'
+                        : 'bg-[#09152b] border-slate-700 text-slate-200 shadow-2xl ring-1 ring-cyan-500/20'
+                    }`}
                     onClick={() => setToolsMenuOpen(false)}
                   >
+                    <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                      Clínica & Dictado
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('dictation_ai')}
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-purple-700' : 'hover:bg-purple-950/40 text-purple-300'
+                      }`}
+                    >
+                      <Mic className="w-4 h-4 text-purple-400 shrink-0" />
+                      <div className="font-bold">Formulario Dictado IA</div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('analytics')}
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-amber-700' : 'hover:bg-amber-950/40 text-amber-300'
+                      }`}
+                    >
+                      <Activity className="w-4 h-4 text-amber-400 shrink-0" />
+                      <div className="font-bold">Estadísticas Clínicas</div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowWidgetsHub(!showWidgetsHub)}
+                      className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Zap className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <span className="font-bold">Widgets Acceso Rápido</span>
+                      </div>
+                      <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${
+                        showWidgetsHub ? 'bg-cyan-500/20 text-cyan-400' : 'bg-slate-800 text-slate-400'
+                      }`}>
+                        {showWidgetsHub ? 'ON' : 'OFF'}
+                      </span>
+                    </button>
+
+                    <div className="my-1 border-t border-slate-700/50" />
+                    <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                      Operaciones & Soporte
+                    </div>
+
                     <button
                       type="button"
                       onClick={() => setIsTechModalOpen(true)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-cyan-950/60 hover:text-cyan-300 font-bold transition text-left cursor-pointer"
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                      }`}
                     >
                       <Settings className="w-4 h-4 text-cyan-400 shrink-0" />
-                      <span>Técnico & Calibración (G)</span>
+                      <span>Técnico & Calibración</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setIsStaffModalOpen(true)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-purple-950/60 hover:text-purple-300 font-bold transition text-left cursor-pointer"
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                      }`}
                     >
                       <Users className="w-4 h-4 text-purple-400 shrink-0" />
                       <span>Gestión de Personal</span>
@@ -469,7 +515,9 @@ export const Dashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsStampModalOpen(true)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-cyan-950/60 hover:text-cyan-300 font-bold transition text-left cursor-pointer"
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                      }`}
                     >
                       <Stamp className="w-4 h-4 text-cyan-400 shrink-0" />
                       <span>Sello & Firma Médica</span>
@@ -478,7 +526,9 @@ export const Dashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setActiveTab(activeTab === 'quoter' ? 'portal' : 'quoter')}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-emerald-950/60 hover:text-emerald-300 font-bold transition text-left cursor-pointer"
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                      }`}
                     >
                       <Boxes className="w-4 h-4 text-emerald-400 shrink-0" />
                       <span>Cotizador Quirúrgico</span>
@@ -487,75 +537,38 @@ export const Dashboard: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsCardModalOpen(true)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-200 hover:bg-blue-950/60 hover:text-cyan-300 font-bold transition text-left cursor-pointer"
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                      }`}
                     >
                       <CreditCard className="w-4 h-4 text-cyan-400 shrink-0" />
                       <span>Tarjeta de Presentación</span>
+                    </button>
+
+                    <div className="my-1 border-t border-slate-700/50" />
+                    <button
+                      type="button"
+                      onClick={() => setIsSettingsModalOpen(true)}
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer font-bold ${
+                        isClinicalLight ? 'hover:bg-slate-100 text-blue-800' : 'hover:bg-slate-800 text-blue-300'
+                      }`}
+                    >
+                      <Sliders className="w-4 h-4 text-blue-400 shrink-0" />
+                      <span>Ajustes & Visualización</span>
                     </button>
                   </div>
                 )}
               </div>
             )}
 
-            {/* Selector Rápido Día / Noche */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
-                isClinicalLight
-                  ? 'bg-amber-100 hover:bg-amber-200 text-amber-950 border-amber-300 shadow-xs'
-                  : 'bg-blue-950/80 hover:bg-blue-900 text-cyan-300 border-blue-700/60'
-              }`}
-              title={
-                isAutoSchedule
-                  ? `Horario Clínico Automático (07:00-18:30: Luz Diurna) • Clic para alternar a ${isClinicalLight ? 'Oscuro' : 'Luz Diurna'}`
-                  : isClinicalLight
-                  ? 'Cambiar a Modo Oscuro'
-                  : "Cambiar a Modo 'Clinical Light' (Luz Diurna)"
-              }
-            >
-              {isClinicalLight ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-600" />
-                  <span className="hidden xl:inline">Luz</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-cyan-400" />
-                  <span className="hidden xl:inline">Oscuro</span>
-                </>
-              )}
-              {isAutoSchedule && (
-                <span className={`text-[9px] font-mono px-1 py-0.2 rounded font-bold ${
-                  isClinicalLight ? 'bg-amber-200 text-amber-900' : 'bg-cyan-950 text-cyan-300 border border-cyan-500/40'
-                }`}>
-                  Auto
-                </span>
-              )}
-            </button>
-
-            {/* Indicador de Estado Cloud Firestore (Paz Mental Multidispositivo) */}
-            <CloudStatusIndicator />
-
-            {/* Botón Ajustes de Usuario */}
-            <button
-              type="button"
-              onClick={() => setIsSettingsModalOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-blue-900/50 hover:bg-blue-800/70 text-slate-200 border border-blue-700/50 transition cursor-pointer shadow-xs"
-              title="Configuración de usuario, contraste y visualización"
-            >
-              <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">Ajustes</span>
-            </button>
-
-            {/* Usuario Autenticado & Cerrar Sesión */}
+            {/* Perfil del Usuario / Cerrar Sesión */}
             {user && (
-              <div className="flex items-center gap-1.5 pl-1.5 border-l border-blue-900/60">
+              <div className="flex items-center gap-1.5 pl-1 sm:pl-2 border-l border-slate-700/40">
                 <div className="hidden xl:flex flex-col text-right">
-                  <span className="text-[11px] font-bold text-white leading-tight truncate max-w-[130px]">
-                    {user.displayName.split(' ')[0]} {user.displayName.split(' ')[1] || ''}
+                  <span className="text-[11px] font-bold leading-tight truncate max-w-[120px]">
+                    {user.displayName.split(' ')[0]}
                   </span>
-                  <span className="text-[9px] font-mono text-cyan-300 font-semibold">
+                  <span className="text-[9px] font-mono text-cyan-300 font-semibold leading-none">
                     {user.role === 'MEDICO' ? 'Médico' : user.role === 'SECRETARIA' ? 'Secretaría' : user.role}
                   </span>
                 </div>
@@ -563,7 +576,7 @@ export const Dashboard: React.FC = () => {
                 <button
                   type="button"
                   onClick={logout}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-900/80 transition cursor-pointer"
+                  className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer active:scale-95"
                   title={`Cerrar sesión (${user.email || ''})`}
                 >
                   <LogOut className="w-3.5 h-3.5" />
@@ -571,11 +584,11 @@ export const Dashboard: React.FC = () => {
               </div>
             )}
 
-            {/* Mobile Toggle */}
+            {/* Botón de Menú Móvil */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-blue-200 hover:text-white rounded-lg hover:bg-blue-900/50 cursor-pointer"
+              className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 cursor-pointer"
               aria-label="Abrir menú"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -583,58 +596,26 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Menú Móvil Desplegable */}
+        {/* Menú Móvil Desplegable Estilo Apple */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#061833] border-t border-blue-900 p-3 space-y-1 animate-fade-in">
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('portal');
-                setMobileMenuOpen(false);
-              }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition ${
-                activeTab === 'portal' ? 'bg-cyan-600 text-white' : 'text-cyan-300 hover:bg-blue-900/40'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Home className="w-4 h-4" />
-                <span>Portal CMI (Dr. Samir)</span>
-              </div>
-              {activeTab === 'portal' && <ChevronRight className="w-3.5 h-3.5 text-white" />}
-            </button>
-
+          <div className={`md:hidden p-3 space-y-1 animate-fade-in border-t ${
+            isClinicalLight ? 'bg-white border-slate-200' : 'bg-[#061833] border-blue-900/60'
+          }`}>
             <button
               type="button"
               onClick={() => {
                 setActiveTab('workspace');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition ${
-                activeTab === 'workspace' ? 'bg-blue-600 text-white' : 'text-slate-200 hover:bg-blue-900/40'
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                activeTab === 'workspace' ? 'bg-blue-600 text-white' : 'hover:bg-blue-900/40'
               }`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <FileText className="w-4 h-4 text-cyan-400" />
-                <span>Papelería Médica Oficial A4</span>
+                <span>Papelería A4 y Récipes</span>
               </div>
               {activeTab === 'workspace' && <ChevronRight className="w-3.5 h-3.5 text-white" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('dictation_ai');
-                setMobileMenuOpen(false);
-              }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-black transition ${
-                activeTab === 'dictation_ai' ? 'bg-purple-600 text-white' : 'text-purple-300 hover:bg-purple-950/40'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <Mic className="w-4 h-4 text-purple-400" />
-                <span>🎙️ Dictado y Procesamiento IA (Opción A)</span>
-              </div>
-              {activeTab === 'dictation_ai' && <ChevronRight className="w-3.5 h-3.5 text-white" />}
             </button>
 
             <button
@@ -643,13 +624,13 @@ export const Dashboard: React.FC = () => {
                 setActiveTab('agenda');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition ${
-                activeTab === 'agenda' ? 'bg-emerald-600 text-white' : 'text-emerald-300 hover:bg-emerald-950/40'
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                activeTab === 'agenda' ? 'bg-emerald-600 text-white' : 'hover:bg-emerald-950/40'
               }`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <CalendarIcon className="w-4 h-4 text-emerald-400" />
-                <span>📅 Agenda Quirúrgica y Citas (Opción D)</span>
+                <span>Agenda Quirúrgica y Consultas</span>
               </div>
               {activeTab === 'agenda' && <ChevronRight className="w-3.5 h-3.5 text-white" />}
             </button>
@@ -660,17 +641,51 @@ export const Dashboard: React.FC = () => {
                 setActiveTab('history');
                 setMobileMenuOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold transition ${
-                activeTab === 'history' ? 'bg-white text-slate-900 font-black' : 'text-slate-200 hover:bg-blue-900/40'
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                activeTab === 'history' ? 'bg-slate-700 text-white' : 'hover:bg-blue-900/40'
               }`}
             >
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 <History className="w-4 h-4 text-cyan-400" />
-                <span>📋 Historial de Documentos (Opción B)</span>
+                <span>Historial de Documentos</span>
               </div>
-              <span className="text-xs font-mono font-bold bg-blue-950 text-cyan-300 px-2 py-0.5 rounded">
+              <span className="text-xs font-mono font-bold bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded-full border border-cyan-500/30">
                 {documentsHistory.length}
               </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('portal');
+                setMobileMenuOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                activeTab === 'portal' ? 'bg-cyan-700 text-white' : 'hover:bg-blue-900/40'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Home className="w-4 h-4 text-cyan-400" />
+                <span>Portal CMI Especialidades</span>
+              </div>
+              {activeTab === 'portal' && <ChevronRight className="w-3.5 h-3.5 text-white" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('dictation_ai');
+                setMobileMenuOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${
+                activeTab === 'dictation_ai' ? 'bg-purple-600 text-white' : 'hover:bg-purple-950/40'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Mic className="w-4 h-4 text-purple-400" />
+                <span>Formulario Dictado IA</span>
+              </div>
+              {activeTab === 'dictation_ai' && <ChevronRight className="w-3.5 h-3.5 text-white" />}
             </button>
 
             <button
@@ -679,10 +694,10 @@ export const Dashboard: React.FC = () => {
                 setIsTechModalOpen(true);
                 setMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-cyan-300 hover:bg-blue-900/40"
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-cyan-300 hover:bg-blue-900/40"
             >
               <Settings className="w-4 h-4 text-cyan-400" />
-              <span>⚙️ Herramientas Técnicas de Papelería (Opción G)</span>
+              <span>Herramientas Técnicas de Papelería</span>
             </button>
 
             <button
@@ -691,10 +706,10 @@ export const Dashboard: React.FC = () => {
                 setActiveTab('quoter');
                 setMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-emerald-300 hover:bg-blue-900/40"
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:bg-blue-900/40"
             >
               <Boxes className="w-4 h-4 text-emerald-400" />
-              <span>Cotizador Quirúrgico Synapsis</span>
+              <span>Cotizador Quirúrgico</span>
             </button>
           </div>
         )}

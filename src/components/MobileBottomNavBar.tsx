@@ -10,8 +10,8 @@ import {
 import { ActiveNavTab } from '../types';
 
 interface MobileBottomNavBarProps {
-  activeTab: 'portal' | 'workspace' | 'dictation_ai' | 'agenda' | 'history' | 'quoter' | 'developer_studio';
-  setActiveTab: (tab: 'portal' | 'workspace' | 'dictation_ai' | 'agenda' | 'history' | 'quoter' | 'developer_studio') => void;
+  activeTab: 'portal' | 'workspace' | 'dictation_ai' | 'agenda' | 'history' | 'quoter' | 'developer_studio' | 'analytics';
+  setActiveTab: (tab: any) => void;
   historyCount: number;
   userRole?: string;
 }

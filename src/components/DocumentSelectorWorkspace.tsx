@@ -312,20 +312,25 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
   const toolsMenuRef = useRef<HTMLDivElement>(null);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState<boolean>(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState<boolean>(false);
+  const shareMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
         setIsMoreMenuOpen(false);
       }
+      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target as Node)) {
+        setIsShareMenuOpen(false);
+      }
     };
-    if (isMoreMenuOpen) {
+    if (isMoreMenuOpen || isShareMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMoreMenuOpen]);
+  }, [isMoreMenuOpen, isShareMenuOpen]);
 
   // === MODO PROGRAMADOR / TALLER DE CALIBRACIÓN MAESTRA & MOTOR IA ===
   const [isDeveloperMode, setIsDeveloperMode] = useState<boolean>(false);
@@ -1626,35 +1631,11 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           ? 'bg-white/95 border-slate-200 text-slate-900 shadow-slate-300/30'
           : 'bg-[#0d162a]/95 border-slate-800 text-white shadow-2xl'
       }`}>
-        {/* ROW 1: BRAND + DOCUMENT SEGMENTED CONTROL + ACTIONS */}
-        <div className="flex items-center justify-between gap-2">
-          {/* Left: Doctor Brand & Card Link */}
-          <div 
-            onClick={() => setIsDoctorCardOpen(true)}
-            className="flex items-center gap-2 cursor-pointer group shrink-0"
-            title="Ver Tarjeta Oficial del Dr. Samir Moucharrafie"
-          >
-            <div className={`w-8 h-8 rounded-xl p-0.5 flex items-center justify-center border shadow-xs transition group-hover:scale-105 ${
-              isClinicalLight ? 'bg-slate-50 border-slate-200' : 'bg-[#070d1e] border-slate-700'
-            }`}>
-              <BrandLogo size={24} textVariant={isClinicalLight ? 'dark' : 'light'} />
-            </div>
-            <div className="hidden sm:block">
-              <div className="text-xs font-black tracking-tight leading-tight flex items-center gap-1.5">
-                <span>Dr. Samir M.</span>
-                <span className={`text-[9px] font-mono px-1.5 py-0.2 rounded-full border ${
-                  isClinicalLight ? 'bg-blue-50 text-blue-800 border-blue-200' : 'bg-cyan-950 text-cyan-300 border-cyan-500/40'
-                }`}>
-                  UCBL
-                </span>
-              </div>
-              <div className="text-[10px] text-slate-400 font-mono">Cerebro y Columna</div>
-            </div>
-          </div>
-
-          {/* Center: Apple Segmented Control for the 5 Documents */}
-          <div className={`flex items-center p-1 rounded-xl border max-w-full overflow-x-auto scrollbar-none gap-0.5 ${
-            isClinicalLight ? 'bg-slate-100 border-slate-200' : 'bg-[#070d1e] border-slate-800'
+        {/* ROW 1: SEGMENTED DOCUMENT PICKER + ACTIONS CLUSTER */}
+        <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+          {/* Left: Apple Segmented Control para los 5 Documentos Oficiales */}
+          <div className={`flex items-center p-1 rounded-xl border max-w-full overflow-x-auto scrollbar-none gap-0.5 shrink-0 ${
+            isClinicalLight ? 'bg-slate-100/90 border-slate-200' : 'bg-[#060e1f] border-slate-800'
           }`}>
             {tabs.map((tab) => {
               const isActive = activeDoc === tab.id;
@@ -1663,7 +1644,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveDoc(tab.id)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
                     isActive
                       ? isClinicalLight
                         ? 'bg-blue-600 text-white shadow-xs'
@@ -1675,15 +1656,14 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   title={tab.label}
                 >
                   <span className="shrink-0">{tab.icon}</span>
-                  <span className="hidden md:inline">{tab.label.split(' ')[0]}</span>
-                  <span className="md:hidden text-[11px]">{tab.label.split(' ')[0]}</span>
+                  <span className="hidden sm:inline">{tab.label.split(' ')[0]}</span>
                 </button>
               );
             })}
           </div>
 
-          {/* Right: Actions (SAMI, Imprimir, WhatsApp, ⋯ Más) */}
-          <div className="flex items-center gap-1.5 shrink-0 relative" ref={moreMenuRef}>
+          {/* Right: Actions Cluster (SAMI Dictado, Imprimir, Compartir, ⋯ Más) */}
+          <div className="flex items-center gap-1.5 shrink-0 relative">
             {/* Dictado SAMI / Cápsula integrada */}
             <ClinicalDictationCapsule
               onSyncAllDocuments={handleSyncAllDocuments}
@@ -1693,279 +1673,363 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               layoutVariant="bar"
             />
 
-            {/* Imprimir A4 */}
+            {/* Imprimir A4 Directo */}
             <button
               type="button"
               onClick={handleDirectPrint}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-sm transition active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-sm transition active:scale-95 cursor-pointer"
               title="Imprimir documento oficial en hoja A4 (Ctrl + P)"
             >
               <Printer className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">Imprimir</span>
+              <span className="hidden md:inline">Imprimir</span>
             </button>
 
-            {/* Compartir WhatsApp */}
-            <button
-              type="button"
-              onClick={handleShareWhatsApp}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm transition active:scale-95 cursor-pointer"
-              title="Compartir enlace PDF por WhatsApp"
-            >
-              <Share2 className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">WhatsApp</span>
-            </button>
-
-            {/* Menú '⋯ Más' (Dropdown) */}
-            <button
-              type="button"
-              onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
-              className={`p-1.5 rounded-xl text-xs border transition cursor-pointer ${
-                isMoreMenuOpen
-                  ? 'bg-cyan-500 text-slate-950 border-cyan-400'
-                  : isClinicalLight
-                  ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
-                  : 'bg-[#070d1e] hover:bg-slate-800 text-slate-300 border-slate-800'
-              }`}
-              title="Más herramientas y opciones"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-
-            {/* Dropdown Popover */}
-            {isMoreMenuOpen && (
-              <div 
-                className={`absolute right-0 top-full mt-2 w-64 rounded-2xl p-2 shadow-2xl z-50 animate-fade-in border font-sans text-xs space-y-1 ${
-                  isClinicalLight
-                    ? 'bg-white border-slate-200 text-slate-800 shadow-slate-400/40'
-                    : 'bg-[#0d162a] border-slate-700 text-slate-200 shadow-2xl ring-1 ring-cyan-500/20'
+            {/* Compartir (Apple Share Sheet) */}
+            <div className="relative" ref={shareMenuRef}>
+              <button
+                type="button"
+                onClick={() => setIsShareMenuOpen(!isShareMenuOpen)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer active:scale-95 shadow-xs ${
+                  isShareMenuOpen
+                    ? 'bg-emerald-500 text-slate-950 border-emerald-400'
+                    : 'bg-emerald-600/90 hover:bg-emerald-500 text-white border-emerald-500/40'
                 }`}
-                onClick={() => setIsMoreMenuOpen(false)}
+                title="Compartir por WhatsApp, descargar PDF o transferir por QR"
               >
-                <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                  Documento & Emisión
-                </div>
-                <button
-                  type="button"
-                  onClick={handleDownloadCurrentPdf}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
-                  }`}
-                >
-                  <Download className="w-3.5 h-3.5 text-cyan-400" />
-                  <div>
-                    <div className="font-bold leading-tight">Descargar PDF 300 DPI</div>
-                    <div className="text-[10px] text-slate-400">Archivo oficial de alta resolución</div>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSaveToStorage}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
-                  }`}
-                >
-                  <Save className="w-3.5 h-3.5 text-cyan-400" />
-                  <div>
-                    <div className="font-bold leading-tight">Guardar en Ficha Local</div>
-                    <div className="text-[10px] text-slate-400">Almacenar estado de la consulta</div>
-                  </div>
-                </button>
+                <Share2 className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Compartir</span>
+              </button>
 
-                <div className="my-1 border-t border-slate-700/50" />
-                <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                  Paciente & Consulta
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsTimelineOpen(true)}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+              {/* Popover Compartir estilo Apple */}
+              {isShareMenuOpen && (
+                <div 
+                  className={`absolute right-0 top-full mt-2 w-64 rounded-2xl p-2 shadow-2xl z-50 animate-fade-in border font-sans text-xs space-y-1 ${
+                    isClinicalLight
+                      ? 'bg-white border-slate-200 text-slate-800 shadow-slate-400/40'
+                      : 'bg-[#0d162a] border-slate-700 text-slate-200 shadow-2xl ring-1 ring-cyan-500/20'
                   }`}
                 >
-                  <History className="w-3.5 h-3.5 text-cyan-400" />
-                  <div>
-                    <div className="font-bold leading-tight">Expediente 360°</div>
-                    <div className="text-[10px] text-slate-400">Consultas previas y re-emisión</div>
+                  <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    Compartir & Emisión
                   </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsQrHandoffOpen(true)}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
-                  }`}
-                >
-                  <QrCode className="w-3.5 h-3.5 text-cyan-400" />
-                  <div>
-                    <div className="font-bold leading-tight">QR al Móvil / Secretaría</div>
-                    <div className="text-[10px] text-slate-400">Transferir sin cables</div>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsPresetsModalOpen(true)}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
-                  }`}
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                  <div>
-                    <div className="font-bold leading-tight">Protocolos Frecuentes</div>
-                    <div className="text-[10px] text-slate-400">Fórmulas habituales Dr. Samir</div>
-                  </div>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsShareMenuOpen(false);
+                      handleShareWhatsApp();
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                      <Share2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="font-bold leading-tight">Enviar por WhatsApp</div>
+                      <div className="text-[10px] text-slate-400">PDF directo al paciente</div>
+                    </div>
+                  </button>
 
-                <div className="my-1 border-t border-slate-700/50" />
-                <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                  Personalización & Ajustes
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsShareMenuOpen(false);
+                      handleDownloadCurrentPdf();
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center shrink-0">
+                      <Download className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="font-bold leading-tight">Descargar PDF Oficial</div>
+                      <div className="text-[10px] text-slate-400">Resolución 300 DPI con fondo</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsShareMenuOpen(false);
+                      setIsQrHandoffOpen(true);
+                    }}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center shrink-0">
+                      <QrCode className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="font-bold leading-tight">Transferir por QR</div>
+                      <div className="text-[10px] text-slate-400">Al celular o secretaría</div>
+                    </div>
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsUploaderOpen(true)}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+              )}
+            </div>
+
+            {/* Menú '⋯ Más' (Dropdown de herramientas secundarias) */}
+            <div className="relative" ref={moreMenuRef}>
+              <button
+                type="button"
+                onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+                className={`p-2 rounded-xl text-xs border transition cursor-pointer active:scale-95 ${
+                  isMoreMenuOpen
+                    ? 'bg-cyan-500 text-slate-950 border-cyan-400'
+                    : isClinicalLight
+                    ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                    : 'bg-[#070d1e] hover:bg-slate-800 text-slate-300 border-slate-800'
+                }`}
+                title="Más herramientas y opciones clínicas"
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+
+              {/* Popover Más Opciones (⋯) */}
+              {isMoreMenuOpen && (
+                <div 
+                  className={`absolute right-0 top-full mt-2 w-64 rounded-2xl p-2 shadow-2xl z-50 animate-fade-in border font-sans text-xs space-y-1 ${
+                    isClinicalLight
+                      ? 'bg-white border-slate-200 text-slate-800 shadow-slate-400/40'
+                      : 'bg-[#0d162a] border-slate-700 text-slate-200 shadow-2xl ring-1 ring-cyan-500/20'
                   }`}
                 >
-                  <UploadCloud className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Cargar Papelería Master</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowZoneGuides(!showZoneGuides)}
-                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <Eye className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Guías Visuales</span>
+                  <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    Clínica & Consulta
                   </div>
-                  <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
-                    showZoneGuides ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-800 text-slate-400'
-                  }`}>
-                    {showZoneGuides ? 'ON' : 'OFF'}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={toggleTheme}
-                  className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    {isClinicalLight ? <Sun className="w-3.5 h-3.5 text-amber-500" /> : <Moon className="w-3.5 h-3.5 text-cyan-400" />}
-                    <span>Modo Iluminación</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMoreMenuOpen(false);
+                      setIsPresetsModalOpen(true);
+                    }}
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                    <div>
+                      <div className="font-bold leading-tight">Protocolos Frecuentes</div>
+                      <div className="text-[10px] text-slate-400">Esquemas habituales Dr. Samir</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMoreMenuOpen(false);
+                      setIsTimelineOpen(true);
+                    }}
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <History className="w-3.5 h-3.5 text-cyan-400" />
+                    <div>
+                      <div className="font-bold leading-tight">Expediente 360°</div>
+                      <div className="text-[10px] text-slate-400">Historial previo del paciente</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMoreMenuOpen(false);
+                      handleSaveToStorage();
+                    }}
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <Save className="w-3.5 h-3.5 text-cyan-400" />
+                    <div>
+                      <div className="font-bold leading-tight">Guardar en Ficha Local</div>
+                      <div className="text-[10px] text-slate-400">Almacenar estado de consulta</div>
+                    </div>
+                  </button>
+
+                  <div className="my-1 border-t border-slate-700/50" />
+                  <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
+                    Calibración & Herramientas
                   </div>
-                  <span className="text-[10px] text-slate-400 font-mono">
-                    {isClinicalLight ? 'Luz Diurna' : 'Oscuro'}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsTechModalOpen(true)}
-                  className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                    isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
-                  }`}
-                >
-                  <Settings className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Herramientas Técnicas</span>
-                </button>
-              </div>
-            )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMoreMenuOpen(false);
+                      setIsLiveCalibratorOpen(true);
+                    }}
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+                    <div>
+                      <div className="font-bold leading-tight">Calibrador Milimétrico V2</div>
+                      <div className="text-[10px] text-slate-400">Ajustar posiciones drag & drop</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMoreMenuOpen(false);
+                      setIsUploaderOpen(true);
+                    }}
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <UploadCloud className="w-3.5 h-3.5 text-amber-400" />
+                    <div>
+                      <div className="font-bold leading-tight">Cargar Papelería Master</div>
+                      <div className="text-[10px] text-slate-400">Subir PDF o imagen escaneada</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowZoneGuides(!showZoneGuides);
+                      setIsMoreMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                      isClinicalLight ? 'hover:bg-slate-100 text-slate-900' : 'hover:bg-slate-800 text-white'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Eye className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Guías Visuales</span>
+                    </div>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      showZoneGuides ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-800 text-slate-400'
+                    }`}>
+                      {showZoneGuides ? 'ON' : 'OFF'}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsMoreMenuOpen(false);
+                      handleLoadDemoCase();
+                    }}
+                    className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition cursor-pointer text-cyan-300 ${
+                      isClinicalLight ? 'hover:bg-slate-100' : 'hover:bg-slate-800'
+                    }`}
+                  >
+                    <Code2 className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Cargar Caso Demo (Test)</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* ROW 2: COMPACT PATIENT BAR (SINGLE ROW - ~36px) */}
-        <div className={`flex flex-wrap items-center gap-2 pt-2 border-t text-xs ${
-          isClinicalLight ? 'border-slate-200' : 'border-slate-800'
+        {/* ROW 2: SPOTLIGHT PATIENT CONTEXT BAR (ESTILO APPLE) */}
+        <div className={`flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl p-1.5 gap-1.5 border transition-all shadow-inner ${
+          isClinicalLight 
+            ? 'bg-slate-50/80 border-slate-200/90 text-slate-900' 
+            : 'bg-[#060e1e]/90 border-slate-800/80 text-white'
         }`}>
           {/* Cédula */}
-          <div className="relative flex-1 min-w-[120px] max-w-[160px]">
+          <div className="relative flex items-center min-w-[120px] sm:w-40 shrink-0">
+            <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
             <input
               type="text"
               value={patient.idNumber}
               onChange={(e) => handleCedulaChange(e.target.value)}
-              placeholder="Cédula / Pasaporte"
-              className={`w-full rounded-lg px-2.5 py-1 text-xs font-mono font-bold outline-none border transition ${
+              placeholder="Cédula / ID"
+              className={`w-full rounded-lg pl-7 pr-2 py-1.5 text-xs font-mono font-bold outline-none border transition ${
                 isClinicalLight
-                  ? 'bg-slate-50 border-slate-300 text-blue-900 focus:border-blue-600'
-                  : 'bg-[#070d1e] border-slate-800 text-cyan-300 focus:border-cyan-500'
+                  ? 'bg-white border-slate-300/80 text-blue-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600/30'
+                  : 'bg-[#09152b] border-slate-700/60 text-cyan-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30'
               }`}
             />
-            <Search className="w-3 h-3 absolute right-2 top-2 text-slate-400 pointer-events-none" />
           </div>
 
+          <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0" />
+
           {/* Nombre Completo */}
-          <div className="flex-[2] min-w-[180px]">
+          <div className="flex-1 min-w-[180px]">
             <input
               id="patient-name-input"
               type="text"
               value={patient.fullName}
               onChange={(e) => setPatient({ ...patient, fullName: e.target.value })}
               placeholder="Nombre del paciente..."
-              className={`w-full rounded-lg px-2.5 py-1 text-xs font-bold outline-none border transition ${
+              className={`w-full rounded-lg px-3 py-1.5 text-xs font-bold outline-none border transition ${
                 isClinicalLight
-                  ? 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                  : 'bg-[#070d1e] border-slate-800 text-white focus:border-cyan-500'
+                  ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600/30'
+                  : 'bg-[#09152b] border-slate-700/60 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30'
               }`}
             />
           </div>
 
-          {/* Edad */}
-          <div className="w-16">
-            <input
-              type="text"
-              value={patient.age}
-              onChange={(e) => setPatient({ ...patient, age: e.target.value })}
-              placeholder="Edad"
-              className={`w-full rounded-lg px-2 py-1 text-xs font-mono font-bold outline-none border text-center transition ${
+          <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0" />
+
+          {/* Fila móvil para Edad, Teléfono y Acciones */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {/* Edad */}
+            <div className="w-16">
+              <input
+                type="text"
+                value={patient.age}
+                onChange={(e) => setPatient({ ...patient, age: e.target.value })}
+                placeholder="Edad"
+                className={`w-full rounded-lg px-2 py-1.5 text-xs font-mono font-bold outline-none border text-center transition ${
+                  isClinicalLight
+                    ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600'
+                    : 'bg-[#09152b] border-slate-700/60 text-white focus:border-cyan-500'
+                }`}
+              />
+            </div>
+
+            {/* Teléfono */}
+            <div className="w-28 sm:w-32">
+              <input
+                type="text"
+                value={patient.phone}
+                onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
+                placeholder="Teléfono"
+                className={`w-full rounded-lg px-2 py-1.5 text-xs font-mono font-medium outline-none border transition ${
+                  isClinicalLight
+                    ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600'
+                    : 'bg-[#09152b] border-slate-700/60 text-white focus:border-cyan-500'
+                }`}
+              />
+            </div>
+
+            {/* Botón Frecuentes rápido */}
+            <button
+              type="button"
+              onClick={() => setIsPresetsModalOpen(true)}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer flex items-center gap-1 active:scale-95 ${
                 isClinicalLight
-                  ? 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                  : 'bg-[#070d1e] border-slate-800 text-white focus:border-cyan-500'
+                  ? 'bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100'
+                  : 'bg-cyan-950/60 text-cyan-300 border-cyan-500/40 hover:bg-cyan-900/60'
               }`}
-            />
+              title="Ver protocolos frecuentes de consulta"
+            >
+              <span>⚡</span>
+              <span className="hidden md:inline">Protocolos</span>
+            </button>
+
+            {/* Botón Limpiar */}
+            <button
+              type="button"
+              onClick={handleClearPatient}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer active:scale-95"
+              title="Limpiar campos del paciente"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
           </div>
-
-          {/* Teléfono */}
-          <div className="flex-1 min-w-[110px] max-w-[140px] hidden sm:block">
-            <input
-              type="text"
-              value={patient.phone}
-              onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
-              placeholder="0424-938.16.74"
-              className={`w-full rounded-lg px-2.5 py-1 text-xs font-mono font-bold outline-none border transition ${
-                isClinicalLight
-                  ? 'bg-slate-50 border-slate-300 text-slate-900 focus:border-blue-600'
-                  : 'bg-[#070d1e] border-slate-800 text-white focus:border-cyan-500'
-              }`}
-            />
-          </div>
-
-          {/* Botón Frecuentes rápido */}
-          <button
-            type="button"
-            onClick={() => setIsPresetsModalOpen(true)}
-            className={`px-2 py-1 rounded-lg text-xs font-bold border transition cursor-pointer flex items-center gap-1 ${
-              isClinicalLight
-                ? 'bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100'
-                : 'bg-cyan-950/60 text-cyan-300 border-cyan-500/40 hover:bg-cyan-900/60'
-            }`}
-            title="Ver protocolos frecuentes de consulta"
-          >
-            <span>⚡</span>
-            <span className="hidden md:inline">Protocolos</span>
-          </button>
-
-          {/* Botón Limpiar */}
-          <button
-            type="button"
-            onClick={handleClearPatient}
-            className={`p-1 rounded-lg text-slate-400 hover:text-rose-400 transition cursor-pointer`}
-            title="Limpiar campos del paciente"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-          </button>
         </div>
 
         {/* BANNERS INLINE COMPACTOS (ALERTA PACIENTE RECURRENTE / CAMPOS DUDOSOS) */}

@@ -114,14 +114,18 @@ export const CloudStatusIndicator: React.FC<Props> = ({
       <button
         type="button"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        className={`group flex items-center gap-2 px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer select-none active:scale-95 ${
+        className={`group flex items-center transition-all duration-200 cursor-pointer select-none active:scale-95 ${
+          variant === 'minimal'
+            ? 'w-8 h-8 rounded-xl justify-center border'
+            : 'gap-2 px-2.5 py-1.5 rounded-xl border text-xs font-semibold'
+        } ${
           isConnected
             ? 'bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-200 border-emerald-500/40 shadow-xs'
             : isSyncing
             ? 'bg-amber-950/40 hover:bg-amber-900/60 text-amber-200 border-amber-500/40 animate-pulse'
             : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border-slate-700/60'
         }`}
-        title="Estado de Respaldo en la Nube (Firebase Firestore) - Clic para ver detalles multidispositivo"
+        title={`Estado Nube: ${isSyncing ? 'Sincronizando' : isConnected ? 'Conectado a Firestore' : 'Modo Local'} • Clic para detalles`}
       >
         {/* Icono con LED de estado */}
         <div className="relative flex items-center justify-center shrink-0">
@@ -145,18 +149,20 @@ export const CloudStatusIndicator: React.FC<Props> = ({
           />
         </div>
 
-        {/* Texto Dinámico */}
-        <div className="flex flex-col items-start text-left leading-tight">
-          <div className="flex items-center gap-1 font-bold text-[11px]">
-            <span className={isConnected ? 'text-emerald-300' : isSyncing ? 'text-amber-300' : 'text-slate-300'}>
-              {isSyncing ? 'Sincronizando...' : isConnected ? 'Nube Activa' : 'Modo Local'}
+        {/* Texto Dinámico (Solo en modo normal / no minimal) */}
+        {variant !== 'minimal' && (
+          <div className="flex flex-col items-start text-left leading-tight hidden sm:flex">
+            <div className="flex items-center gap-1 font-bold text-[11px]">
+              <span className={isConnected ? 'text-emerald-300' : isSyncing ? 'text-amber-300' : 'text-slate-300'}>
+                {isSyncing ? 'Sincronizando...' : isConnected ? 'Nube Activa' : 'Modo Local'}
+              </span>
+              <ChevronDown className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-transform group-hover:translate-y-0.5" />
+            </div>
+            <span className="text-[9.5px] font-mono text-slate-400 font-normal">
+              {isSyncing ? 'Subiendo datos' : getRelativeTimeString(lastBackup)}
             </span>
-            <ChevronDown className="w-3 h-3 opacity-60 group-hover:opacity-100 transition-transform group-hover:translate-y-0.5" />
           </div>
-          <span className="text-[9.5px] font-mono text-slate-400 font-normal">
-            {isSyncing ? 'Subiendo datos' : getRelativeTimeString(lastBackup)}
-          </span>
-        </div>
+        )}
       </button>
 
       {/* Menú Desplegable Informativo: Paz Mental Multidispositivo */}
