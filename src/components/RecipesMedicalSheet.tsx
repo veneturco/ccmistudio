@@ -91,14 +91,14 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
   const rightStampEl = pageElements.find(e => e.id === 'right_doctor_stamp' || (e.dataKey === 'doctor_stamp_signature' && (e.geometry?.xMm ?? (e as any).xMm ?? 0) >= 105) || ((e.type === 'stamp' || (e as any).assetKey === 'doctor_stamp_signature') && (e.geometry?.xMm ?? (e as any).xMm ?? 0) >= 105));
 
   // Geometrías calculadas (Canónicas calibradas sobre cajas físicas)
-  const gLeftName = getElGeo(leftNameEl, { xMm: 25.0, yMm: 52.0, widthMm: 75.0, heightMm: 5.5, fontSizePt: 9.5 });
+  const gLeftName = getElGeo(leftNameEl, { xMm: 25.0, yMm: 56.5, widthMm: 75.0, heightMm: 5.5, fontSizePt: 9.5 });
   const gLeftId = getElGeo(leftIdEl, { xMm: 15.0, yMm: 60.5, widthMm: 32.0, heightMm: 5.0, fontSizePt: 9.5 });
   const gLeftAge = getElGeo(leftAgeEl, { xMm: 51.0, yMm: 60.5, widthMm: 18.0, heightMm: 5.0, fontSizePt: 9.5 });
   const gLeftDate = getElGeo(leftDateEl, { xMm: 74.0, yMm: 60.5, widthMm: 25.0, heightMm: 5.0, fontSizePt: 9.5 });
   const gLeftRx = getElGeo(leftRxEl, { xMm: 10.0, yMm: 78.0, widthMm: 89.0, heightMm: 165.0, fontSizePt: 10.0 });
   const gLeftStamp = getElGeo(leftStampEl, { xMm: 58.0, yMm: 248.0, widthMm: 38.0, heightMm: 22.0 });
 
-  const gRightName = getElGeo(rightNameEl, { xMm: 129.0, yMm: 52.0, widthMm: 75.0, heightMm: 5.5, fontSizePt: 9.5 });
+  const gRightName = getElGeo(rightNameEl, { xMm: 129.0, yMm: 56.5, widthMm: 75.0, heightMm: 5.5, fontSizePt: 9.5 });
   const gRightId = getElGeo(rightIdEl, { xMm: 119.0, yMm: 60.5, widthMm: 32.0, heightMm: 5.0, fontSizePt: 9.5 });
   const gRightAge = getElGeo(rightAgeEl, { xMm: 155.0, yMm: 60.5, widthMm: 18.0, heightMm: 5.0, fontSizePt: 9.5 });
   const gRightDate = getElGeo(rightDateEl, { xMm: 178.0, yMm: 60.5, widthMm: 25.0, heightMm: 5.0, fontSizePt: 9.5 });

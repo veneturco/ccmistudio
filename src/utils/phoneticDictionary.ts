@@ -61,6 +61,9 @@ const PHONETIC_RULES: Array<{ pattern: RegExp; replacement: string; label: strin
   { pattern: /\b(duloxetina|cymbalta)\b/gi, replacement: 'Duloxetina', label: 'Duloxetina' },
   { pattern: /\b(tiocolchicósido|tiocolchicosido|coltrax)\b/gi, replacement: 'Tiocolchicósido', label: 'Tiocolchicósido' },
   { pattern: /\b(omeprazol|pantoprazol|esomeprazol)\b/gi, replacement: 'Omeprazol', label: 'Protector gástrico' },
+  { pattern: /\b(magnesio citrato|citrato de magnesio|citrato magnesio)\b/gi, replacement: 'Citrato de Magnesio', label: 'Citrato de Magnesio' },
+  { pattern: /\b(ipratropio|bromuro de ipratropio|ipratropium|atrovent)\b/gi, replacement: 'Bromuro de Ipratropio', label: 'Bromuro de Ipratropio' },
+  { pattern: /\b(decobel|decovel|dekobel)\b/gi, replacement: 'Decobel', label: 'Decobel' },
 
   // Estudios de imagen y neurodiagnóstico
   { pattern: /\b(resonancia con contraste|rmn con contraste|resonancia magnética con contraste)\b/gi, replacement: 'Resonancia Magnética Nuclear (RMN) de Columna Lumbosacra con y sin contraste', label: 'RMN con contraste' },

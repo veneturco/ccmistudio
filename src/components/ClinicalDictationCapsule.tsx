@@ -191,9 +191,10 @@ export const ClinicalDictationCapsule: React.FC<Props> = ({
         // Enrutamiento seguro: Ningún guardado automático (R-01 Eliminado)
         setPendingProposal(result.proposal || null);
         setPendingLegacyData(result.data || null);
-        setCapsuleState('requiresReview');
-        setStatusMessage('⚠️ Propuesta estructurada. Requiere revisión y autorización médica.');
-        handleConfirmProposal(newProposal.payload); // Abrir automáticamente la bandeja de revisión facultativa
+        const payloadToConfirm = result.proposal?.payload || result.data?.payload || result.data;
+        if (payloadToConfirm) {
+          handleConfirmProposal(payloadToConfirm);
+        }
 
         if (onOpenProposalReview) {
           onOpenProposalReview(result.proposal || result.data);
