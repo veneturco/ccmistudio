@@ -403,13 +403,13 @@ export const LAB_ORDER_MASTER_V2: MasterTemplateV2 = {
   source: {
     backgroundPdf: (labMasterJson as any).backgroundPdf || '/templates/orden_lab_base.pdf',
     backgroundImage: '/templates/orden_lab_p1_bg.jpg',
-    sourcePdfSha256: 'f680cb425545ff65e9d064f69a67be776405671477aef09e4d4675070e3d2758',
+    sourcePdfSha256: '77ed84d81ad2c5b90df87743079b709e4c4b542b5c4beeb9600569722c3bb1ce',
     dimensionsMm: {
       width: (labMasterJson as any).pageSize?.widthMm || 153.5,
       height: (labMasterJson as any).pageSize?.heightMm || 215.8,
     }
   },
-  sourcePdfSha256: 'f680cb425545ff65e9d064f69a67be776405671477aef09e4d4675070e3d2758',
+  sourcePdfSha256: '77ed84d81ad2c5b90df87743079b709e4c4b542b5c4beeb9600569722c3bb1ce',
   coordinateSystem: {
     unit: 'mm',
     origin: 'top-left',

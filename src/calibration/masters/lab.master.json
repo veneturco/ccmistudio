@@ -4,6 +4,7 @@
   "documentType": "lab_order",
   "status": "CALIBRATED",
   "source": {
+    "backgroundPdf": "/templates/orden_lab_base.pdf",
     "backgroundImage": "/templates/orden_lab_p1_bg.jpg",
     "pageCount": 2,
     "dimensionsMm": {
@@ -36,7 +37,7 @@
           "type": "text",
           "geometry": {
             "xMm": 39.5,
-            "yMm": 39,
+            "yMm": 40.8,
             "widthMm": 102,
             "heightMm": 5
           },
@@ -46,7 +47,7 @@
             "align": "center"
           },
           "xMm": 39.5,
-          "yMm": 39,
+          "yMm": 40.8,
           "widthMm": 102,
           "heightMm": 5,
           "fontSizePt": 9.5,
@@ -61,7 +62,7 @@
           "type": "text",
           "geometry": {
             "xMm": 25,
-            "yMm": 48.5,
+            "yMm": 50.2,
             "widthMm": 36,
             "heightMm": 4.5
           },
@@ -71,7 +72,7 @@
             "align": "center"
           },
           "xMm": 25,
-          "yMm": 48.5,
+          "yMm": 50.2,
           "widthMm": 36,
           "heightMm": 4.5,
           "fontSizePt": 9,
@@ -86,7 +87,7 @@
           "type": "text",
           "geometry": {
             "xMm": 76.5,
-            "yMm": 48.5,
+            "yMm": 50.2,
             "widthMm": 11.5,
             "heightMm": 5
           },
@@ -96,7 +97,7 @@
             "align": "center"
           },
           "xMm": 76.5,
-          "yMm": 48.5,
+          "yMm": 50.2,
           "widthMm": 11.5,
           "heightMm": 5,
           "fontSizePt": 8.5,
@@ -111,7 +112,7 @@
           "type": "text",
           "geometry": {
             "xMm": 103,
-            "yMm": 48.5,
+            "yMm": 50.2,
             "widthMm": 34,
             "heightMm": 5
           },
@@ -121,7 +122,7 @@
             "align": "center"
           },
           "xMm": 103,
-          "yMm": 48.5,
+          "yMm": 50.2,
           "widthMm": 34,
           "heightMm": 5,
           "fontSizePt": 9,

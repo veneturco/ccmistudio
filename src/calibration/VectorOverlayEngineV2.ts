@@ -1,4 +1,4 @@
-﻿/**
+/**
  * VectorOverlayEngineV2.ts
  * 
  * MOTOR UNIVERSAL DE RENDERIZADO VECTORIAL OVERLAY (ARQUITECTURA V2)
@@ -106,13 +106,9 @@ export class VectorOverlayEngineV2 {
       originalPdfBytes[2] === 0x4e &&
       originalPdfBytes[3] === 0x47;
 
-    // LEY DEL MASTER CCMI:
-    // Los archivos *_base.pdf o PDFs vectoriales carecen del fondo visual oficial de la clínica.
-    // Todos los documentos oficiales (Récipes, Órdenes de Lab, Informe, Constancia, Historia)
-    // se generan SIEMPRE con su plantilla gráfica oficial de alta resolución 300 DPI incrustada en cada página.
-    const isExternalSignedPdf = isPdf && Boolean(options.preserveExternalPdf);
-
-    if (isExternalSignedPdf) {
+    // Si el buffer es un PDF maestro vectorial (como orden_lab_base.pdf o documentos base con membrete),
+    // se carga directamente con pdf-lib preservando toda la tipografía vectorial, logos y recuadros.
+    if (isPdf) {
       pdfDoc = await PDFDocument.load(originalPdfBytes, { ignoreEncryption: true });
     } else {
       // Si el buffer es una imagen de alta resoluciÃ³n o respaldo, se genera un PDF contenedor con fondo incrustado por cada pÃ¡gina
@@ -401,7 +397,7 @@ export class VectorOverlayEngineV2 {
             const isDebug = Boolean(options.debugMode || options.debugOverlay);
             if (!isChecked && !isDebug) break;
 
-            const markChar = element.markStyle === 'CHECK' ? 'âœ“' : 'X';
+            const markChar = 'X';
             const fontSize = element.fontSizePt ?? (element as any).fontSizePt ?? 8;
             const markWidth = fontBold.widthOfTextAtSize(markChar, fontSize);
             const boxWidthPt = CalibrationEngine.mmToPt(geom.widthMm);
