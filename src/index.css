@@ -1,29 +1,29 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 /* ========================================================================= */
-/* JERARQUÍA TIPOGRÁFICA UNIFICADA Y VARIABLES GLOBALES (:root)             */
+/* JERARQUÃA TIPOGRÃFICA UNIFICADA Y VARIABLES GLOBALES (:root)             */
 /* ========================================================================= */
 :root {
-  /* Familias Tipográficas */
+  /* Familias TipogrÃ¡ficas */
   --font-clinical-base: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-clinical-calligraphic: 'Dancing Script', cursive, serif;
 
-  /* Escala de Pesos para Lectura Clínica */
+  /* Escala de Pesos para Lectura ClÃ­nica */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
 
-  /* Colores de Contraste Tipográfico Clínico (WCAG AA/AAA) */
-  --text-clinical-primary: #0f172a;       /* Slate 900: Máximo contraste sobre fondos claros */
-  --text-clinical-secondary: #334155;     /* Slate 700: Subtítulos y descripciones legibles */
+  /* Colores de Contraste TipogrÃ¡fico ClÃ­nico (WCAG AA/AAA) */
+  --text-clinical-primary: #0f172a;       /* Slate 900: MÃ¡ximo contraste sobre fondos claros */
+  --text-clinical-secondary: #334155;     /* Slate 700: SubtÃ­tulos y descripciones legibles */
   --text-clinical-muted: #64748b;         /* Slate 500: Metadatos y etiquetas secundarias */
-  --text-clinical-inverse: #f8fafc;       /* Slate 50: Texto sobre fondos oscuros o de acción */
-  --text-calligraphic-signature: #0c4a6e; /* Sky 900: Firma médica institucional con contraste */
+  --text-clinical-inverse: #f8fafc;       /* Slate 50: Texto sobre fondos oscuros o de acciÃ³n */
+  --text-calligraphic-signature: #0c4a6e; /* Sky 900: Firma mÃ©dica institucional con contraste */
 }
 
-/* Clases de Utilidad Tipográfica */
+/* Clases de Utilidad TipogrÃ¡fica */
 .font-clinical {
   font-family: var(--font-clinical-base);
 }
@@ -113,7 +113,7 @@ html, body {
 }
 
 /* ========================================================================= */
-/* ANIMACIONES CLÍNICAS DE ENTRADA SUAVE (FADE-IN & STAGGER TRANSLATE)       */
+/* ANIMACIONES CLÃNICAS DE ENTRADA SUAVE (FADE-IN & STAGGER TRANSLATE)       */
 /* ========================================================================= */
 @keyframes clinical-fade-in-up {
   0% {
@@ -299,20 +299,6 @@ html, body {
 
 /* Glass Card Global Utility */
 .glass-card-2026 {
-  background: rgba(11, 20, 38, 0.6);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.glass-card-2026:hover {
-  border-color: rgba(56, 189, 248, 0.2);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 15px 40px -15px rgba(56, 189, 248, 0.2);
-  transform: translateY(-4px) scale(1.01);
-}
-
-.light-glass-card-2026 {
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -320,10 +306,24 @@ html, body {
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 1), 0 10px 30px -10px rgba(0, 0, 0, 0.05);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.light-glass-card-2026:hover {
+.glass-card-2026:hover {
   border-color: rgba(59, 130, 246, 0.2);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 1), 0 15px 40px -15px rgba(59, 130, 246, 0.15);
   transform: translateY(-4px) scale(1.01);
+}
+
+:root[data-theme='dark'] .glass-card-2026,
+.theme-dark .glass-card-2026,
+.dark .glass-card-2026 {
+  background: rgba(11, 20, 38, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
+}
+:root[data-theme='dark'] .glass-card-2026:hover,
+.theme-dark .glass-card-2026:hover,
+.dark .glass-card-2026:hover {
+  border-color: rgba(56, 189, 248, 0.2) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 15px 40px -15px rgba(56, 189, 248, 0.2) !important;
 }
 /* ========================================================================= */
 /* DIRECTOR OF DESIGN 2026: NEUROSURGERY CLINICAL AESTHETICS               */
@@ -350,7 +350,7 @@ html, body {
   background-position: center top;
 }
 
-/* 2. Sello y Firma Hologr�fica (Security Foil) */
+/* 2. Sello y Firma Holográfica (Security Foil) */
 @keyframes foil-shimmer {
   0% { transform: translateX(-150%) skewX(-45deg); opacity: 0; }
   20% { opacity: 0.5; }

@@ -112,7 +112,7 @@ export const HistoryList: React.FC<Props> = ({ documents }) => {
           {filteredDocs.map((doc, index) => (
             <div
               key={doc.id}
-              className="animate-fade-in-up rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 dark:glass-card-2026 light-glass-card-2026 dark:hover:border-cyan-500/50 dark:hover:-translate-y-1 dark:hover:scale-[1.01]"
+              className="animate-fade-in-up rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card-2026 text-slate-800 dark:text-slate-100 dark:hover:border-cyan-500/50 dark:hover:-translate-y-1 dark:hover:scale-[1.01]"
               style={{ animationDelay: `${index * 80}ms` }}
             >
               <div className="space-y-1.5 flex-1">

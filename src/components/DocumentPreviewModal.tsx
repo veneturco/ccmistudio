@@ -21,7 +21,7 @@ import {
 import { PDFDocumentPipelineV2 } from '../utils/PDFDocumentPipelineV2';
 import { ClinicalWorkspaceContext } from '../calibration/SemanticDataMapperV2';
 import { LiveCoordinateCalibratorModal } from './LiveCoordinateCalibratorModal';
-
+import { OptimizedA4Background } from './OptimizedA4Background';
 interface Props {
   document: ProcessedDocumentResult | null;
   isOpen: boolean;
@@ -218,13 +218,18 @@ export const DocumentPreviewModal: React.FC<Props> = ({ document, isOpen, onClos
               width: '794px',
               height: '1123px',
               minHeight: '1123px',
+              maxHeight: '1123px',
               fontFamily: "'Montserrat', sans-serif",
-              backgroundImage: `url(${bgUrl})`,
-              backgroundSize: '100% 100%',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
+              boxSizing: 'border-box',
             }}
           >
+            {/* Progressive Lazy-Loaded A4 Stationery Layer (300 DPI) */}
+            <OptimizedA4Background 
+              src={bgUrl || ''} 
+              isCustomOriginal={false} 
+              docTitle={document.documentType} 
+            />
+
             {/* RÉCIPE MÉDICO: Estampado directo sobre recipes_bg.jpg (Doble Talón Simétrico) */}
             {document.documentType === 'recipe' && (
               <div className="relative w-[794px] h-[1123px]">

@@ -490,7 +490,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
             return (
               <div
                 key={apt.id}
-                className="animate-fade-in-up p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xs transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-4 dark:glass-card-2026 light-glass-card-2026"
+                className="animate-fade-in-up p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xs transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-4 glass-card-2026 text-slate-800 dark:text-slate-100"
                 style={{ animationDelay: `${index * 80}ms` }}
               >
                 {/* Hora y Paciente */}

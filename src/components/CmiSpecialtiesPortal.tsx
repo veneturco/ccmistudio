@@ -370,7 +370,7 @@ export const CmiSpecialtiesPortal: React.FC<CmiSpecialtiesPortalProps> = ({
             <div
               key={doc.id}
               onClick={() => onNavigateToDocs(doc.id)}
-              className="animate-fade-in-up p-4 rounded-2xl border border-slate-200/90 hover:border-blue-500 hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between light-glass-card-2026 dark:glass-card-2026 hover:scale-[1.03] hover:-translate-y-1.5"
+              className="animate-fade-in-up p-4 rounded-2xl border border-slate-200/90 hover:border-blue-500 hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between glass-card-2026 text-slate-800 dark:text-slate-100 hover:scale-[1.03] hover:-translate-y-1.5"
               style={{ animationDelay: `${index * 80}ms` }}
             >
               <div>
