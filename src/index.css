@@ -4,26 +4,26 @@
 /* JERARQUÃA TIPOGRÃFICA UNIFICADA Y VARIABLES GLOBALES (:root)             */
 /* ========================================================================= */
 :root {
-  /* Familias TipogrÃ¡ficas */
+  /* Familias Tipográficas */
   --font-clinical-base: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-clinical-calligraphic: 'Dancing Script', cursive, serif;
 
-  /* Escala de Pesos para Lectura ClÃ­nica */
+  /* Escala de Pesos para Lectura Clónica */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
 
-  /* Colores de Contraste TipogrÃ¡fico ClÃ­nico (WCAG AA/AAA) */
+  /* Colores de Contraste TipogrÃ¡fico Clónico (WCAG AA/AAA) */
   --text-clinical-primary: #0f172a;       /* Slate 900: MÃ¡ximo contraste sobre fondos claros */
   --text-clinical-secondary: #334155;     /* Slate 700: SubtÃ­tulos y descripciones legibles */
   --text-clinical-muted: #64748b;         /* Slate 500: Metadatos y etiquetas secundarias */
-  --text-clinical-inverse: #f8fafc;       /* Slate 50: Texto sobre fondos oscuros o de acciÃ³n */
-  --text-calligraphic-signature: #0c4a6e; /* Sky 900: Firma mÃ©dica institucional con contraste */
+  --text-clinical-inverse: #f8fafc;       /* Slate 50: Texto sobre fondos oscuros o de acción */
+  --text-calligraphic-signature: #0c4a6e; /* Sky 900: Firma médica institucional con contraste */
 }
 
-/* Clases de Utilidad TipogrÃ¡fica */
+/* Clases de Utilidad Tipográfica */
 .font-clinical {
   font-family: var(--font-clinical-base);
 }
@@ -449,35 +449,55 @@ html, body {
   margin: 1.5px; /* Border thickness */
 }
 
-/* Responsive A4 Zoom for Mobile to prevent layout breakage */
-@media (max-width: 500px) {
-  .a4-responsive-container {
-    zoom: 0.45;
-  }
+
+
+/* A4 CSS Transform Scaler - Layout Safe */
+.a4-transform-wrapper {
+  position: relative;
+  overflow: visible;
+  transform-origin: top center;
+  transform: scale(0.45);
+  margin-bottom: calc(-1123px * 0.55);
 }
+
 @media (min-width: 501px) and (max-width: 639px) {
-  .a4-responsive-container {
-    zoom: 0.6;
+  .a4-transform-wrapper {
+    transform: scale(0.6);
+    margin-bottom: calc(-1123px * 0.4);
   }
 }
+
 @media (min-width: 640px) and (max-width: 768px) {
-  .a4-responsive-container {
-    zoom: 0.75;
+  .a4-transform-wrapper {
+    transform: scale(0.75);
+    margin-bottom: calc(-1123px * 0.25);
   }
 }
+
 @media (min-width: 769px) and (max-width: 1023px) {
-  .a4-responsive-container {
-    zoom: 0.85;
+  .a4-transform-wrapper {
+    transform: scale(0.85);
+    margin-bottom: calc(-1123px * 0.15);
   }
 }
+
 @media (min-width: 1024px) {
-  .a4-responsive-container {
-    zoom: 1;
+  .a4-transform-wrapper {
+    transform: scale(1);
+    margin-bottom: 0;
   }
 }
-/* Print should always be 100% */
+
 @media print {
-  .a4-responsive-container {
-    zoom: 1 !important;
+  .a4-transform-wrapper {
+    transform: scale(1) !important;
+    margin-bottom: 0 !important;
   }
+}
+
+/* Force prevent body scroll overflow caused by absolute or transformed elements */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }

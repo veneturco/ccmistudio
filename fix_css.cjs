@@ -1,0 +1,10 @@
+const fs = require('fs');
+let c = fs.readFileSync('src/index.css', 'utf8');
+c = c.replace(/[\x80-\xFF]{2,}tica/g, 'ática');
+c = c.replace(/[\x80-\xFF]{2,}fica/g, 'áfica');
+c = c.replace(/[\x80-\xFF]{2,}n/g, 'ón');
+c = c.replace(/Cl[\x80-\xFF]{2,}nica/g, 'Clínica');
+c = c.replace(/m[\x80-\xFF]{2,}dica/g, 'médica');
+c = c.replace(/[\x80-\xFF]{2,}xima/g, 'Máxima');
+c = c.replace(/[\x80-\xFF]{2,}nica/g, 'ánica');
+fs.writeFileSync('src/index.css', c);

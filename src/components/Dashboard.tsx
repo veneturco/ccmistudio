@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   FileText, 
   History, 
@@ -178,7 +178,7 @@ export const Dashboard: React.FC = () => {
     return 'workspace';
   });
 
-  const [selectedDoc, setSelectedDoc] = useState<DocType>('RECIPES');
+  const [selectedDoc, setSelectedDoc] = useState<DocType>('HISTORIA');
   const [activePatientData, setActivePatientData] = useState<PatientData | undefined>(undefined);
   const [documentsHistory, setDocumentsHistory] = useState<ProcessedDocumentResult[]>(() => {
     try {
@@ -320,24 +320,6 @@ export const Dashboard: React.FC = () => {
           }`}>
             <button
               type="button"
-              onClick={() => setActiveTab('workspace')}
-              className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer relative overflow-hidden ${
-                activeTab === 'workspace'
-                  ? isClinicalLight
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'bg-gradient-to-r from-blue-600/90 to-cyan-500/90 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] ring-1 ring-white/10 scale-100'
-                  : isClinicalLight
-                  ? 'text-slate-500 hover:text-blue-600 hover:bg-blue-50/80 hover:scale-105 active:scale-95'
-                  : 'text-slate-400 hover:text-cyan-300 hover:bg-white/5 hover:scale-105 active:scale-95'
-              }`}
-              title="Estación de Papelería A4 y Récipes Oficiales"
-            >
-              <FileText className={`w-4 h-4 transition-transform duration-300 ${activeTab !== 'workspace' && 'group-hover:rotate-6'}`} />
-              <span>Papelería A4</span>
-            </button>
-
-            <button
-              type="button"
               onClick={() => setActiveTab('agenda')}
               className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer relative overflow-hidden ${
                 activeTab === 'agenda'
@@ -375,6 +357,24 @@ export const Dashboard: React.FC = () => {
                   {documentsHistory.length}
                 </span>
               )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('workspace')}
+              className={`group flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer relative overflow-hidden ${
+                activeTab === 'workspace'
+                  ? isClinicalLight
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gradient-to-r from-blue-600/90 to-cyan-500/90 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] ring-1 ring-white/10 scale-100'
+                  : isClinicalLight
+                  ? 'text-slate-500 hover:text-blue-600 hover:bg-blue-50/80 hover:scale-105 active:scale-95'
+                  : 'text-slate-400 hover:text-cyan-300 hover:bg-white/5 hover:scale-105 active:scale-95'
+              }`}
+              title="Estación de Papelería A4 y Récipes Oficiales"
+            >
+              <FileText className={`w-4 h-4 transition-transform duration-300 ${activeTab !== 'workspace' && 'group-hover:rotate-6'}`} />
+              <span>Papelería A4</span>
             </button>
 
             <button
@@ -717,7 +717,7 @@ export const Dashboard: React.FC = () => {
         )}
       </header>
 
-      {/* NOTIFICACIÓN FLOTANTE */}
+      {/* NOTIFICACIÃ“N FLOTANTE */}
       {notificationToast && (
         <div className="fixed top-20 right-6 z-50 p-4 rounded-2xl bg-emerald-950/95 text-emerald-100 border border-emerald-500/40 shadow-2xl flex items-center gap-3 text-xs font-bold animate-fade-in backdrop-blur-md">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -725,7 +725,7 @@ export const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {/* 2. ÁREA PRINCIPAL SEGÚN PESTAÑA ACTIVA */}
+      {/* 2. ÁREA PRINCIPAL SEGÃšN PESTAÃ‘A ACTIVA */}
       <main key={activeTab} className="flex-1 py-4 sm:py-6 px-2 sm:px-6 max-w-7xl mx-auto w-full animate-fade-in-up">
         {/* SISTEMA DE WIDGETS DE ACCESO RÁPIDO CLÍNICO CONFIGURABLES */}
         {showWidgetsHub && (
@@ -735,7 +735,7 @@ export const Dashboard: React.FC = () => {
           />
         )}
 
-        {/* PESTAÑA: PORTAL CMI */}
+        {/* PESTAÃ‘A: PORTAL CMI */}
         {activeTab === 'portal' && (
           <div className="w-full animate-fade-in">
             <CmiSpecialtiesPortal
@@ -757,11 +757,11 @@ export const Dashboard: React.FC = () => {
         )}
 
         
-        {/* PESTAÑA: ANALYTICS */}
+        {/* PESTAÃ‘A: ANALYTICS */}
         {activeTab === 'analytics' && (
           <AnalyticsDashboard />
         )}
-        {/* PESTAÑA: ESTACIÓN OFICIAL DE PAPELERÍA A4 */}
+        {/* PESTAÃ‘A: ESTACIÃ“N OFICIAL DE PAPELERÍA A4 */}
         {activeTab === 'workspace' && (
           <div className="w-full">
             <DocumentSelectorWorkspace 
@@ -775,7 +775,7 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* OPCIÓN A: FORMULARIO RÁPIDO DE DICTADO Y PROCESAMIENTO IA (MedicalForm) */}
+        {/* OPCIÃ“N A: FORMULARIO RÁPIDO DE DICTADO Y PROCESAMIENTO IA (MedicalForm) */}
         {activeTab === 'dictation_ai' && (
           <div className="w-full space-y-3 animate-fade-in">
             <div className="flex items-center justify-between bg-white dark:bg-[#091328] px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
@@ -790,7 +790,7 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setActiveTab('workspace')}
                 className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold cursor-pointer transition flex items-center gap-1"
               >
-                <span>← Ir a Papelería A4</span>
+                <span>â† Ir a Papelería A4</span>
               </button>
             </div>
 
@@ -798,7 +798,7 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* OPCIÓN D: AGENDA QUIRÚRGICA Y CITAS MÉDICAS */}
+        {/* OPCIÃ“N D: AGENDA QUIRÃšRGICA Y CITAS MÃ‰DICAS */}
         {activeTab === 'agenda' && (
           <div className="w-full space-y-3 animate-fade-in">
             <ClinicalAgendaView
@@ -808,7 +808,7 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* OPCIÓN B: HISTORIAL DE DOCUMENTOS EMITIDOS */}
+        {/* OPCIÃ“N B: HISTORIAL DE DOCUMENTOS EMITIDOS */}
         {activeTab === 'history' && (
           <div className="space-y-4 max-w-5xl mx-auto animate-fade-in">
             <div className="flex items-center justify-between bg-white dark:bg-[#091328] p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
@@ -834,7 +834,7 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* COTIZADOR LOGÍSTICO QUIRÚRGICO */}
+        {/* COTIZADOR LOGÍSTICO QUIRÃšRGICO */}
         {activeTab === 'quoter' && (
           <div className="space-y-4 max-w-5xl mx-auto animate-fade-in">
             <div className="flex items-center justify-between bg-white dark:bg-[#091328] p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
@@ -868,7 +868,7 @@ export const Dashboard: React.FC = () => {
                   onClick={() => setActiveTab('workspace')}
                   className="text-blue-700 dark:text-cyan-400 font-bold flex items-center gap-1 cursor-pointer"
                 >
-                  <span>← Volver a Papelería A4</span>
+                  <span>â† Volver a Papelería A4</span>
                 </button>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
                 <span className="text-slate-600 dark:text-slate-300 font-medium">Developer Studio (Calibración & Formas PDF)</span>
@@ -888,7 +888,7 @@ export const Dashboard: React.FC = () => {
       </main>
 
       {/* ============================================================ */}
-      {/* OPCIÓN C: COPILOTO CLÍNICO SAMI (PRESENCIA GLOBAL)            */}
+      {/* OPCIÃ“N C: COPILOTO CLÍNICO SAMI (PRESENCIA GLOBAL)            */}
       {/* ============================================================ */}
       <SamiCopilot
         activePatient={activePatientData}
@@ -896,21 +896,21 @@ export const Dashboard: React.FC = () => {
         userRole="NEUROCIRUJANO"
       />
 
-      {/* MODAL DE TARJETA DE PRESENTACIÓN DIGITAL */}
+      {/* MODAL DE TARJETA DE PRESENTACIÃ“N DIGITAL */}
       <DoctorBusinessCard
         isModal
         isOpen={isCardModalOpen}
         onClose={() => setIsCardModalOpen(false)}
       />
 
-      {/* MODAL DE CONFIGURACIÓN DE USUARIO Y HORARIO CIRCADIANO */}
+      {/* MODAL DE CONFIGURACIÃ“N DE USUARIO Y HORARIO CIRCADIANO */}
       <UserSettingsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
       />
 
       {/* ============================================================ */}
-      {/* OPCIÓN G: MODALES DE HERRAMIENTAS TÉCNICAS Y CALIBRACIÓN     */}
+      {/* OPCIÃ“N G: MODALES DE HERRAMIENTAS TÃ‰CNICAS Y CALIBRACIÃ“N     */}
       {/* ============================================================ */}
       <TechnicalToolsModal
         isOpen={isTechModalOpen}
@@ -931,7 +931,7 @@ export const Dashboard: React.FC = () => {
           onClose={() => setIsLiveCalibratorOpen(false)}
           onApplyCoordinates={() => {
             FirestoreStationerySync.pushLocalCalibrationToCloud().catch((err) => console.warn(err));
-            setNotificationToast('¡Coordenadas calibradas aplicadas exitosamente!');
+            setNotificationToast('Â¡Coordenadas calibradas aplicadas exitosamente!');
             setTimeout(() => setNotificationToast(null), 3000);
           }}
         />
@@ -965,7 +965,7 @@ export const Dashboard: React.FC = () => {
         initialDoc={selectedDoc}
       />
 
-      {/* Modal: Sincronización Celular ⇄ PC */}
+      {/* Modal: Sincronización Celular â‡„ PC */}
       <SyncTemplatesModal
         isOpen={isSyncModalOpen}
         onClose={() => setIsSyncModalOpen(false)}
@@ -1009,7 +1009,7 @@ export const Dashboard: React.FC = () => {
         }}
       />
 
-      {/* 5. BARRA DE NAVEGACIÓN INFERIOR PARA CELULARES (Bottom Nav Bar) */}
+      {/* 5. BARRA DE NAVEGACIÃ“N INFERIOR PARA CELULARES (Bottom Nav Bar) */}
       <MobileBottomNavBar
         activeTab={activeTab}
         setActiveTab={setActiveTab}

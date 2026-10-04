@@ -1,0 +1,69 @@
+const fs = require('fs');
+
+function fixFile(filePath) {
+  let c = fs.readFileSync(filePath, 'utf8');
+
+  // Specific text repairs
+  c = c.replace(/Papeler\?a/g, 'Papelería');
+  c = c.replace(/Papelera/g, 'Papelería');
+  c = c.replace(/Rcipe/g, 'Récipe');
+  c = c.replace(/R\?cipe/g, 'Récipe');
+  c = c.replace(/Mdico/g, 'Médico');
+  c = c.replace(/M\?dico/g, 'Médico');
+  c = c.replace(/clnic/g, 'clínic');
+  c = c.replace(/Clnic/g, 'Clínic');
+  c = c.replace(/Cl\?nic/g, 'Clínic');
+  c = c.replace(/quirrgic/g, 'quirúrgic');
+  c = c.replace(/Quirrgic/g, 'Quirúrgic');
+  c = c.replace(/Quir\?rgic/g, 'Quirúrgic');
+  c = c.replace(/diagnstic/g, 'diagnóstic');
+  c = c.replace(/Diagnstic/g, 'Diagnóstic');
+  c = c.replace(/Diagn\?stic/g, 'Diagnóstic');
+  c = c.replace(/Imgenes/g, 'Imágenes');
+  c = c.replace(/Im\?genes/g, 'Imágenes');
+
+  c = c.replace(/[\x80-\xFF]{2,}dico/g, 'médico');
+  c = c.replace(/M[\x80-\xFF]{2,}dico/g, 'Médico');
+  c = c.replace(/cl[\x80-\xFF]{2,}nico/g, 'clínico');
+  c = c.replace(/Cl[\x80-\xFF]{2,}nico/g, 'Clínico');
+  c = c.replace(/r[\x80-\xFF]{2,}pido/g, 'rápido');
+  c = c.replace(/quir[\x80-\xFF]{2,}rgica/g, 'quirúrgica');
+  c = c.replace(/diagn[\x80-\xFF]{2,}stico/g, 'diagnóstico');
+  c = c.replace(/Diagn[\x80-\xFF]{2,}stico/g, 'Diagnóstico');
+  c = c.replace(/Preg[\x80-\xFF]{2,}ntale/g, 'Pregúntale');
+  c = c.replace(/T[\x80-\xFF]{2,}cnicas/g, 'Técnicas');
+  c = c.replace(/informaci[\x80-\xFF]{2,}n/g, 'información');
+  c = c.replace(/Informaci[\x80-\xFF]{2,}n/g, 'Información');
+  c = c.replace(/configuraci[\x80-\xFF]{2,}n/g, 'configuración');
+  c = c.replace(/evaluaci[\x80-\xFF]{2,}n/g, 'evaluación');
+  c = c.replace(/descompresi[\x80-\xFF]{2,}n/g, 'descompresión');
+  c = c.replace(/dosificaci[\x80-\xFF]{2,}n/g, 'dosificación');
+  c = c.replace(/redacci[\x80-\xFF]{2,}n/g, 'redacción');
+  c = c.replace(/espa[\x80-\xFF]{2,}ol/g, 'español');
+  c = c.replace(/est[\x80-\xFF]{2,}ndar/g, 'estándar');
+  c = c.replace(/s[\x80-\xFF]{2,}ntesis/g, 'síntesis');
+  c = c.replace(/par[\x80-\xFF]{2,}metros/g, 'parámetros');
+  c = c.replace(/est[\x80-\xFF]{2,} /g, 'está ');
+  c = c.replace(/s[\x80-\xFF]{2,}\?/g, 'sí?');
+  c = c.replace(/d[\x80-\xFF]{2,}as/g, 'días');
+  c = c.replace(/g[\x80-\xFF]{2,}strico/g, 'gástrico');
+  c = c.replace(/posolog[\x80-\xFF]{2,}a/g, 'posología');
+  c = c.replace(/Posolog[\x80-\xFF]{2,}a/g, 'Posología');
+  c = c.replace(/Analg[\x80-\xFF]{2,}sico/g, 'Analgésico');
+  c = c.replace(/f[\x80-\xFF]{2,}rmacos/g, 'fármacos');
+  c = c.replace(/Emisi[\x80-\xFF]{2,}n/g, 'Emisión');
+  c = c.replace(/r[\x80-\xFF]{2,}cipes/g, 'récipes');
+  c = c.replace(/r[\x80-\xFF]{2,}cipe/g, 'récipe');
+  c = c.replace(/R[\x80-\xFF]{2,}cipes/g, 'Récipes');
+  c = c.replace(/R[\x80-\xFF]{2,}cipe/g, 'Récipe');
+  c = c.replace(/[\x80-\xFF]{2,}gil/g, 'Ágil');
+  c = c.replace(/[\x80-\xFF]{2,}qu[eé] /g, 'qué ');
+  c = c.replace(/[\x80-\xFF]{2,}Cu/g, '¿Cu');
+  c = c.replace(/[\x80-\xFF]{2,}D[oó]/g, '¿Dó');
+
+  fs.writeFileSync(filePath, c);
+}
+
+const glob = require('fs').readdirSync('src/components').filter(f => f.endsWith('.tsx'));
+glob.forEach(f => fixFile('src/components/' + f));
+console.log("Fixed encodings on all components!");
