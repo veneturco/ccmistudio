@@ -1931,12 +1931,15 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* ROW 2: SPOTLIGHT PATIENT CONTEXT BAR (ESTILO APPLE) */}
-        <div className={`flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl p-1.5 gap-1.5 border transition-all shadow-inner ${
+        {/* ROW 2: SPOTLIGHT PATIENT CONTEXT BAR (ESTILO APPLE + BIOMETRIC HUD) */}
+        <div className={`relative overflow-hidden flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl p-1.5 gap-1.5 border transition-all shadow-inner ${
           isClinicalLight 
             ? 'bg-slate-50/80 border-slate-200/90 text-slate-900' 
             : 'bg-[#060e1e]/90 border-slate-800/80 text-white'
         }`}>
+          {/* Biometric MRI Scan Line (Triggers on mount or patient change) */}
+          <div key={patient.idNumber || patient.fullName} className="mri-scan-line" />
+
           {/* Cédula */}
           <div className="relative flex items-center min-w-[120px] sm:w-40 shrink-0">
             <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
@@ -1945,7 +1948,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               value={patient.idNumber}
               onChange={(e) => handleCedulaChange(e.target.value)}
               placeholder="Cédula / ID"
-              className={`w-full rounded-lg pl-7 pr-2 py-1.5 text-xs font-mono font-bold outline-none border transition ${
+              className={`w-full rounded-lg pl-7 pr-2 py-1.5 text-xs font-mono font-bold outline-none border transition relative z-10 ${
                 isClinicalLight
                   ? 'bg-white border-slate-300/80 text-blue-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600/30'
                   : 'bg-[#09152b] border-slate-700/60 text-cyan-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30'
@@ -1953,22 +1956,28 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             />
           </div>
 
-          <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0" />
+          <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0 relative z-10" />
 
-          {/* Nombre Completo */}
-          <div className="flex-1 min-w-[180px]">
+          {/* Nombre Completo con EKG Pulse HUD */}
+          <div className="flex-1 min-w-[180px] relative">
             <input
               id="patient-name-input"
               type="text"
               value={patient.fullName}
               onChange={(e) => setPatient({ ...patient, fullName: e.target.value })}
               placeholder="Nombre del paciente..."
-              className={`w-full rounded-lg px-3 py-1.5 text-xs font-bold outline-none border transition ${
+              className={`w-full rounded-lg px-3 py-1.5 text-xs font-bold outline-none border transition relative z-10 ${
                 isClinicalLight
                   ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600/30'
                   : 'bg-[#09152b] border-slate-700/60 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30'
-              }`}
+              } ${(patient.fullName && !isClinicalLight) ? 'pr-8' : ''}`}
             />
+            {/* EKG Pulse Indicator (Shows when patient is active in dark mode) */}
+            {patient.fullName && !isClinicalLight && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center" title="Expediente Clínico Activo">
+                <div className="ekg-pulse-dot"></div>
+              </div>
+            )}
           </div>
 
           <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0" />

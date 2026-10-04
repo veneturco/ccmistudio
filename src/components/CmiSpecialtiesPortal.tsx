@@ -366,11 +366,12 @@ export const CmiSpecialtiesPortal: React.FC<CmiSpecialtiesPortalProps> = ({
             { id: 'EXAMENES', name: 'Orden de Exámenes', desc: 'Laboratorio y Neuroimagen', tag: 'Checklist' },
             { id: 'CONSTANCIA', name: 'Constancia de Reposo', desc: 'Certificado Laboral Legal', tag: 'Días y Letras' },
             { id: 'HISTORIA', name: 'Historia Clínica', desc: 'Anamnesis y Examen Físico', tag: 'Expediente' },
-          ].map((doc) => (
+          ].map((doc, index) => (
             <div
               key={doc.id}
               onClick={() => onNavigateToDocs(doc.id)}
-              className="bg-white p-4 rounded-2xl border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+              className="animate-fade-in-up p-4 rounded-2xl border border-slate-200/90 hover:border-blue-500 hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between light-glass-card-2026 dark:glass-card-2026 hover:scale-[1.03] hover:-translate-y-1.5"
+              style={{ animationDelay: `${index * 80}ms` }}
             >
               <div>
                 <span className="text-[9px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">

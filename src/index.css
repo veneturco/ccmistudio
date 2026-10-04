@@ -325,3 +325,87 @@ html, body {
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 1), 0 15px 40px -15px rgba(59, 130, 246, 0.15);
   transform: translateY(-4px) scale(1.01);
 }
+/* ========================================================================= */
+/* DIRECTOR OF DESIGN 2026: NEUROSURGERY CLINICAL AESTHETICS               */
+/* ========================================================================= */
+
+/* 1. Fondo "Asepsia Neuronal" (Pristine Neural Mesh) */
+.bg-neural-mesh {
+  background-color: #030712;
+  background-image: 
+    linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.15), transparent 60%);
+  background-size: 30px 30px, 30px 30px, 100% 100%;
+  background-position: center top;
+}
+
+.light-bg-neural-mesh {
+  background-color: #f8fafc;
+  background-image: 
+    linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.1), transparent 60%);
+  background-size: 30px 30px, 30px 30px, 100% 100%;
+  background-position: center top;
+}
+
+/* 2. Sello y Firma Holográfica (Security Foil) */
+@keyframes foil-shimmer {
+  0% { transform: translateX(-150%) skewX(-45deg); opacity: 0; }
+  20% { opacity: 0.5; }
+  50% { transform: translateX(150%) skewX(-45deg); opacity: 0; }
+  100% { transform: translateX(150%) skewX(-45deg); opacity: 0; }
+}
+.holographic-foil {
+  position: relative;
+  overflow: hidden;
+}
+.holographic-foil::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), rgba(56, 189, 248, 0.6), transparent);
+  mix-blend-mode: color-dodge;
+  animation: foil-shimmer 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* 3. Biometric HUD: MRI Scanner Line */
+@keyframes mri-scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(500%); opacity: 0; }
+}
+.mri-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.8), transparent);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  animation: mri-scan 2.5s ease-in-out;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Biometric HUD: EKG Pulse */
+@keyframes ekg-pulse-anim {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+.ekg-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #10b981;
+  border-radius: 50%;
+  display: inline-block;
+  animation: ekg-pulse-anim 2s infinite;
+}

@@ -39,11 +39,11 @@ export const OfficialMedicalStamp: React.FC<StampProps> = ({
   // Si el médico configuró su firma y sello transparente con el extractor inteligente
   if (customStampPng) {
     return (
-      <div className={`inline-flex items-center justify-center select-none ${scaleMap[size]} ${className}`}>
+      <div className={`inline-flex items-center justify-center select-none holographic-foil ${scaleMap[size]} ${className}`}>
         <img 
           src={customStampPng} 
           alt="Sello y Firma Médica Oficial" 
-          className="max-h-24 max-w-full object-contain filter drop-shadow-xs" 
+          className="max-h-24 max-w-full object-contain filter drop-shadow-xs relative z-10" 
         />
       </div>
     );
@@ -51,7 +51,7 @@ export const OfficialMedicalStamp: React.FC<StampProps> = ({
 
   return (
     <div
-      className={`inline-flex flex-col items-center justify-center select-none font-sans transition-all py-1 px-3 ${
+      className={`inline-flex flex-col items-center justify-center select-none font-sans transition-all py-1 px-3 holographic-foil ${
         withBorder ? 'border-2 border-dashed rounded-xl' : ''
       } ${colorMap[inkColor]} ${scaleMap[size]} ${className}`}
     >

@@ -273,14 +273,9 @@ export const Dashboard: React.FC = () => {
     <div 
       id="socs-dashboard-root" 
       className={`min-h-screen flex flex-col font-sans transition-colors duration-200 pb-20 md:pb-0 relative ${
-        isClinicalLight ? 'bg-slate-50 text-slate-900' : 'bg-[#030712] text-slate-100'
+        isClinicalLight ? 'bg-slate-50 text-slate-900 light-bg-neural-mesh' : 'bg-[#030712] text-slate-100 bg-neural-mesh'
       }`}
     >
-      {/* 2026 Ambient Aurora Background */}
-      {!isClinicalLight && (
-        <div className="fixed inset-0 z-0 pointer-events-none bg-aurora opacity-30 mix-blend-screen" />
-      )}
-
       {/* Main Content Wrapper (Above Background) */}
       <div className="relative z-10 flex flex-col flex-1">
         {/* Banner de Modo Quirófano / Hospital sin Cobertura */}
@@ -731,7 +726,7 @@ export const Dashboard: React.FC = () => {
       )}
 
       {/* 2. ÁREA PRINCIPAL SEGÚN PESTAÑA ACTIVA */}
-      <main className="flex-1 py-4 sm:py-6 px-2 sm:px-6 max-w-7xl mx-auto w-full">
+      <main key={activeTab} className="flex-1 py-4 sm:py-6 px-2 sm:px-6 max-w-7xl mx-auto w-full animate-fade-in-up">
         {/* SISTEMA DE WIDGETS DE ACCESO RÁPIDO CLÍNICO CONFIGURABLES */}
         {showWidgetsHub && (
           <QuickAccessWidgetsHub

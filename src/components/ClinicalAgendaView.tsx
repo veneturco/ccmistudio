@@ -482,7 +482,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
             </p>
           </div>
         ) : (
-          filteredAppointments.map((apt) => {
+          filteredAppointments.map((apt, index) => {
             const statusBadge = getStatusBadge(apt.status);
             const typeBadge = getTypeBadge(apt.type);
             const TypeIcon = typeBadge.icon;
@@ -490,7 +490,8 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
             return (
               <div
                 key={apt.id}
-                className="bg-white dark:bg-[#091328] p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-blue-400 dark:hover:border-cyan-500/50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="animate-fade-in-up p-4 sm:p-5 rounded-3xl border border-slate-200 dark:border-white/5 shadow-xs transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-4 dark:glass-card-2026 light-glass-card-2026"
+                style={{ animationDelay: `${index * 80}ms` }}
               >
                 {/* Hora y Paciente */}
                 <div className="flex items-start gap-4">
