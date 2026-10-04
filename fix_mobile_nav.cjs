@@ -1,4 +1,6 @@
-import React from 'react';
+const fs = require('fs');
+
+const content = `import React from 'react';
 import { 
   FileText, 
   Calendar as CalendarIcon, 
@@ -35,13 +37,13 @@ export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('agenda')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${
+          className={\`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 \${
             activeTab === 'agenda'
               ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
               : 'text-slate-400 hover:text-slate-200'
-          }`}
+          }\`}
         >
-          <CalendarIcon className={`w-5 h-5 ${activeTab === 'agenda' ? 'text-cyan-400 scale-110' : ''}`} />
+          <CalendarIcon className={\`w-5 h-5 \${activeTab === 'agenda' ? 'text-cyan-400 scale-110' : ''}\`} />
           <span className="text-[10px] mt-0.5 tracking-tight font-medium">Agenda</span>
         </button>
 
@@ -49,14 +51,14 @@ export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('history')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${
+          className={\`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 \${
             activeTab === 'history'
               ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
               : 'text-slate-400 hover:text-slate-200'
-          }`}
+          }\`}
         >
           <div className="relative">
-            <History className={`w-5 h-5 ${activeTab === 'history' ? 'text-cyan-400 scale-110' : ''}`} />
+            <History className={\`w-5 h-5 \${activeTab === 'history' ? 'text-cyan-400 scale-110' : ''}\`} />
             {historyCount > 0 && (
               <span className="absolute -top-1 -right-2 bg-emerald-400 text-slate-950 font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center ring-1 ring-slate-900 shadow-md">
                 {historyCount}
@@ -70,17 +72,17 @@ export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('dictation_ai')}
-          className={`flex flex-col items-center justify-center -mt-3 py-1 px-2 rounded-2xl transition-all cursor-pointer hover:-translate-y-1 active:scale-95 relative group ${
+          className={\`flex flex-col items-center justify-center -mt-3 py-1 px-2 rounded-2xl transition-all cursor-pointer hover:-translate-y-1 active:scale-95 relative group \${
             activeTab === 'dictation_ai'
               ? 'text-white'
               : 'text-cyan-200'
-          }`}
+          }\`}
         >
-          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-transform ${
+          <div className={\`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-transform \${
             activeTab === 'dictation_ai'
               ? 'bg-gradient-to-tr from-cyan-400 to-blue-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] ring-2 ring-cyan-300'
               : 'bg-gradient-to-tr from-slate-800 to-cyan-900 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-          }`}>
+          }\`}>
             <Mic className="w-5 h-5 animate-pulse" />
           </div>
           <span className="text-[10px] font-bold mt-1 text-cyan-300 flex items-center gap-0.5 drop-shadow-md">
@@ -93,14 +95,14 @@ export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('workspace')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${
+          className={\`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 \${
             activeTab === 'workspace'
               ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
               : 'text-slate-400 hover:text-slate-200'
-          }`}
+          }\`}
         >
           <div className="relative">
-            <FileText className={`w-5 h-5 ${activeTab === 'workspace' ? 'text-cyan-400 scale-110' : ''}`} />
+            <FileText className={\`w-5 h-5 \${activeTab === 'workspace' ? 'text-cyan-400 scale-110' : ''}\`} />
           </div>
           <span className="text-[10px] mt-0.5 tracking-tight font-medium">Docs</span>
         </button>
@@ -109,13 +111,13 @@ export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('portal')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer ${
+          className={\`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer \${
             activeTab === 'portal'
               ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
               : 'text-slate-400 hover:text-slate-200'
-          }`}
+          }\`}
         >
-          <Building2 className={`w-5 h-5 ${activeTab === 'portal' ? 'text-cyan-400 scale-110' : ''}`} />
+          <Building2 className={\`w-5 h-5 \${activeTab === 'portal' ? 'text-cyan-400 scale-110' : ''}\`} />
           <span className="text-[10px] mt-0.5 tracking-tight font-medium">Portal</span>
         </button>
 
@@ -123,3 +125,7 @@ export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
     </nav>
   );
 };
+`
+
+fs.writeFileSync('src/components/MobileBottomNavBar.tsx', content);
+console.log("Fixed!");
