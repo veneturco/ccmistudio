@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Pill, 
   FileText, 
@@ -566,15 +566,15 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     const handleSamiAutofill = (e: any) => {
       const detail = e.detail;
       if (!detail) return;
-      if (detail.type === 'RECETA') {
-        setActiveDoc('RECETA');
+      if (detail.type === 'RECETA' || detail.type === 'RECIPES') {
+        setActiveDoc('RECIPES');
         setRecipeData(prev => ({ 
           ...prev, 
           rxLeft: detail.rxLeft || prev.rxLeft, 
           indicationsRight: detail.indicationsRight || prev.indicationsRight 
         }));
-      } else if (detail.type === 'ORDEN' || detail.type === 'LABORATORIO') {
-        setActiveDoc('ORDEN');
+      } else if (detail.type === 'ORDEN' || detail.type === 'ORDEN_LAB' || detail.type === 'LABORATORIO') {
+        setActiveDoc('ORDEN_LAB');
         if (detail.labTests) {
           setLabTests(prev => ({ ...prev, ...detail.labTests }));
         }
@@ -1663,9 +1663,9 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       }`}>
         {/* ROW 1: SEGMENTED DOCUMENT PICKER + ACTIONS CLUSTER */}
         <div className="flex items-center justify-between gap-2 flex-wrap md:flex-nowrap">
-          {/* Left: Apple Segmented Control para los 5 Documentos Oficiales */}
-          <div className={`flex items-center p-1 rounded-xl border max-w-full overflow-x-auto scrollbar-none gap-0.5 shrink min-w-0 ${
-            isClinicalLight ? 'bg-slate-100/90 border-slate-200' : 'bg-[#060e1f] border-slate-800'
+          {/* Left: Google Material 3 Segmented Button Group para los 5 Documentos Oficiales */}
+          <div className={`flex items-center p-1 rounded-full border max-w-full overflow-x-auto scrollbar-none gap-1 shrink min-w-0 ${
+            isClinicalLight ? 'bg-slate-100/90 border-slate-200 shadow-inner' : 'bg-[#060e1f] border-slate-800/90 shadow-inner'
           }`}>
             {tabs.map((tab) => {
               const isActive = activeDoc === tab.id;
@@ -1674,25 +1674,25 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveDoc(tab.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 shrink-0 ${
+                  className={`flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 shrink-0 select-none ${
                     isActive
                       ? isClinicalLight
-                        ? 'bg-blue-600 text-white shadow-xs'
-                        : 'bg-gradient-to-r from-cyan-600 to-emerald-600 text-white shadow-[0_0_15px_rgba(6,182,212,0.4)] ring-1 ring-white/20 scale-105 z-10'
+                        ? 'bg-blue-600 text-white shadow-xs ring-1 ring-blue-400/40'
+                        : 'bg-gradient-to-r from-cyan-600 via-sky-600 to-blue-600 text-white shadow-[0_0_15px_rgba(6,182,212,0.45)] ring-1 ring-cyan-300/40 scale-102 z-10'
                       : isClinicalLight
                       ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
-                      : 'text-slate-400 hover:text-cyan-300 hover:bg-slate-800/80 hover:shadow-[0_0_10px_rgba(6,182,212,0.15)]'
+                      : 'text-slate-400 hover:text-cyan-200 hover:bg-slate-800/70'
                   }`}
                   title={tab.label}
                 >
                   <span className="shrink-0">{tab.icon}</span>
-                  <span className="hidden lg:inline">{tab.label.split(' ')[0]}</span>
+                  <span className="inline font-medium">{tab.label.split(' ')[0]}</span>
                 </button>
               );
             })}
           </div>
 
-          {/* Right: Actions Cluster (SAMI Dictado, Imprimir, Compartir, â‹¯ Más) */}
+{/* Right: Actions Cluster (SAMI Dictado, Imprimir, Compartir, â‹¯ Más) */}
           <div className="flex items-center gap-1.5 shrink-0 relative flex-wrap justify-end">
             {/* Dictado SAMI / Cápsula integrada */}
             <ClinicalDictationCapsule
@@ -1961,32 +1961,32 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* ROW 2: SPOTLIGHT PATIENT CONTEXT BAR (ESTILO APPLE + BIOMETRIC HUD) */}
-        <div className={`relative overflow-hidden flex flex-col sm:flex-row items-stretch sm:items-center rounded-xl p-1.5 gap-1.5 border transition-all shadow-inner ${
+        {/* ROW 2: GOOGLE MATERIAL 3 ASSISTANT PATIENT CARD */}
+        <div className={`relative overflow-hidden flex flex-col sm:flex-row items-stretch sm:items-center rounded-2xl p-2 gap-2 border transition-all shadow-sm ${
           isClinicalLight 
-            ? 'bg-slate-50/80 border-slate-200/90 text-slate-900' 
-            : 'bg-[#060e1e]/90 border-slate-800/80 text-white'
+            ? 'bg-slate-50/90 border-slate-200 text-slate-900' 
+            : 'bg-[#081226]/90 border-cyan-500/20 text-white shadow-inner'
         }`}>
-          {/* Biometric MRI Scan Line (Triggers on mount or patient change) */}
+          {/* Biometric MRI Scan Line */}
           <div key={patient.idNumber || patient.fullName} className="mri-scan-line" />
 
           {/* Cédula */}
-          <div className="relative flex items-center min-w-[120px] sm:w-40 shrink-0">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
+          <div className="relative flex items-center min-w-[130px] sm:w-44 shrink-0">
+            <Search className="w-3.5 h-3.5 absolute left-3 text-cyan-400 pointer-events-none" />
             <input
               type="text"
               value={patient.idNumber}
               onChange={(e) => handleCedulaChange(e.target.value)}
               placeholder="Cédula / ID"
-              className={`w-full rounded-lg pl-7 pr-2 py-1.5 text-xs font-mono font-bold outline-none border transition relative z-10 ${
+              className={`w-full rounded-xl pl-8 pr-2.5 py-1.5 text-xs font-mono font-bold outline-none border transition relative z-10 ${
                 isClinicalLight
-                  ? 'bg-white border-slate-300/80 text-blue-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600/30'
-                  : 'bg-[#09152b] border-slate-700/60 text-cyan-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30'
+                  ? 'bg-white border-slate-300 text-blue-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20'
+                  : 'bg-[#09152b] border-cyan-500/30 text-cyan-200 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20'
               }`}
             />
           </div>
 
-          <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0 relative z-10" />
+          <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0" />
 
           {/* Nombre Completo con EKG Pulse HUD */}
           <div className="flex-1 min-w-[180px] relative">
@@ -1996,13 +1996,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               value={patient.fullName}
               onChange={(e) => setPatient({ ...patient, fullName: e.target.value })}
               placeholder="Nombre del paciente..."
-              className={`w-full rounded-lg px-3 py-1.5 text-xs font-bold outline-none border transition relative z-10 ${
+              className={`w-full rounded-xl px-3 py-1.5 text-xs font-bold outline-none border transition relative z-10 ${
                 isClinicalLight
-                  ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600/30'
-                  : 'bg-[#09152b] border-slate-700/60 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30'
+                  ? 'bg-white border-slate-300 text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20'
+                  : 'bg-[#09152b] border-cyan-500/30 text-white focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20'
               } ${(patient.fullName && !isClinicalLight) ? 'pr-8' : ''}`}
             />
-            {/* EKG Pulse Indicator (Shows when patient is active in dark mode) */}
             {patient.fullName && !isClinicalLight && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center" title="Expediente Clínico Activo">
                 <div className="ekg-pulse-dot"></div>
@@ -2012,7 +2011,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
 
           <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0" />
 
-          {/* Fila móvil para Edad, Teléfono y Acciones */}
+          {/* Fila para Edad, Teléfono y Acciones */}
           <div className="flex items-center gap-1.5 shrink-0">
             {/* Edad */}
             <div className="w-16">
@@ -2021,10 +2020,10 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 value={patient.age}
                 onChange={(e) => setPatient({ ...patient, age: e.target.value })}
                 placeholder="Edad"
-                className={`w-full rounded-lg px-2 py-1.5 text-xs font-mono font-bold outline-none border text-center transition ${
+                className={`w-full rounded-xl px-2 py-1.5 text-xs font-mono font-bold outline-none border text-center transition ${
                   isClinicalLight
-                    ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600'
-                    : 'bg-[#09152b] border-slate-700/60 text-white focus:border-cyan-500'
+                    ? 'bg-white border-slate-300 text-slate-900 focus:border-blue-600'
+                    : 'bg-[#09152b] border-cyan-500/30 text-white focus:border-cyan-400'
                 }`}
               />
             </div>
@@ -2036,26 +2035,26 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 value={patient.phone}
                 onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
                 placeholder="Teléfono"
-                className={`w-full rounded-lg px-2 py-1.5 text-xs font-mono font-medium outline-none border transition ${
+                className={`w-full rounded-xl px-2.5 py-1.5 text-xs font-mono font-medium outline-none border transition ${
                   isClinicalLight
-                    ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600'
-                    : 'bg-[#09152b] border-slate-700/60 text-white focus:border-cyan-500'
+                    ? 'bg-white border-slate-300 text-slate-900 focus:border-blue-600'
+                    : 'bg-[#09152b] border-cyan-500/30 text-white focus:border-cyan-400'
                 }`}
               />
             </div>
 
-            {/* Botón Frecuentes rápido */}
+            {/* Botón Protocolos rápidos */}
             <button
               type="button"
               onClick={() => setIsPresetsModalOpen(true)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer flex items-center gap-1 active:scale-95 ${
+              className={`px-3 py-1.5 rounded-full text-xs font-bold border transition cursor-pointer flex items-center gap-1.5 active:scale-95 shadow-sm ${
                 isClinicalLight
                   ? 'bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100'
                   : 'bg-cyan-950/60 text-cyan-300 border-cyan-500/40 hover:bg-cyan-900/60'
               }`}
               title="Ver protocolos frecuentes de consulta"
             >
-              <span>âš¡</span>
+              <span>⚡</span>
               <span className="hidden md:inline">Protocolos</span>
             </button>
 
@@ -2063,7 +2062,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             <button
               type="button"
               onClick={handleClearPatient}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer active:scale-95"
+              className="p-1.5 rounded-full text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition cursor-pointer active:scale-95"
               title="Limpiar campos del paciente"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -2071,7 +2070,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* BANNERS INLINE COMPACTOS (ALERTA PACIENTE RECURRENTE / CAMPOS DUDOSOS) */}
+{/* BANNERS INLINE COMPACTOS (ALERTA PACIENTE RECURRENTE / CAMPOS DUDOSOS) */}
         {foundPatientAlert && (
           <div className={`p-2 rounded-xl flex items-center justify-between text-xs animate-fade-in border ${
             isClinicalLight ? 'bg-blue-50 border-blue-200 text-blue-900' : 'bg-cyan-950/40 border-cyan-500/40 text-cyan-200'

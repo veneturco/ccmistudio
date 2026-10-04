@@ -7,7 +7,6 @@ import {
   Building2,
   Sparkles
 } from 'lucide-react';
-import { ActiveNavTab } from '../types';
 
 interface MobileBottomNavBarProps {
   activeTab: 'portal' | 'workspace' | 'dictation_ai' | 'agenda' | 'history' | 'quoter' | 'developer_studio' | 'analytics';
@@ -16,74 +15,93 @@ interface MobileBottomNavBarProps {
   userRole?: string;
 }
 
+/**
+ * Google Material Design 3 (M3) Mobile Navigation Bar
+ * Diseñado bajo especificaciones de Material You:
+ * - Altura estándar 80dp con elevación tonal de superficie.
+ * - Indicadores activos en forma de píldora (Active Indicator Pill).
+ * - Extended FAB central con aura iridiscente para Dictado IA.
+ * - Badges numéricos M3 de alta visibilidad.
+ */
 export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
   activeTab,
   setActiveTab,
   historyCount,
   userRole,
 }) => {
-  const isSecretary = userRole === 'SECRETARIA' || userRole === 'RECEPCION';
   return (
     <nav 
-      aria-label="Navegación Móvil Principal"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#061122]/95 backdrop-blur-xl border-t border-cyan-500/20 px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] transition-all"
-      style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
+      aria-label="Barra de Navegación Móvil Material 3"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#071329]/95 backdrop-blur-2xl border-t border-cyan-500/20 shadow-[0_-8px_30px_rgba(0,0,0,0.65)] transition-all"
+      style={{ paddingBottom: 'max(0.4rem, env(safe-area-inset-bottom))' }}
     >
-      <div className="grid grid-cols-5 items-center justify-around gap-1 max-w-lg mx-auto">
+      <div className="grid grid-cols-5 items-center justify-around h-[72px] max-w-lg mx-auto px-1">
         
         {/* 1. Agenda / Citas */}
         <button
           type="button"
           onClick={() => setActiveTab('agenda')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${
-            activeTab === 'agenda'
-              ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
+          className="flex flex-col items-center justify-center py-1 transition-all group cursor-pointer active:scale-95 select-none"
         >
-          <CalendarIcon className={`w-5 h-5 ${activeTab === 'agenda' ? 'text-cyan-400 scale-110' : ''}`} />
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Agenda</span>
+          <div className={`w-14 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+            activeTab === 'agenda'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.35)]'
+              : 'text-slate-400 group-hover:text-slate-200'
+          }`}>
+            <CalendarIcon className="w-5 h-5" />
+          </div>
+          <span className={`text-[10.5px] mt-0.5 tracking-tight transition-colors ${
+            activeTab === 'agenda' ? 'text-cyan-200 font-bold' : 'text-slate-400 font-medium'
+          }`}>
+            Agenda
+          </span>
         </button>
 
         {/* 2. Historial */}
         <button
           type="button"
           onClick={() => setActiveTab('history')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${
-            activeTab === 'history'
-              ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
+          className="flex flex-col items-center justify-center py-1 transition-all group cursor-pointer active:scale-95 select-none"
         >
           <div className="relative">
-            <History className={`w-5 h-5 ${activeTab === 'history' ? 'text-cyan-400 scale-110' : ''}`} />
+            <div className={`w-14 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+              activeTab === 'history'
+                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.35)]'
+                : 'text-slate-400 group-hover:text-slate-200'
+            }`}>
+              <History className="w-5 h-5" />
+            </div>
             {historyCount > 0 && (
-              <span className="absolute -top-1 -right-2 bg-emerald-400 text-slate-950 font-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center ring-1 ring-slate-900 shadow-md">
+              <span className="absolute -top-0.5 right-1 bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 font-black text-[9px] min-w-4 h-4 px-1 rounded-full flex items-center justify-center ring-1 ring-slate-900 shadow-md">
                 {historyCount}
               </span>
             )}
           </div>
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Historial</span>
+          <span className={`text-[10.5px] mt-0.5 tracking-tight transition-colors ${
+            activeTab === 'history' ? 'text-cyan-200 font-bold' : 'text-slate-400 font-medium'
+          }`}>
+            Historial
+          </span>
         </button>
 
-        {/* 3. Dictado IA (Botón Central Destacado) */}
+        {/* 3. Dictado IA (Google M3 Extended Floating Action Button) */}
         <button
           type="button"
           onClick={() => setActiveTab('dictation_ai')}
-          className={`flex flex-col items-center justify-center -mt-3 py-1 px-2 rounded-2xl transition-all cursor-pointer hover:-translate-y-1 active:scale-95 relative group ${
-            activeTab === 'dictation_ai'
-              ? 'text-white'
-              : 'text-cyan-200'
-          }`}
+          className="flex flex-col items-center justify-center -mt-5 transition-all group cursor-pointer active:scale-90 select-none"
+          title="Dictado Clínico Neuronal"
         >
-          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-lg transition-transform ${
-            activeTab === 'dictation_ai'
-              ? 'bg-gradient-to-tr from-cyan-400 to-blue-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.6)] ring-2 ring-cyan-300'
-              : 'bg-gradient-to-tr from-slate-800 to-cyan-900 border border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-          }`}>
-            <Mic className="w-5 h-5 animate-pulse" />
+          <div className="relative p-[2px] rounded-full sami-capsule shadow-[0_6px_25px_rgba(6,182,212,0.5)]">
+            <div className="sami-synaptic-border rounded-full" />
+            <div className={`w-13 h-13 rounded-full flex items-center justify-center transition-all duration-300 relative z-10 ${
+              activeTab === 'dictation_ai'
+                ? 'bg-gradient-to-tr from-cyan-400 via-sky-500 to-blue-600 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.8)]'
+                : 'bg-[#09152b] border border-cyan-400/50 text-cyan-300 hover:text-white'
+            }`}>
+              <Mic className="w-6 h-6 animate-pulse" />
+            </div>
           </div>
-          <span className="text-[10px] font-bold mt-1 text-cyan-300 flex items-center gap-0.5 drop-shadow-md">
+          <span className="text-[10.5px] font-bold mt-1 text-cyan-300 flex items-center gap-0.5 drop-shadow-sm">
             <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
             Dictado
           </span>
@@ -93,30 +111,40 @@ export const MobileBottomNavBar: React.FC<MobileBottomNavBarProps> = ({
         <button
           type="button"
           onClick={() => setActiveTab('workspace')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95 ${
-            activeTab === 'workspace'
-              ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
+          className="flex flex-col items-center justify-center py-1 transition-all group cursor-pointer active:scale-95 select-none"
         >
-          <div className="relative">
-            <FileText className={`w-5 h-5 ${activeTab === 'workspace' ? 'text-cyan-400 scale-110' : ''}`} />
+          <div className={`w-14 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+            activeTab === 'workspace'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.35)]'
+              : 'text-slate-400 group-hover:text-slate-200'
+          }`}>
+            <FileText className="w-5 h-5" />
           </div>
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Docs</span>
+          <span className={`text-[10.5px] mt-0.5 tracking-tight transition-colors ${
+            activeTab === 'workspace' ? 'text-cyan-200 font-bold' : 'text-slate-400 font-medium'
+          }`}>
+            Docs A4
+          </span>
         </button>
 
         {/* 5. Portal */}
         <button
           type="button"
           onClick={() => setActiveTab('portal')}
-          className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer ${
-            activeTab === 'portal'
-              ? 'text-cyan-300 font-bold bg-cyan-950/60 ring-1 ring-cyan-500/40'
-              : 'text-slate-400 hover:text-slate-200'
-          }`}
+          className="flex flex-col items-center justify-center py-1 transition-all group cursor-pointer active:scale-95 select-none"
         >
-          <Building2 className={`w-5 h-5 ${activeTab === 'portal' ? 'text-cyan-400 scale-110' : ''}`} />
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Portal</span>
+          <div className={`w-14 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+            activeTab === 'portal'
+              ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.35)]'
+              : 'text-slate-400 group-hover:text-slate-200'
+          }`}>
+            <Building2 className="w-5 h-5" />
+          </div>
+          <span className={`text-[10.5px] mt-0.5 tracking-tight transition-colors ${
+            activeTab === 'portal' ? 'text-cyan-200 font-bold' : 'text-slate-400 font-medium'
+          }`}>
+            Portal
+          </span>
         </button>
 
       </div>
