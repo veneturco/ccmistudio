@@ -64,7 +64,9 @@ export const SamiAvatar: React.FC<SamiAvatarProps> = ({
             className={`${currentSize.icon} text-cyan-300 animate-pulse transition-transform`}
           />
         ) : (
-          <div className={	ext-cyan-300 transition-transform duration-500 hover:scale-110 flex items-center justify-center }><BrandLogo /></div>
+          <div className={`text-cyan-300 transition-transform duration-500 hover:scale-110 flex items-center justify-center ${currentSize.icon}`}>
+            <BrandLogo />
+          </div>
         )}
 
         {/* Peque�o destello de IA */}
