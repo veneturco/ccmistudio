@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 /* ========================================================================= */
 /* JERARQUÃA TIPOGRÃFICA UNIFICADA Y VARIABLES GLOBALES (:root)             */
@@ -32,21 +32,28 @@
   font-family: var(--font-clinical-calligraphic);
 }
 
-/* Typography & Smooth Rendering */
+/* Typography & Smooth Rendering with Native Wheel Scrolling */
 html {
   font-family: var(--font-clinical-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  height: 100%;
 }
 
-/* Mobile optimization & smooth scrolling */
-html, body {
+body {
   -webkit-tap-highlight-color: transparent;
-  overscroll-behavior-y: none;
-  touch-action: manipulation;
   background-color: #060b16;
   color: #f8fafc;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+  width: 100%;
+  margin: 0;
 }
 
 /* Safe area padding for mobile notches and home indicators */
@@ -495,8 +502,8 @@ html, body {
   }
 }
 
-/* Force prevent body scroll overflow caused by absolute or transformed elements */
-html, body {
+/* Viewport overflow protection without locking vertical wheel */
+#root, #socs-app-container {
   overflow-x: hidden;
   width: 100%;
   position: relative;

@@ -8,6 +8,7 @@
     "format": "A4 Portrait"
   },
   "backgroundPdf": "/templates/recipe_base.pdf",
+  "backgroundImage": "/templates/recipes_bg.jpg",
   "pageIndex": 0,
   "status": "CALIBRATED",
   "lockedRegions": [

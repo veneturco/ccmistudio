@@ -4,7 +4,7 @@
   "documentType": "lab_order",
   "status": "CALIBRATED",
   "source": {
-    "backgroundPdf": "/templates/orden_lab_base.pdf",
+    "backgroundImage": "/templates/orden_lab_p1_bg.jpg",
     "pageCount": 2,
     "dimensionsMm": {
       "width": 153.5,
@@ -21,7 +21,7 @@
     "heightMm": 215.8,
     "format": "MEDIA_CARTA"
   },
-  "backgroundPdf": "/templates/orden_lab_base.pdf",
+  "backgroundImage": "/templates/orden_lab_p1_bg.jpg",
   "pages": [
     {
       "pageIndex": 0,

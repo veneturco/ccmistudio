@@ -30,6 +30,7 @@ export const RECIPE_MASTER_V2: MasterTemplateV2 = {
   status: 'LOCKED',
   source: {
     backgroundPdf: '/templates/recipe_base.pdf',
+    backgroundImage: '/templates/recipes_bg.jpg',
     sourcePdfSha256: '6fb2dcf33ebdb18d9271b8ece15c442462520557dea12f739776d299e190b7da',
   },
   sourcePdfSha256: '6fb2dcf33ebdb18d9271b8ece15c442462520557dea12f739776d299e190b7da',
@@ -179,6 +180,7 @@ export const CONSTANCIA_MASTER_V2: MasterTemplateV2 = {
   status: 'CALIBRATED',
   source: {
     backgroundPdf: (constanciaMasterJson as any).backgroundPdf || '/templates/constancia_base.pdf',
+    backgroundImage: '/templates/constancia_bg.jpg',
     sourcePdfSha256: '80400e390c64b95e2ecd67e74de17dd4bb0906706cfd9c23abdc29164589bbe7',
   },
   sourcePdfSha256: '80400e390c64b95e2ecd67e74de17dd4bb0906706cfd9c23abdc29164589bbe7',
@@ -237,6 +239,7 @@ export const INFORME_MASTER_V2: MasterTemplateV2 = {
   status: 'LOCKED',
   source: {
     backgroundPdf: '/templates/informe_base.pdf',
+    backgroundImage: '/templates/informe_bg.jpg',
     sourcePdfSha256: 'e184f64cbaf54a5ae006bbfeaf1db5de5cd24895ae693b59020b427dff396754',
   },
   sourcePdfSha256: 'e184f64cbaf54a5ae006bbfeaf1db5de5cd24895ae693b59020b427dff396754',
@@ -338,6 +341,7 @@ export const HISTORIA_MASTER_V2: MasterTemplateV2 = {
   status: 'CALIBRATED',
   source: {
     backgroundPdf: (historiaMasterJson as any).backgroundPdf || '/templates/historia_base.pdf',
+    backgroundImage: '/templates/historia_bg.jpg',
     sourcePdfSha256: '25055bd9783cfd6e4474608c4bb4784f4c8fdd02ff7689f5852753f48f1fed7a',
   },
   sourcePdfSha256: '25055bd9783cfd6e4474608c4bb4784f4c8fdd02ff7689f5852753f48f1fed7a',
@@ -398,6 +402,7 @@ export const LAB_ORDER_MASTER_V2: MasterTemplateV2 = {
   status: 'CALIBRATED',
   source: {
     backgroundPdf: (labMasterJson as any).backgroundPdf || '/templates/orden_lab_base.pdf',
+    backgroundImage: '/templates/orden_lab_p1_bg.jpg',
     sourcePdfSha256: 'f680cb425545ff65e9d064f69a67be776405671477aef09e4d4675070e3d2758',
     dimensionsMm: {
       width: (labMasterJson as any).pageSize?.widthMm || 153.5,

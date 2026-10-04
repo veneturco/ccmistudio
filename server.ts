@@ -391,7 +391,7 @@ const CLINICAL_EXTRACTION_SCHEMA = {
     ordenLab: {
       type: "object",
       properties: {
-        perfilPreoperatorio: { type: "array", items: { type: "string" } },
+        laboratorios: { type: "array", items: { type: "string" } },
         neuroimagen: { type: "array", items: { type: "string" } },
         otrosEstudios: { type: "array", items: { type: "string" } },
         diagnosticoPresuntivo: { type: "string" }
@@ -483,7 +483,7 @@ function formatClinicalData(parsedData: any, currentData?: any) {
 
   // Lab order
   const rawOrdenLab = parsedData.ordenLab || {};
-  const perfilPreoperatorio = Array.isArray(rawOrdenLab.perfilPreoperatorio) ? rawOrdenLab.perfilPreoperatorio : [];
+  const laboratorios = Array.isArray(rawOrdenLab.laboratorios) ? rawOrdenLab.laboratorios : [];
   const neuroimagen = Array.isArray(rawOrdenLab.neuroimagen) ? rawOrdenLab.neuroimagen : [];
   const otrosEstudios = Array.isArray(rawOrdenLab.otrosEstudios) ? rawOrdenLab.otrosEstudios : [];
   const labOrderText = typeof parsedData.labAndImagesOrder === 'string' ? parsedData.labAndImagesOrder.trim() : '';
@@ -551,7 +551,7 @@ function formatClinicalData(parsedData: any, currentData?: any) {
     },
     labAndImagesOrder: labOrderText,
     ordenLab: {
-      perfilPreoperatorio,
+      laboratorios,
       neuroimagen,
       otrosEstudios,
       diagnosticoPresuntivo: typeof rawOrdenLab.diagnosticoPresuntivo === 'string' ? rawOrdenLab.diagnosticoPresuntivo : diagnosisPrincipal,

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * PDFTemplatePreloader.ts
  * 
  * PILAR 5: OPTIMIZACIÃ“N A TIEMPO REAL (GENERACIÃ“N EN < 50 MS)
@@ -13,16 +13,18 @@ const PDF_CACHE = new Map<string, Uint8Array>();
 const PRELOAD_PROMISES = new Map<string, Promise<Uint8Array>>();
 
 const MASTER_PDF_PATHS: Record<string, string> = {
-  recipe: '/templates/recipe_base.pdf',
-  recipes: '/templates/recipe_base.pdf',
-  lab_order: '/templates/orden_lab_base.pdf',
-  orden_lab: '/templates/orden_lab_base.pdf',
-  report: '/templates/informe_base.pdf',
-  informe: '/templates/informe_base.pdf',
-  certificate: '/templates/constancia_base.pdf',
-  constancia: '/templates/constancia_base.pdf',
-  history: '/templates/historia_base.pdf',
-  historia: '/templates/historia_base.pdf',
+  recipe: '/templates/recipes_bg.jpg',
+  recipes: '/templates/recipes_bg.jpg',
+  lab_order: '/templates/orden_lab_p1_bg.jpg',
+  orden_lab: '/templates/orden_lab_p1_bg.jpg',
+  lab_order_p2: '/templates/orden_lab_p2_bg.jpg',
+  orden_lab_p2: '/templates/orden_lab_p2_bg.jpg',
+  report: '/templates/informe_bg.jpg',
+  informe: '/templates/informe_bg.jpg',
+  certificate: '/templates/constancia_bg.jpg',
+  constancia: '/templates/constancia_bg.jpg',
+  history: '/templates/historia_bg.jpg',
+  historia: '/templates/historia_bg.jpg',
 };
 
 export class PDFTemplatePreloader {

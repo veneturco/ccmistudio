@@ -1,5 +1,6 @@
-﻿import React from 'react';
-import { Brain, Sparkles, Activity } from 'lucide-react';
+import React from 'react';
+import { Sparkles, Activity } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 
 interface SamiAvatarProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -40,8 +41,8 @@ export const SamiAvatar: React.FC<SamiAvatarProps> = ({
         <div
           className={`absolute inset-0 rounded-full transition-all duration-700 pointer-events-none ${
             isThinking
-              ? 'bg-gradient-to-r from-cyan-500/40 via-indigo-500/40 to-blue-500/40 animate-ping'
-              : 'bg-cyan-500/20 blur-[2px]'
+              ? 'bg-[conic-gradient(at_center,_var(--tw-gradient-stops))] from-cyan-400/40 via-indigo-500/40 to-blue-500/40 animate-spin'
+              : 'bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cyan-500/30 via-cyan-900/10 to-transparent blur-md'
           }`}
         />
       )}
@@ -63,12 +64,10 @@ export const SamiAvatar: React.FC<SamiAvatarProps> = ({
             className={`${currentSize.icon} text-cyan-300 animate-pulse transition-transform`}
           />
         ) : (
-          <Brain
-            className={`${currentSize.icon} text-cyan-300 transition-transform duration-300 hover:scale-110`}
-          />
+          <div className={	ext-cyan-300 transition-transform duration-500 hover:scale-110 flex items-center justify-center }><BrandLogo /></div>
         )}
 
-        {/* Pequeño destello de IA */}
+        {/* Peque�o destello de IA */}
         <Sparkles
           className={`absolute top-0.5 right-0.5 w-2 h-2 text-amber-300 pointer-events-none ${
             isThinking ? 'animate-spin opacity-90' : 'opacity-60'
@@ -76,15 +75,16 @@ export const SamiAvatar: React.FC<SamiAvatarProps> = ({
         />
       </div>
 
-      {/* Indicador de estado en línea */}
+      {/* Indicador de estado en l�nea */}
       {isOnline && (
         <span
           className={`absolute bottom-0 right-0 ${currentSize.badge} rounded-full ring-1.5 ring-slate-900 ${
             isThinking ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
           }`}
-          title={isThinking ? 'SAMI pensando...' : 'SAMI en línea (Gemini Pro/Flash)'}
+          title={isThinking ? 'SAMI pensando...' : 'SAMI en l�nea (Gemini Pro/Flash)'}
         />
       )}
     </div>
   );
 };
+

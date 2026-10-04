@@ -8,6 +8,7 @@
     "format": "A4 Portrait"
   },
   "backgroundPdf": "/templates/informe_base.pdf",
+  "backgroundImage": "/templates/informe_bg.jpg",
   "pageIndex": 0,
   "status": "CALIBRATED",
   "lockedRegions": [

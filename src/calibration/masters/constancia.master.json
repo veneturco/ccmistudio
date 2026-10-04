@@ -4,6 +4,7 @@
   "documentType": "certificate",
   "pageSize": { "widthMm": 210.0, "heightMm": 297.0, "format": "A4 Portrait" },
   "backgroundPdf": "/templates/constancia_base.pdf",
+  "backgroundImage": "/templates/constancia_bg.jpg",
   "status": "CALIBRATED",
   "lockedRegions": [
     { "id": "header_institutional", "xMm": 0, "yMm": 0, "widthMm": 210.0, "heightMm": 45.0 },

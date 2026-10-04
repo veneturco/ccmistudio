@@ -23,19 +23,19 @@ export interface ClinicalWorkspaceContext {
 // Mapeo exhaustivo de patrones clínicos a las llaves booleanas de clinical.cb.*
 const CLINICAL_CB_RULES: Array<{ key: string; regex: RegExp }> = [
   // Hematología y coagulación
-  { key: 'hematologia_completa', regex: /\b(hematolog|hemograma|formula\s*leucocit|leucocitos|hemoglobina|hematocrito|cbc)\b/i },
-  { key: 'plaquetas', regex: /\b(plaqueta|recuento\s*plaquetar|trombocito)\b/i },
-  { key: 'reticulocitos', regex: /\b(reticulocito)\b/i },
-  { key: 'vsg', regex: /\b(vsg|eritrosedimentaci|velocidad\s*de\s*sedimentaci)\b/i },
-  { key: 'eosinofilos', regex: /\b(eosinofil|recuento\s*de\s*eosinofil)\b/i },
+  { key: 'hematologia_completa', regex: /\b(hematolog\w*|hemograma|formula\s*leucocit|leucocitos|hemoglobina|hematocrito|cbc)\b/i },
+  { key: 'plaquetas', regex: /\b(plaqueta\w*|recuento\s*plaquetar|trombocito\w*)\b/i },
+  { key: 'reticulocitos', regex: /\b(reticulocito\w*)\b/i },
+  { key: 'vsg', regex: /\b(vsg|eritrosedimentaci\w*|velocidad\s*de\s*sedimentaci)\b/i },
+  { key: 'eosinofilos', regex: /\b(eosinofil\w*|recuento\s*de\s*eosinofil)\b/i },
   { key: 'grupo_rh', regex: /\b(grupo|rh|factor\s*rh|tipiaje)\b/i },
   { key: 'frotis', regex: /\b(frotis|frotis\s*de\s*sangre|lamina\s*periferica)\b/i },
   { key: 'pt', regex: /\b(pt|tiempo\s*de\s*protrombina|protrombina|inr)\b/i },
   { key: 'ptt', regex: /\b(ptt|tpt|tromboplastina|tiempo\s*parcial\s*de\s*tromboplastina)\b/i },
   { key: 'tiempo_sangria', regex: /\b(sangria|tiempo\s*de\s*sangria|duke|ivy)\b/i },
-  { key: 'tiempo_retraccion', regex: /\b(retracci|tiempo\s*de\s*retracci|retraccion\s*del\s*coagulo)\b/i },
-  { key: 'fibrinogeno', regex: /\b(fibrinogen|fibrinogeno)\b/i },
-  { key: 'dimero_d', regex: /\b(dimero|dimero\s*d|d-dimer)\b/i },
+  { key: 'tiempo_retraccion', regex: /\b(retracci\w*|tiempo\s*de\s*retracci|retraccion\s*del\s*coagulo)\b/i },
+  { key: 'fibrinogeno', regex: /\b(fibrinogen\w*|fibrinogeno)\b/i },
+  { key: 'dimero_d', regex: /\b(dimero\w*|dimero\s*d|d-dimer)\b/i },
   // Uroanálisis
   { key: 'orina', regex: /\b(orina|examen\s*general\s*de\s*orina|uroanalisis|ego|sedimento\s*urinario)\b/i },
   { key: 'electrolitos_urinarios', regex: /\b(electrolitos\s*urinarios|sodio\s*urinario|potasio\s*urinario)\b/i },
@@ -110,7 +110,7 @@ const CLINICAL_CB_RULES: Array<{ key: string; regex: RegExp }> = [
   { key: 'colesterol', regex: /\b(colesterol|colesterol\s*total|colesterolemia|lipidico|lipidos)\b/i },
   { key: 'hdl', regex: /\b(hdl|colesterol\s*hdl)\b/i },
   { key: 'ldl', regex: /\b(ldl|colesterol\s*ldl)\b/i },
-  { key: 'trigliceridos', regex: /\b(triglicerid|trigliceridos)\b/i },
+  { key: 'trigliceridos', regex: /\b(triglicerid\w*|trigliceridos)\b/i },
   { key: 'tgo', regex: /\b(tgo|ast|transaminasas|transaminasa\s*glutamico\s*oxalacetica)\b/i },
   { key: 'tgp', regex: /\b(tgp|alt|transaminasa\s*glutamico\s*piruvica)\b/i },
   { key: 'ggt', regex: /\b(ggt|gamma[- ]*gt|gamma\s*glutamil)\b/i },
@@ -214,7 +214,8 @@ export class SemanticDataMapperV2 {
       });
     }
 
-    const combinedClinicalCorpus = [...textSources, ...testList].join(' ');
+    const normTxt = (s: string): string => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const combinedClinicalCorpus = normTxt([...textSources, ...testList].join(' '));
     const neuroCorpus = [...textSources, ...neuroList].join(' ');
     const hasNeuroMatch = (regex: RegExp) => regex.test(neuroCorpus);
 
@@ -308,7 +309,7 @@ export class SemanticDataMapperV2 {
     };
 
     const hasMatch = (regex: RegExp): boolean => {
-      if (testList.some(t => regex.test(t))) return true;
+      if (testList.some(t => regex.test(normTxt(t)))) return true;
       return regex.test(combinedClinicalCorpus);
     };
 
@@ -401,7 +402,7 @@ export class SemanticDataMapperV2 {
       if (isDataKeyOrInternalKey(t)) continue;
       let matched = false;
       for (const rule of CLINICAL_CB_RULES) {
-        if (rule.regex.test(t)) {
+        if (rule.regex.test(normTxt(t))) {
           matched = true;
           break;
         }

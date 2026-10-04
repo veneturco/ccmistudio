@@ -106,43 +106,14 @@ export class VectorOverlayEngineV2 {
       originalPdfBytes[2] === 0x4e &&
       originalPdfBytes[3] === 0x47;
 
-    if (isPdf) {
-      pdfDoc = await PDFDocument.load(originalPdfBytes, { ignoreEncryption: true });
-      // Asegurar que si el template tiene mÃ¡s pÃ¡ginas que el PDF cargado, se agreguen con su fondo correspondiente
-      const pageCount = pdfDoc.getPageCount();
-      const requiredPages = template?.pages?.length || 1;
-      if (pageCount < requiredPages) {
-        for (let pIdx = pageCount; pIdx < requiredPages; pIdx++) {
-          const pConfig = template.pages[pIdx];
-          const pWidthMm = pConfig?.widthMm || 210.0;
-          const pHeightMm = pConfig?.heightMm || 297.0;
-          const pWidthPt = (pWidthMm * 72) / 25.4;
-          const pHeightPt = (pHeightMm * 72) / 25.4;
-          const newPage = pdfDoc.addPage([pWidthPt, pHeightPt]);
+    // LEY DEL MASTER CCMI:
+    // Los archivos *_base.pdf o PDFs vectoriales carecen del fondo visual oficial de la clínica.
+    // Todos los documentos oficiales (Récipes, Órdenes de Lab, Informe, Constancia, Historia)
+    // se generan SIEMPRE con su plantilla gráfica oficial de alta resolución 300 DPI incrustada en cada página.
+    const isExternalSignedPdf = isPdf && Boolean(options.preserveExternalPdf);
 
-          // Cargar fondo de la pÃ¡gina secundaria (ej. orden_lab_p2_bg.jpg)
-          const docTypeLower = (template?.documentType || '').toLowerCase();
-          let pageImgUrl = '/templates/recipes_bg.jpg';
-          if (docTypeLower.includes('lab') || docTypeLower.includes('orden')) {
-            pageImgUrl = pIdx === 1 ? '/templates/orden_lab_p2_bg.jpg' : '/templates/orden_lab_p1_bg.jpg';
-          }
-          try {
-            const resp = await fetch(pageImgUrl);
-            if (resp.ok) {
-              const buf = await resp.arrayBuffer();
-              const bgImg = await pdfDoc.embedJpg(new Uint8Array(buf));
-              newPage.drawImage(bgImg, {
-                x: 0,
-                y: 0,
-                width: pWidthPt,
-                height: pHeightPt,
-              });
-            }
-          } catch (e) {
-            console.warn(`[VectorOverlayEngineV2] Advertencia cargando fondo de pÃ¡gina ${pIdx}:`, e);
-          }
-        }
-      }
+    if (isExternalSignedPdf) {
+      pdfDoc = await PDFDocument.load(originalPdfBytes, { ignoreEncryption: true });
     } else {
       // Si el buffer es una imagen de alta resoluciÃ³n o respaldo, se genera un PDF contenedor con fondo incrustado por cada pÃ¡gina
       pdfDoc = await PDFDocument.create();

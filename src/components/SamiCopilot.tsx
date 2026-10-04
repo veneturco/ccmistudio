@@ -17,7 +17,7 @@ import {
   Stethoscope,
   Pill,
   FileSpreadsheet,
-  BrainCircuit,
+  
   MessageSquare,
   HelpCircle,
   Activity,
@@ -32,6 +32,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { SamiAvatar } from './SamiAvatar';
+import { BrandLogo } from './BrandLogo';
 import { PatientData } from '../types';
 import { useClinicalDictation } from '../hooks/useClinicalDictation';
 
@@ -527,7 +528,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
       if (line.startsWith('### ')) {
         return (
           <h4 key={idx} className="text-base font-bold text-cyan-300 mt-2 mb-1 flex items-center gap-1.5">
-            <BrainCircuit className="w-4 h-4 text-cyan-400 shrink-0" />
+            <div className="w-4 h-4 shrink-0 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"><BrandLogo /></div>
             <span>{line.replace('### ', '')}</span>
           </h4>
         );
@@ -636,7 +637,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                     </span>
                   </div>
                   <span className="text-[11px] text-cyan-100/60 font-medium flex items-center gap-1">
-                    <BrainCircuit className="w-3 h-3 text-cyan-500/70" />
+                    <div className="w-3 h-3 flex items-center justify-center opacity-70 [&>svg]:w-full [&>svg]:h-full"><BrandLogo /></div>
                     Asistente ClÃƒónico Inteligente
                   </span>
                 </div>

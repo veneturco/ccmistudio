@@ -92,18 +92,8 @@ export class PDFDocumentPipelineV2 {
     if (documentType) {
       const rawType = documentType.toLowerCase().trim();
       try {
-        // A. Revisar si tiene PDF oficial subido en IndexedDB
-        const storedPdf = await getCustomTemplateOriginalPdf(documentType);
-        if (
-          storedPdf &&
-          storedPdf.length > 10000 &&
-          storedPdf[0] === 0x25 &&
-          storedPdf[1] === 0x50 &&
-          storedPdf[2] === 0x44 &&
-          storedPdf[3] === 0x46
-        ) {
-          return storedPdf;
-        }
+        // A. (LEY DEL MASTER) Los PDF vectoriales guardados en IndexedDB se IGNORAN: carecen del arte del master.
+        //    Siempre prevalece la imagen oficial del master (/templates/*_bg.jpg) salvo una imagen propia explícita.
 
         // B. Revisar si tiene Imagen escaneada/DataURL personalizada en IndexedDB o localStorage
         const customImgDataUrl =
@@ -115,7 +105,8 @@ export class PDFDocumentPipelineV2 {
 
         if (customImgDataUrl) {
           const customBytes = dataUrlToBytes(customImgDataUrl);
-          if (customBytes && customBytes.length > 500) {
+          const isImg = !!customBytes && customBytes.length > 500 && ((customBytes[0] === 0xff && customBytes[1] === 0xd8) || (customBytes[0] === 0x89 && customBytes[1] === 0x50));
+          if (customBytes && isImg) {
             return customBytes;
           }
           if (typeof customImgDataUrl === 'string' && customImgDataUrl.startsWith('http')) {
@@ -213,7 +204,8 @@ export class PDFDocumentPipelineV2 {
     }
 
     // 1. Cargar el PDF maestro original (Bytes directos, customBgImage, IndexedDB o ruta estática)
-    const originalPdfBytes = request.templateBytes || (await this.loadOriginalPdf(template.source.backgroundPdf, request.documentType, request.customBgImage));
+    const bgPath = template.source?.backgroundImage || template.source?.backgroundPdf || (template as any).backgroundImage || template.backgroundPdf || '';
+    const originalPdfBytes = request.templateBytes || (await this.loadOriginalPdf(bgPath, request.documentType, request.customBgImage));
 
     // 2. Mapear datos semánticos del paciente
     const semanticDictionary = SemanticDataMapperV2.mapToSemanticDictionary(request.context);
@@ -327,3 +319,4 @@ export class PDFDocumentPipelineV2 {
     return { pipelineResponse, shareResult: { success: true } };
   }
 }
+
