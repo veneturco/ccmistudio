@@ -1,7 +1,7 @@
-/**
+﻿/**
  * PDFTemplatePreloader.ts
  * 
- * PILAR 5: OPTIMIZACIÓN A TIEMPO REAL (GENERACIÓN EN < 50 MS)
+ * PILAR 5: OPTIMIZACIÃ“N A TIEMPO REAL (GENERACIÃ“N EN < 50 MS)
  * ============================================================
  * Pre-carga y mantiene en memoria viva (RAM) los ArrayBuffers de los 
  * PDFs maestros oficiales (/templates/*.pdf) y sus esquemas vectoriales.
@@ -41,7 +41,7 @@ export class PDFTemplatePreloader {
   }
 
   /**
-   * Obtiene el buffer en memoria inmediatamente o lo descarga de forma asíncrona.
+   * Obtiene el buffer en memoria inmediatamente o lo descarga de forma asÃ­ncrona.
    */
   public static async getOrFetch(path: string): Promise<Uint8Array> {
     const cached = PDF_CACHE.get(path);
@@ -92,7 +92,7 @@ export class PDFTemplatePreloader {
   }
 
   /**
-   * Retorna si la plantilla ya está cargada en RAM lista para tiempo de ejecución < 50ms
+   * Retorna si la plantilla ya estÃ¡ cargada en RAM lista para tiempo de ejecuciÃ³n < 50ms
    */
   public static isWarm(docType: string): boolean {
     const normalized = docType.toLowerCase().trim();

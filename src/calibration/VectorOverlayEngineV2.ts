@@ -1,4 +1,4 @@
-/**
+﻿/**
  * VectorOverlayEngineV2.ts
  * 
  * MOTOR UNIVERSAL DE RENDERIZADO VECTORIAL OVERLAY (ARQUITECTURA V2)
@@ -6,9 +6,9 @@
  * REGLAS FUNDAMENTALES:
  * 1. PDF MAESTRO INMUTABLE: Se utiliza como background original no rasterizado.
  * 2. OVERLAY VECTORIAL PURO: El texto, marcas y firmas se inyectan como streams vectoriales nativos.
- * 3. NO INVENCIÓN DE DATOS: Si un dato no existe, no se inyecta nada ni se inventa contenido.
- * 4. PROTECCIÓN DE REGIONES BLOQUEADAS: Detecta colisiones geométricas con membretes o sellos.
- * 5. AUTOAJUSTE TIPOGRÁFICO: Aplica Shrink-to-fit o advertencia de revisión sin truncamiento destructivo.
+ * 3. NO INVENCIÃ“N DE DATOS: Si un dato no existe, no se inyecta nada ni se inventa contenido.
+ * 4. PROTECCIÃ“N DE REGIONES BLOQUEADAS: Detecta colisiones geomÃ©tricas con membretes o sellos.
+ * 5. AUTOAJUSTE TIPOGRÃFICO: Aplica Shrink-to-fit o advertencia de revisiÃ³n sin truncamiento destructivo.
  */
 
 import { PDFDocument, PDFPage, PDFFont, rgb } from 'pdf-lib';
@@ -46,7 +46,7 @@ export interface OverlayRenderResult {
 
 export class VectorOverlayEngineV2 {
   /**
-   * Resuelve el valor semántico a partir de una clave con notación de puntos
+   * Resuelve el valor semÃ¡ntico a partir de una clave con notaciÃ³n de puntos
    * Ej: 'patient.fullName' -> data.patient?.fullName
    */
   public static resolveDataKey(data: Record<string, any>, key: string): any {
@@ -55,7 +55,7 @@ export class VectorOverlayEngineV2 {
   }
 
   /**
-   * Comprueba si una geometría colisiona con alguna región bloqueada
+   * Comprueba si una geometrÃ­a colisiona con alguna regiÃ³n bloqueada
    */
   public static checkCollision(
     geom: ElementGeometry,
@@ -72,7 +72,7 @@ export class VectorOverlayEngineV2 {
   }
 
   /**
-   * Aplica un MasterTemplateV2 con datos semánticos sobre un PDF o imagen original
+   * Aplica un MasterTemplateV2 con datos semÃ¡nticos sobre un PDF o imagen original
    */
   public static async applyOverlay(
     originalPdfBytes: Uint8Array,
@@ -82,7 +82,7 @@ export class VectorOverlayEngineV2 {
   ): Promise<OverlayRenderResult> {
     let pdfDoc: PDFDocument;
 
-    // Detección de formato del buffer maestro
+    // DetecciÃ³n de formato del buffer maestro
     const isPdf =
       originalPdfBytes &&
       originalPdfBytes.length > 4 &&
@@ -108,7 +108,7 @@ export class VectorOverlayEngineV2 {
 
     if (isPdf) {
       pdfDoc = await PDFDocument.load(originalPdfBytes, { ignoreEncryption: true });
-      // Asegurar que si el template tiene más páginas que el PDF cargado, se agreguen con su fondo correspondiente
+      // Asegurar que si el template tiene mÃ¡s pÃ¡ginas que el PDF cargado, se agreguen con su fondo correspondiente
       const pageCount = pdfDoc.getPageCount();
       const requiredPages = template?.pages?.length || 1;
       if (pageCount < requiredPages) {
@@ -120,7 +120,7 @@ export class VectorOverlayEngineV2 {
           const pHeightPt = (pHeightMm * 72) / 25.4;
           const newPage = pdfDoc.addPage([pWidthPt, pHeightPt]);
 
-          // Cargar fondo de la página secundaria (ej. orden_lab_p2_bg.jpg)
+          // Cargar fondo de la pÃ¡gina secundaria (ej. orden_lab_p2_bg.jpg)
           const docTypeLower = (template?.documentType || '').toLowerCase();
           let pageImgUrl = '/templates/recipes_bg.jpg';
           if (docTypeLower.includes('lab') || docTypeLower.includes('orden')) {
@@ -139,12 +139,12 @@ export class VectorOverlayEngineV2 {
               });
             }
           } catch (e) {
-            console.warn(`[VectorOverlayEngineV2] Advertencia cargando fondo de página ${pIdx}:`, e);
+            console.warn(`[VectorOverlayEngineV2] Advertencia cargando fondo de pÃ¡gina ${pIdx}:`, e);
           }
         }
       }
     } else {
-      // Si el buffer es una imagen de alta resolución o respaldo, se genera un PDF contenedor con fondo incrustado por cada página
+      // Si el buffer es una imagen de alta resoluciÃ³n o respaldo, se genera un PDF contenedor con fondo incrustado por cada pÃ¡gina
       pdfDoc = await PDFDocument.create();
       const requiredPages = template?.pages?.length || 1;
 
@@ -157,7 +157,7 @@ export class VectorOverlayEngineV2 {
 
         const page = pdfDoc.addPage([widthPt, heightPt]);
 
-        // Determinar imagen maestra para esta página específica
+        // Determinar imagen maestra para esta pÃ¡gina especÃ­fica
         const docTypeLower = (template?.documentType || '').toLowerCase();
         let targetImgUrl = '/templates/recipes_bg.jpg';
         if (docTypeLower.includes('lab') || docTypeLower.includes('orden')) {
@@ -172,7 +172,7 @@ export class VectorOverlayEngineV2 {
 
         try {
           let imgBytesToEmbed: Uint8Array | null = null;
-          // Si es la página 0 y el originalPdfBytes ya era JPG/PNG, usarlo
+          // Si es la pÃ¡gina 0 y el originalPdfBytes ya era JPG/PNG, usarlo
           if (pIdx === 0 && (isJpg || isPng)) {
             imgBytesToEmbed = originalPdfBytes;
           } else {
@@ -210,7 +210,7 @@ export class VectorOverlayEngineV2 {
             });
           }
         } catch (imgErr) {
-          console.warn(`[VectorOverlayEngineV2] Advertencia al incrustar fondo de página ${pIdx}:`, imgErr);
+          console.warn(`[VectorOverlayEngineV2] Advertencia al incrustar fondo de pÃ¡gina ${pIdx}:`, imgErr);
         }
       }
     }
@@ -222,7 +222,7 @@ export class VectorOverlayEngineV2 {
     let requiresReview = false;
     let injectedElementsCount = 0;
 
-    // Embeber sello/firma si está disponible en opciones
+    // Embeber sello/firma si estÃ¡ disponible en opciones
     let embeddedStampImage: any = null;
     if (options.doctorStampBase64) {
       try {
@@ -232,11 +232,11 @@ export class VectorOverlayEngineV2 {
           ? await pdfDoc.embedPng(imageBytes)
           : await pdfDoc.embedJpg(imageBytes);
       } catch (err: any) {
-        warnings.push(`No se pudo embeber el sello del médico: ${err.message}`);
+        warnings.push(`No se pudo embeber el sello del mÃ©dico: ${err.message}`);
       }
     }
 
-    // Asegurar que existan suficientes páginas en el documento
+    // Asegurar que existan suficientes pÃ¡ginas en el documento
     const tplPages = template?.pages || [];
     while (pdfDoc.getPageCount() < tplPages.length) {
       const pIdx = pdfDoc.getPageCount();
@@ -250,7 +250,7 @@ export class VectorOverlayEngineV2 {
 
     for (const pageTemplate of tplPages) {
       if (pageTemplate.pageIndex >= pages.length) {
-        warnings.push(`Página ${pageTemplate.pageIndex + 1} no existe en el PDF base (total páginas: ${pages.length}).`);
+        warnings.push(`PÃ¡gina ${pageTemplate.pageIndex + 1} no existe en el PDF base (total pÃ¡ginas: ${pages.length}).`);
         continue;
       }
 
@@ -260,7 +260,7 @@ export class VectorOverlayEngineV2 {
       const actualPageWidthMm = (actualPageWidthPt * 25.4) / 72;
       const actualPageHeightMm = (actualPageHeightPt * 25.4) / 72;
 
-      // Validación estricta de dimensiones físicas reales vs MasterTemplateV2
+      // ValidaciÃ³n estricta de dimensiones fÃ­sicas reales vs MasterTemplateV2
       const templatePageWidthMm = pageTemplate.widthMm ?? (pageTemplate as any).pageSize?.widthMm ?? actualPageWidthMm;
       const templatePageHeightMm = pageTemplate.heightMm ?? (pageTemplate as any).pageSize?.heightMm ?? actualPageHeightMm;
 
@@ -269,20 +269,20 @@ export class VectorOverlayEngineV2 {
       const DIMENSION_TOLERANCE_MM = 3.0;
 
       if (widthDiffMm > DIMENSION_TOLERANCE_MM || heightDiffMm > DIMENSION_TOLERANCE_MM) {
-        const errorMsg = `[VectorOverlayEngineV2] ADVERTENCIA DE DIMENSIÓN DEL MASTER: La página ${pageTemplate.pageIndex + 1} del PDF base mide ${actualPageWidthMm.toFixed(1)} × ${actualPageHeightMm.toFixed(1)} mm (${actualPageWidthPt.toFixed(1)} × ${actualPageHeightPt.toFixed(1)} pt), mientras que el MasterTemplateV2 '${template.masterId}' declara ${templatePageWidthMm.toFixed(1)} × ${templatePageHeightMm.toFixed(1)} mm.`;
+        const errorMsg = `[VectorOverlayEngineV2] ADVERTENCIA DE DIMENSIÃ“N DEL MASTER: La pÃ¡gina ${pageTemplate.pageIndex + 1} del PDF base mide ${actualPageWidthMm.toFixed(1)} Ã— ${actualPageHeightMm.toFixed(1)} mm (${actualPageWidthPt.toFixed(1)} Ã— ${actualPageHeightPt.toFixed(1)} pt), mientras que el MasterTemplateV2 '${template.masterId}' declara ${templatePageWidthMm.toFixed(1)} Ã— ${templatePageHeightMm.toFixed(1)} mm.`;
         console.warn(errorMsg);
         warnings.push(errorMsg);
         requiresReview = true;
       }
 
-      // La altura física real de la página para la transformación top-down a bottom-up
+      // La altura fÃ­sica real de la pÃ¡gina para la transformaciÃ³n top-down a bottom-up
       const pageHeightMm = actualPageHeightMm;
       const combinedLockedRegions = [
         ...(template.lockedRegions || []),
         ...(pageTemplate.lockedRegions || []),
       ];
 
-      // Factor de escala dinámico en caso de que el PDF cargado difiera del diseño de referencia (ej. Carta vs A4)
+      // Factor de escala dinÃ¡mico en caso de que el PDF cargado difiera del diseÃ±o de referencia (ej. Carta vs A4)
       const scaleX = templatePageWidthMm > 0 && Math.abs(templatePageWidthMm - actualPageWidthMm) > 1.5
         ? actualPageWidthMm / templatePageWidthMm
         : 1.0;
@@ -298,7 +298,7 @@ export class VectorOverlayEngineV2 {
           heightMm: (element as any).heightMm ?? 6,
         };
 
-        // Guarda Centinela Geométrica Canónica (Protección Anti-Desalineación Récipe)
+        // Guarda Centinela GeomÃ©trica CanÃ³nica (ProtecciÃ³n Anti-DesalineaciÃ³n RÃ©cipe)
         if (element.id && (element.id === 'left_date' || element.id === 'right_date') && (rawGeom.yMm <= 5.0 || rawGeom.yMm < 56.0)) {
           rawGeom.yMm = 60.5;
         }
@@ -329,7 +329,7 @@ export class VectorOverlayEngineV2 {
             const font = (element.typography?.fontWeight ?? (element as any).fontWeight) === 'bold' ? fontBold : fontRegular;
             let fontSize = element.typography?.fontSizePt ?? (element as any).fontSizePt ?? 9.5;
 
-            // Medición tipográfica exacta y autoajuste (shrink) sin partir en múltiples líneas
+            // MediciÃ³n tipogrÃ¡fica exacta y autoajuste (shrink) sin partir en mÃºltiples lÃ­neas
             const maxAllowedWidthPt = CalibrationEngine.xMmToPdfPt(geom.widthMm);
             let textWidth = font.widthOfTextAtSize(textToDraw, fontSize);
             if (textWidth > maxAllowedWidthPt) {
@@ -354,7 +354,7 @@ export class VectorOverlayEngineV2 {
               geom.heightMm
             );
 
-            // Importante: No pasar maxWidth en 'text' de una sola línea para evitar saltos de línea no deseados en pdf-lib
+            // Importante: No pasar maxWidth en 'text' de una sola lÃ­nea para evitar saltos de lÃ­nea no deseados en pdf-lib
             page.drawText(textToDraw, {
               x: alignedX,
               y: baselineY,
@@ -384,13 +384,13 @@ export class VectorOverlayEngineV2 {
 
             if (shrinkResult.requiresReview) {
               requiresReview = true;
-              warnings.push(`El texto en '${element.id}' excede el espacio visual asignado y requiere revisión.`);
+              warnings.push(`El texto en '${element.id}' excede el espacio visual asignado y requiere revisiÃ³n.`);
             }
 
             const activeFontSize = shrinkResult.fontSizePt;
             const lineHeightPt = element.typography?.lineHeightPt ?? ((element as any).lineHeightPt || (activeFontSize * 1.35));
 
-            // Renderizar párrafos y líneas
+            // Renderizar pÃ¡rrafos y lÃ­neas
             const lines = VectorOverlayEngineV2.wrapText(textToDraw, font, activeFontSize, CalibrationEngine.xMmToPdfPt(geom.widthMm));
             let currentYMm = geom.yMm;
 
@@ -416,7 +416,7 @@ export class VectorOverlayEngineV2 {
                 size: activeFontSize,
                 font,
                 maxWidth: CalibrationEngine.xMmToPdfPt(geom.widthMm),
-                color: rgb(0.08, 0.12, 0.2), // Mejora: Color clínico de alto contraste para lectura médica
+                color: rgb(0.08, 0.12, 0.2), // Mejora: Color clÃ­nico de alto contraste para lectura mÃ©dica
               });
               currentYMm += CalibrationEngine.ptToMm(lineHeightPt);
             }
@@ -430,7 +430,7 @@ export class VectorOverlayEngineV2 {
             const isDebug = Boolean(options.debugMode || options.debugOverlay);
             if (!isChecked && !isDebug) break;
 
-            const markChar = element.markStyle === 'CHECK' ? '✓' : 'X';
+            const markChar = element.markStyle === 'CHECK' ? 'âœ“' : 'X';
             const fontSize = element.fontSizePt ?? (element as any).fontSizePt ?? 8;
             const markWidth = fontBold.widthOfTextAtSize(markChar, fontSize);
             const boxWidthPt = CalibrationEngine.mmToPt(geom.widthMm);
@@ -438,7 +438,7 @@ export class VectorOverlayEngineV2 {
             const originXPt = CalibrationEngine.xMmToPdfPt(geom.xMm);
             const originYPt = CalibrationEngine.yMmToPdfPt(geom.yMm, pageHeightMm);
 
-            // Centrado geométrico exacto usando métricas reales de la fuente
+            // Centrado geomÃ©trico exacto usando mÃ©tricas reales de la fuente
             const alignedX = originXPt + (boxWidthPt - markWidth) / 2;
             const capHeight = fontSize * 0.718;
             const baselineY = originYPt - (boxHeightPt + capHeight) / 2;
@@ -455,7 +455,7 @@ export class VectorOverlayEngineV2 {
             }
 
             if (isDebug) {
-              // Caja de diagnóstico de alta visibilidad para comprobación de superposición
+              // Caja de diagnÃ³stico de alta visibilidad para comprobaciÃ³n de superposiciÃ³n
               page.drawRectangle({
                 x: originXPt,
                 y: originYPt - boxHeightPt,
@@ -485,11 +485,11 @@ export class VectorOverlayEngineV2 {
               });
               injectedElementsCount++;
             } else {
-              // Sello Vectorial Automático Oficial (Dr. Samir - Neurocirugía y Cirugía de Columna)
+              // Sello Vectorial AutomÃ¡tico Oficial (Dr. Samir - NeurocirugÃ­a y CirugÃ­a de Columna)
               const stampBlue = rgb(0.04, 0.22, 0.43); // #0a376d
               const stampCyan = rgb(0.06, 0.45, 0.65); // #0f769e
 
-              // Marco institucional vectorial de alta definición
+              // Marco institucional vectorial de alta definiciÃ³n
               page.drawRectangle({
                 x: xPt,
                 y: yPt,
@@ -500,7 +500,7 @@ export class VectorOverlayEngineV2 {
                 opacity: 0.85,
               });
 
-              // Línea divisoria de firma
+              // LÃ­nea divisoria de firma
               page.drawLine({
                 start: { x: xPt + 8, y: yPt + heightPt * 0.46 },
                 end: { x: xPt + widthPt - 8, y: yPt + heightPt * 0.46 },
@@ -510,8 +510,8 @@ export class VectorOverlayEngineV2 {
               });
 
               const line1 = 'Dr. Samir';
-              const line2 = 'Especialista en Neurocirugía y Cirugía de Columna';
-              const line3 = 'MPPS: 61231 • CMEB: 5331';
+              const line2 = 'Especialista en NeurocirugÃ­a y CirugÃ­a de Columna';
+              const line3 = 'MPPS: 61231 â€¢ CMEB: 5331';
 
               const sz1 = Math.max(6.5, Math.min(8.5, widthPt / 13));
               const sz2 = Math.max(5.0, Math.min(6.2, widthPt / 22));
@@ -572,9 +572,9 @@ export class VectorOverlayEngineV2 {
     }
 
     
-    // === MEJORA: INYECCIÓN DE CÓDIGO QR DE SEGURIDAD ANTIFALSIFICACIÓN ===
+    // === MEJORA: INYECCIÃ“N DE CÃ“DIGO QR DE SEGURIDAD ANTIFALSIFICACIÃ“N ===
     try {
-      // Generamos un string de verificación único con los datos del documento
+      // Generamos un string de verificaciÃ³n Ãºnico con los datos del documento
       const docRef = `${template.documentType.toUpperCase()}-${new Date().getTime().toString(36).toUpperCase()}`;
       const verificationText = `CCMI STUDIO | Dr. Samir Moucharrafie
 Doc: ${docRef}
@@ -590,7 +590,7 @@ Verificable digitalmente.`;
       const qrBytes = Uint8Array.from(atob(cleanBase64), c => c.charCodeAt(0));
       const qrImage = await pdfDoc.embedPng(qrBytes);
 
-      // Dibujar en todas las páginas procesadas en la esquina inferior derecha
+      // Dibujar en todas las pÃ¡ginas procesadas en la esquina inferior derecha
       for (const p of tplPages) {
          if (p.pageIndex < pages.length) {
             const pdfPage = pages[p.pageIndex];
@@ -606,7 +606,7 @@ Verificable digitalmente.`;
               opacity: 0.9,
             });
 
-            pdfPage.drawText("VERIFICACIÓN DIGITAL", {
+            pdfPage.drawText("VERIFICACIÃ“N DIGITAL", {
               x: pdfPage.getWidth() - qrSize - marginX - 5,
               y: marginY - 6,
               size: 5,
@@ -632,7 +632,7 @@ Verificable digitalmente.`;
   }
 
   /**
-   * Divide un texto en líneas respetando el ancho máximo en puntos
+   * Divide un texto en lÃ­neas respetando el ancho mÃ¡ximo en puntos
    */
   public static wrapText(text: string, font: PDFFont, fontSize: number, maxWidthPt: number): string[] {
     const paragraphs = text.split('\n');
