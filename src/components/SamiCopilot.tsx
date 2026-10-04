@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import {
   Sparkles,
   X,
@@ -63,7 +63,7 @@ const DEFAULT_VOICE_SETTINGS: SamiVoiceSettings = {
 const VOICE_PRESETS = [
   {
     id: 'sobrio',
-    name: 'Ã°Å¸Ââ€ºÃ¯Â¸Â MÃƒÂ©dico Sobrio',
+    name: 'Ãƒ…‚‚ƒ‚‚í MÃƒÆ’Ã‚dico Sobrio',
     desc: 'Cadencia sosegada y tono grave profesional',
     rate: 0.98,
     pitch: 0.92,
@@ -71,7 +71,7 @@ const VOICE_PRESETS = [
   },
   {
     id: 'dinamico',
-    name: 'Ã¢Å¡Â¡ Ejecutivo ÃƒÂgil',
+    name: 'Ãƒ…‚í Ejecutivo ÃƒÆ’Ã‚Ágil',
     desc: 'Mayor velocidad para consultas de alta demanda',
     rate: 1.15,
     pitch: 1.0,
@@ -79,8 +79,8 @@ const VOICE_PRESETS = [
   },
   {
     id: 'exhaustivo',
-    name: 'Ã°Å¸Â©Âº Lectura Exhaustiva',
-    desc: 'Velocidad estÃƒÂ¡ndar y lectura completa del informe',
+    name: 'Ãƒ…‚‚í Lectura Exhaustiva',
+    desc: 'Velocidad estÃƒÆ’Ã‚óndar y lectura completa del informe',
     rate: 1.02,
     pitch: 1.0,
     readMode: 'full' as const,
@@ -120,14 +120,14 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
     return DEFAULT_VOICE_SETTINGS;
   });
 
-  // Guardar configuraciÃƒÂ³n de audio en almacenamiento local
+  // Guardar configuraciÃƒÆ’Ã‚ón de audio en almacenamiento local
   useEffect(() => {
     try {
       localStorage.setItem('ccmi_sami_voice_settings_v1', JSON.stringify(voiceSettings));
     } catch {}
   }, [voiceSettings]);
 
-  // Cargar y ordenar voces del sistema (con auto-selecciÃƒÂ³n preferente en espaÃƒÂ±ol)
+  // Cargar y ordenar voces del sistema (con auto-selecciÃƒÆ’Ã‚ón preferente en espaÃƒÆ’Ã‚ol)
   useEffect(() => {
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
 
@@ -144,7 +144,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
         if (prev.voiceURI && sorted.some((v) => v.voiceURI === prev.voiceURI)) {
           return prev;
         }
-        // Auto-seleccionar la mejor voz disponible en espaÃƒÂ±ol
+        // Auto-seleccionar la mejor voz disponible en espaÃƒÆ’Ã‚ol
         const preferred = spanishVoices.find((v) =>
           v.name.toLowerCase().includes('google') ||
           v.name.toLowerCase().includes('natural') ||
@@ -177,7 +177,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
     };
   }, []);
 
-  // FunciÃƒÂ³n de sÃƒÂ­ntesis de voz personalizable con parÃƒÂ¡metros mÃƒÂ©dicos avanzados
+  // FunciÃƒÆ’Ã‚ón de sÃƒÆ’Ã‚óntesis de voz personalizable con parÃƒÆ’Ã‚metros mÃƒÆ’Ã‚dicos avanzados
   const speakText = (text: string, force = false) => {
     if ((!isVoiceOutputEnabled || !voiceSettings.autoPlay) && !force) return;
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
@@ -185,7 +185,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
     try {
       window.speechSynthesis.cancel();
 
-      // Limpiar formato markdown para lectura oral mÃƒÂ©dica fluida
+      // Limpiar formato markdown para lectura oral mÃƒÆ’Ã‚dica fluida
       let cleanText = text
         .replace(/[*#_`>]/g, '')
         .replace(/\[.*?\]\(.*?\)/g, '')
@@ -226,7 +226,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
   };
 
   const handleTestVoice = () => {
-    speakText('Dr. Samir, el sistema de asistencia neuroquirÃƒÂºrgica SAMI estÃƒÂ¡ configurado con este timbre y cadencia.', true);
+    speakText('Dr. Samir, el sistema de asistencia neuroquirÃƒÆ’Ã‚rgica SAMI estÃƒÆ’Ã‚í configurado con este timbre y cadencia.', true);
   };
 
   const handleStopSpeaking = () => {
@@ -236,11 +236,11 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
     }
   };
 
-  // Referencias para auto-envÃƒÂ­o por voz
+  // Referencias para auto-envÃƒÆ’Ã‚o por voz
   const voiceTimeoutRef = useRef<any>(null);
   const voiceTranscriptRef = useRef<string>('');
 
-  // Hook de dictado clÃƒÂ­nico por voz en espaÃƒÂ±ol con auto-envÃƒÂ­o inteligente
+  // Hook de dictado clÃƒÆ’Ã‚ónico por voz en espaÃƒÆ’Ã‚ol con auto-envÃƒÆ’Ã‚o inteligente
   const { isListening, toggleDictation, stopDictation, isSupported: speechSupported } = useClinicalDictation((text) => {
     setInputQuery(text);
     voiceTranscriptRef.current = text;
@@ -282,7 +282,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
     return () => window.removeEventListener('open-sami-copilot', handleOpenSami);
   }, []);
 
-  // Triage Inteligente: DetecciÃƒÂ³n proactiva de banderas rojas clÃƒÂ­nicas (Diabetes, HTA, Alergias, CardiopatÃƒÂ­as)
+  // Triage Inteligente: DetecciÃƒÆ’Ã‚ón proactiva de banderas rojas clÃƒÆ’Ã‚ónicas (Diabetes, HTA, Alergias, CardiopatÃƒÆ’Ã‚as)
   useEffect(() => {
     if (!activePatient) {
       setRedFlags([]);
@@ -294,16 +294,16 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
     const allergiesText = `${patientAny.allergies || ''} ${patientAny.alergias || ''}`.toLowerCase();
 
     if (historyText.includes('diabet') || historyText.includes('dm2') || historyText.includes('dm1') || historyText.includes('dbt')) {
-      flags.push('Diabetes Mellitus (Riesgo metabÃƒÂ³lico / CicatrizaciÃƒÂ³n e InfecciÃƒÂ³n quirÃƒÂºrgica)');
+      flags.push('Diabetes Mellitus (Riesgo metabÃƒÆ’Ã‚lico / CicatrizaciÃƒÆ’Ã‚ón e InfecciÃƒÆ’Ã‚ón quirÃƒÆ’Ã‚rgica)');
     }
     if (
       historyText.includes('hta') ||
       historyText.includes('hipertens') ||
       historyText.includes('hipertension') ||
       historyText.includes('presion alta') ||
-      historyText.includes('presiÃƒÂ³n alta')
+      historyText.includes('presiÃƒÆ’Ã‚ón alta')
     ) {
-      flags.push('HipertensiÃƒÂ³n Arterial (HTA) (Riesgo cardiovascular / Control hemodinÃƒÂ¡mico)');
+      flags.push('HipertensiÃƒÆ’Ã‚ón Arterial (HTA) (Riesgo cardiovascular / Control hemodinÃƒÆ’Ã‚mico)');
     }
     if (
       allergiesText.trim() &&
@@ -316,7 +316,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
       flags.push(`Alergia confirmada: ${patientAny.allergies || patientAny.alergias}`);
     }
     if (historyText.includes('cardiopat') || historyText.includes('infarto') || historyText.includes('arritmia') || historyText.includes('stent')) {
-      flags.push('CardiopatÃƒÂ­a / Riesgo cardiovascular mayor');
+      flags.push('CardiopatÃƒÆ’Ã‚a / Riesgo cardiovascular mayor');
     }
 
     setRedFlags(flags);
@@ -338,7 +338,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
       {
         id: 'welcome-1',
         role: 'model',
-        text: `Hola, soy **SAMI** (Synapsis Advanced Medical Intelligence), tu copiloto clÃƒÂ­nico y guÃƒÂ­a de operaciones de **CORTEX AXIS** en el CCMI.\n\nPuedes consultarme sobre:\n* Ã°Å¸Â§Â  **Escalas neuroquirÃƒÂºrgicas** (Nurick, mJOA, ASIA, VAS/EVA, Glasgow).\n* Ã°Å¸â€™Å  **Esquemas farmacolÃƒÂ³gicos** y posologÃƒÂ­a en patologÃƒÂ­a raquimedular.\n* Ã°Å¸â€œâ€¹ **TÃƒÂ©cnicas quirÃƒÂºrgicas y protocolos** de columna.\n* Ã°Å¸â€œâ€ž **GuÃƒÂ­a de uso** de los 5 documentos oficiales, secretarÃƒÂ­a y nube.\n\nÃ‚Â¿En quÃƒÂ© puedo ayudarte hoy?`,
+        text: `Hola, soy **SAMI** (Synapsis Advanced Medical Intelligence), tu copiloto clÃƒÆ’Ã‚ónico y guÃƒÆ’Ã‚a de operaciones de **CORTEX AXIS** en el CCMI.\n\nPuedes consultarme sobre:\n* Ãƒ…‚‚í **Escalas neuroquirÃƒÆ’Ã‚rgicas** (Nurick, mJOA, ASIA, VAS/EVA, Glasgow).\n* Ãƒ…‚„…í **Esquemas farmacolÃƒÆ’Ã‚gicos** y posologÃƒÆ’Ã‚a en patologÃƒÆ’Ã‚a raquimedular.\n* Ãƒ…‚“‚í **TÃƒÆ’Ã‚cnicas quirÃƒÆ’Ã‚rgicas y protocolos** de columna.\n* Ãƒ…‚“‚í **GuÃƒÆ’Ã‚a de uso** de los 5 documentos oficiales, secretarÃƒÆ’Ã‚a y nube.\n\nÃƒâ€šÃ‚En quÃƒÆ’Ã‚í puedo ayudarte hoy?`,
         timestamp: new Date().toISOString(),
         modelUsed: 'SAMI-Core',
       },
@@ -402,7 +402,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
       }
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
 
       let data: any = null;
       try {
@@ -416,22 +416,22 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
         if (response.ok) {
           data = await response.json();
         } else {
-          console.warn('[SAMI Copilot] Servidor retornÃƒÂ³ cÃƒÂ³digo:', response.status);
+          console.warn('[SAMI Copilot] Servidor retornÃƒÆ’Ã‚í cÃƒÆ’Ã‚digo:', response.status);
         }
       } catch (fetchErr: any) {
         clearTimeout(timeoutId);
-        console.warn('[SAMI Copilot] Red o timeout tras 5s, activando respuesta segura inmediata:', fetchErr);
+        console.warn('[SAMI Copilot] Red o timeout tras 25s, activando respuesta segura inmediata:', fetchErr);
       }
 
-      // Si el servidor respondiÃƒÂ³ o si aplicamos respuesta clÃƒÂ­nica estructurada
+      // Si el servidor respondiÃƒÆ’Ã‚í o si aplicamos respuesta clÃƒÆ’Ã‚ónica estructurada
       let replyText = data?.reply;
       let usedModel = data?.usedModel || 'Gemini 3.1 Flash';
 
       if (!replyText) {
-        // Red de seguridad local del cliente ante desconexiÃƒÂ³n o demora
+        // Red de seguridad local del cliente ante desconexiÃƒÆ’Ã‚ón o demora
         const q = textToSend.toLowerCase();
         
-        // AGENTE AUTÃƒâ€œNOMO: DETECCIÃƒâ€œN DE COMANDOS DE AUTOCOMPLETADO
+        // AGENTE AUTÃƒÆ’‚“NOMO: DETECCIÃƒÆ’‚“N DE COMANDOS DE AUTOCOMPLETADO
         if (q.startsWith('recetar') || q.startsWith('receta:') || q.startsWith('indicar')) {
            const medicamento = textToSend.replace(/receta:|recetar|indicar/i, '').trim();
            // Disparamos el evento al workspace
@@ -442,16 +442,16 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                indicationsRight: '1. Tomar cada 12 horas.\n2. Mantener reposo relativo.' 
              } 
            }));
-           replyText = `Ã‚Â¡Listo Dr. Samir! He rellenado automÃƒÂ¡ticamente la pestaÃƒÂ±a de rÃƒÂ©cipe con: **${medicamento}**.\n\nVerifique los datos en el documento antes de emitir el PDF.`;
+           replyText = `Ãƒâ€šÃ‚Listo Dr. Samir! He rellenado automÃƒÆ’Ã‚ticamente la pestaÃƒÆ’Ã‚a de rÃƒÆ’Ã‚cipe con: **${medicamento}**.\n\nVerifique los datos en el documento antes de emitir el PDF.`;
            usedModel = 'SAMI-AutoFill-Agent';
         } else if (q.includes('hola') || q.includes('saludos') || q.includes('buenos') || q.includes('buenas') || q === 'sami') {
-          replyText = `Ã‚Â¡Hola Dr. Samir! Es un gusto saludarle. Estoy conectado y listo para asistirle en la Unidad Cerebro Columna MÃƒÂ­nimamente Invasiva (CCMI).\n\nÃ‚Â¿En quÃƒÂ© paciente o caso clÃƒÂ­nico nos enfocamos hoy? Puede consultarme sobre:\n* Ã°Å¸Â§Â  **Escalas neuroquirÃƒÂºrgicas** (Nurick, mJOA, ASIA, VAS).\n* Ã°Å¸â€™Å  **PosologÃƒÂ­a y fÃƒÂ¡rmacos** de columna.\n* Ã°Å¸â€œâ€¹ **TÃƒÂ©cnicas quirÃƒÂºrgicas** (TLIF, artrodesis, descompresiÃƒÂ³n).\n* Ã°Å¸â€œâ€ž **EmisiÃƒÂ³n de rÃƒÂ©cipes e informes**.`;
+          replyText = `Ãƒâ€šÃ‚Hola Dr. Samir! Es un gusto saludarle. Estoy conectado y listo para asistirle en la Unidad Cerebro Columna MÃƒÆ’Ã‚ónimamente Invasiva (CCMI).\n\nÃƒâ€šÃ‚En quÃƒÆ’Ã‚í paciente o caso clÃƒÆ’Ã‚ónico nos enfocamos hoy? Puede consultarme sobre:\n* Ãƒ…‚‚í **Escalas neuroquirÃƒÆ’Ã‚rgicas** (Nurick, mJOA, ASIA, VAS).\n* Ãƒ…‚„…í **PosologÃƒÆ’Ã‚a y fÃƒÆ’Ã‚rmacos** de columna.\n* Ãƒ…‚“‚í **TÃƒÆ’Ã‚cnicas quirÃƒÆ’Ã‚rgicas** (TLIF, artrodesis, descompresiÃƒÆ’Ã‚ón).\n* Ãƒ…‚“‚í **EmisiÃƒÆ’Ã‚ón de rÃƒÆ’Ã‚cipes e informes**.`;
         } else if (q.includes('nurick') || q.includes('mjoa') || q.includes('mielopat')) {
-          replyText = `### Ã°Å¸Â§Â  Escalas Nurick & mJOA (MielopatÃƒÂ­a Cervical)\n\n* **Nurick 0-1:** AsintomÃƒÂ¡tico o sin alteraciÃƒÂ³n de marcha.\n* **Nurick 2-3:** Dificultad para deambular pero autÃƒÂ³nomo.\n* **Nurick 4-5:** Requiere apoyo de terceros o silla de ruedas.\n* **mJOA (0-17):** Leve (15-17), Moderada (12-14), Severa (<12).\n\nÃ¢Å¡Â¡ **Conducta CCMI:** mJOA Ã¢â€°Â¤ 14 con compresiÃƒÂ³n medular en RMN amerita descompresiÃƒÂ³n quirÃƒÂºrgica oportuna.`;
+          replyText = `### Ãƒ…‚‚í Escalas Nurick & mJOA (MielopatÃƒÆ’Ã‚a Cervical)\n\n* **Nurick 0-1:** AsintomÃƒÆ’Ã‚tico o sin alteraciÃƒÆ’Ã‚ón de marcha.\n* **Nurick 2-3:** Dificultad para deambular pero autÃƒÆ’Ã‚ónomo.\n* **Nurick 4-5:** Requiere apoyo de terceros o silla de ruedas.\n* **mJOA (0-17):** Leve (15-17), Moderada (12-14), Severa (<12).\n\nÃƒ…‚í **Conducta CCMI:** mJOA Ãƒ‚‚í 14 con compresiÃƒÆ’Ã‚ón medular en RMN amerita descompresiÃƒÆ’Ã‚ón quirÃƒÆ’Ã‚rgica oportuna.`;
         } else if (q.includes('pregabalina') || q.includes('posologia') || q.includes('farmaco') || q.includes('dolor')) {
-          replyText = `### Ã°Å¸â€™Å  Esquema AnalgÃƒÂ©sico y PosologÃƒÂ­a en Crisis Radicular\n\n1. **Pregabalina:** 75 mg VO cada 12 h (o nocturno si hay somnolencia) por 14-21 dÃƒÂ­as.\n2. **Ketoprofeno:** 100 mg VO cada 12 h por 5 dÃƒÂ­as con protector gÃƒÂ¡strico.\n3. **TiocolchicÃƒÂ³sido:** 4 mg VO cada 12 h por 5 dÃƒÂ­as en contractura muscular severa.\n\n*Nota:* Indicar reposo relativo en posiciÃƒÂ³n semi-fowler y evitar flexiÃƒÂ³n de tronco.`;
+          replyText = `### Ãƒ…‚„…í Esquema AnalgÃƒÆ’Ã‚sico y PosologÃƒÆ’Ã‚a en Crisis Radicular\n\n1. **Pregabalina:** 75 mg VO cada 12 h (o nocturno si hay somnolencia) por 14-21 dÃƒÆ’Ã‚as.\n2. **Ketoprofeno:** 100 mg VO cada 12 h por 5 dÃƒÆ’Ã‚as con protector gÃƒÆ’Ã‚strico.\n3. **TiocolchicÃƒÆ’Ã‚sido:** 4 mg VO cada 12 h por 5 dÃƒÆ’Ã‚as en contractura muscular severa.\n\n*Nota:* Indicar reposo relativo en posiciÃƒÆ’Ã‚ón semi-fowler y evitar flexiÃƒÆ’Ã‚ón de tronco.`;
         } else {
-          replyText = `### Ã°Å¸Â§Â  SAMI Copilot (Modo Resiliente CCMI)\n\nDr. Samir, he recibido su consulta: **"${textToSend}"**.\n\n* Quedo a su disposiciÃƒÂ³n para desglosar escalas neuroquirÃƒÂºrgicas (Nurick, mJOA, ASIA, Glasgow), dosificaciÃƒÂ³n farmacolÃƒÂ³gica o redacciÃƒÂ³n de los 5 documentos oficiales.\n* Si el caso presenta dÃƒÂ©ficit motor rÃƒÂ¡pido o signos de cauda equina, priorice la evaluaciÃƒÂ³n imagenolÃƒÂ³gica y descompresiÃƒÂ³n de urgencia.`;
+          replyText = `### Ãƒ…‚‚í SAMI Copilot (Modo Resiliente CCMI)\n\nDr. Samir, he recibido su consulta: **"${textToSend}"**.\n\n* Quedo a su disposiciÃƒÆ’Ã‚ón para desglosar escalas neuroquirÃƒÆ’Ã‚rgicas (Nurick, mJOA, ASIA, Glasgow), dosificaciÃƒÆ’Ã‚ón farmacolÃƒÆ’Ã‚gica o redacciÃƒÆ’Ã‚ón de los 5 documentos oficiales.\n* Si el caso presenta dÃƒÆ’Ã‚ficit motor rÃƒÆ’Ã‚pido o signos de cauda equina, priorice la evaluaciÃƒÆ’Ã‚ón imagenolÃƒÆ’Ã‚gica y descompresiÃƒÆ’Ã‚ón de urgencia.`;
         }
         usedModel = 'SAMI-Local-Resiliente';
       }
@@ -470,12 +470,12 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
       const errorMessage: SamiChatMessage = {
         id: `error-${Date.now()}`,
         role: 'model',
-        text: `Ã¢Å¡Â Ã¯Â¸Â **Aviso:** ${err.message || 'Error procesando respuesta.'}\nPuede seguir consultando escalas y protocolos esenciales normalmente.`,
+        text: `Ãƒ…‚ƒ‚‚í **Aviso:** ${err.message || 'Error procesando respuesta.'}\nPuede seguir consultando escalas y protocolos esenciales normalmente.`,
         timestamp: new Date().toISOString(),
         isError: true,
       };
       setMessages((prev) => [...prev, errorMessage]);
-      speakText('Aviso de conexiÃƒÂ³n. Puedes consultar las escalas en modo local.');
+      speakText('Aviso de conexiÃƒÆ’Ã‚ón. Puedes consultar las escalas en modo local.');
     } finally {
       setIsThinking(false);
     }
@@ -495,12 +495,12 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
   };
 
   const handleClearHistory = () => {
-    if (confirm('Ã‚Â¿Deseas reiniciar la conversaciÃƒÂ³n con SAMI?')) {
+    if (confirm('Ãƒâ€šÃ‚Deseas reiniciar la conversaciÃƒÆ’Ã‚ón con SAMI?')) {
       const initial: SamiChatMessage[] = [
         {
           id: 'welcome-new',
           role: 'model',
-          text: `ConversaciÃƒÂ³n reiniciada. Estoy listo para asistirte en tus decisiones clÃƒÂ­nicas, posologÃƒÂ­a o manejo del sistema CCMI.`,
+          text: `ConversaciÃƒÆ’Ã‚ón reiniciada. Estoy listo para asistirte en tus decisiones clÃƒÆ’Ã‚ónicas, posologÃƒÆ’Ã‚a o manejo del sistema CCMI.`,
           timestamp: new Date().toISOString(),
           modelUsed: 'SAMI-Core',
         },
@@ -511,12 +511,12 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
   };
 
   const quickPrompts = [
-    { label: 'Ã°Å¸Â§Â  Escala Nurick / mJOA', query: 'ExplÃƒÂ­came las escalas de Nurick y mJOA para mielopatÃƒÂ­a cervical y sus puntos de corte quirÃƒÂºrgico.' },
-    { label: 'Ã¢Å¡Â¡ Escala ASIA', query: 'CuÃƒÂ¡les son los grados de la escala ASIA para lesiÃƒÂ³n medular y cÃƒÂ³mo clasificar cada nivel?' },
-    { label: 'Ã°Å¸â€œÅ  Escala VAS / EVA', query: 'CÃƒÂ³mo clasificar la escala analÃƒÂ³gica del dolor EVA/VAS y su esquema analgÃƒÂ©sico sugerido?' },
-    { label: 'Ã°Å¸â€™Å  PosologÃƒÂ­a Columna', query: 'CuÃƒÂ¡l es la posologÃƒÂ­a recomendada de Pregabalina, TiocolchicÃƒÂ³sido y Ketoprofeno en crisis radicular aguda?' },
-    { label: 'Ã°Å¸â€œâ€¹ Protocolo Artrodesis Lumbar', query: 'CuÃƒÂ¡les son los pasos e indicaciones clÃƒÂ­nicas para una artrodesis lumbar instrumentada TLIF L4-L5/L5-S1?' },
-    { label: 'Ã°Å¸â€œâ€ž Ã‚Â¿CÃƒÂ³mo emitir rÃƒÂ©cipe doble?', query: 'ExplÃƒÂ­came cÃƒÂ³mo funciona el rÃƒÂ©cipe oficial duplicado con talÃƒÂ³n farmacia e indicaciones al paciente en CCMI.' },
+    { label: 'Ãƒ…‚‚í Escala Nurick / mJOA', query: 'ExplÃƒÆ’Ã‚came las escalas de Nurick y mJOA para mielopatÃƒÆ’Ã‚a cervical y sus puntos de corte quirÃƒÆ’Ã‚rgico.' },
+    { label: 'Ãƒ…‚í Escala ASIA', query: 'CuÃƒÆ’Ã‚les son los grados de la escala ASIA para lesiÃƒÆ’Ã‚ón medular y cÃƒÆ’Ã‚mo clasificar cada nivel?' },
+    { label: 'Ãƒ…‚“Ã…í Escala VAS / EVA', query: 'CÃƒÆ’Ã‚mo clasificar la escala analÃƒÆ’Ã‚gica del dolor EVA/VAS y su esquema analgÃƒÆ’Ã‚sico sugerido?' },
+    { label: 'Ãƒ…‚„…í PosologÃƒÆ’Ã‚a Columna', query: 'CuÃƒÆ’Ã‚l es la posologÃƒÆ’Ã‚a recomendada de Pregabalina, TiocolchicÃƒÆ’Ã‚sido y Ketoprofeno en crisis radicular aguda?' },
+    { label: 'Ãƒ…‚“‚í Protocolo Artrodesis Lumbar', query: 'CuÃƒÆ’Ã‚les son los pasos e indicaciones clÃƒÆ’Ã‚ónicas para una artrodesis lumbar instrumentada TLIF L4-L5/L5-S1?' },
+    { label: 'Ãƒ…‚“‚í Ãƒâ€šÃ‚CÃƒÆ’Ã‚mo emitir rÃƒÆ’Ã‚cipe doble?', query: 'ExplÃƒÆ’Ã‚came cÃƒÆ’Ã‚mo funciona el rÃƒÆ’Ã‚cipe oficial duplicado con talÃƒÆ’Ã‚ón farmacia e indicaciones al paciente en CCMI.' },
   ];
 
   // Render basic markdown with headers, bold, bullet points
@@ -606,14 +606,14 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
 
   return (
     <>
-      {/* BOTÃƒâ€œN FLOTANTE DISCRETO DE SAMI (Bottom Right) */}
+      {/* BOTÃƒÆ’‚“N FLOTANTE DISCRETO DE SAMI (Bottom Right) */}
       {!isOpen && (
                   <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
             <button
               type="button"
               onClick={() => setIsOpen(true)}
               className="group relative rounded-full transition-all duration-300 transform hover:-translate-y-1 active:scale-95 text-left flex p-[1.5px] sami-capsule shadow-[0_8px_30px_rgba(6,182,212,0.25)] hover:shadow-[0_12px_40px_rgba(6,182,212,0.5)]"
-              title="Abrir SAMI Copilot (Asistente ClÃ­nico Neuronal)"
+              title="Abrir SAMI Copilot (Asistente ClÃƒónico Neuronal)"
             >
               {/* Animated Synaptic Border */}
               <div className="sami-synaptic-border rounded-full" />
@@ -637,7 +637,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                   </div>
                   <span className="text-[11px] text-cyan-100/60 font-medium flex items-center gap-1">
                     <BrainCircuit className="w-3 h-3 text-cyan-500/70" />
-                    Asistente ClÃ­nico Inteligente
+                    Asistente ClÃƒónico Inteligente
                   </span>
                 </div>
               </div>
@@ -668,15 +668,15 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                 </div>
                 <p className="text-[11px] text-slate-400 flex items-center gap-1">
                   <span>Synapsis Medical Intelligence</span>
-                  <span className="text-cyan-500">Ã¢â‚¬Â¢</span>
-                  <span className="text-emerald-400 font-medium">ClÃƒÂ­nica CCMI</span>
+                  <span className="text-cyan-500">Ãƒ€š‚</span>
+                  <span className="text-emerald-400 font-medium">ClÃƒÆ’Ã‚ónica CCMI</span>
                 </p>
               </div>
             </div>
 
             {/* Acciones del Header */}
             <div className="flex items-center gap-1">
-              {/* BotÃƒÂ³n de Ajustes de Voz y Lectura */}
+              {/* BotÃƒÆ’Ã‚ón de Ajustes de Voz y Lectura */}
               <button
                 type="button"
                 onClick={() => setShowVoiceSettings((prev) => !prev)}
@@ -685,7 +685,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                     ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
-                title="Ajustes de Voz y Lectura MÃƒÂ©dica (Timbre, Tono, Velocidad)"
+                title="Ajustes de Voz y Lectura MÃƒÆ’Ã‚dica (Timbre, Tono, Velocidad)"
               >
                 <SlidersHorizontal className="w-4 h-4" />
               </button>
@@ -704,7 +704,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                 className={`p-1.5 rounded-lg transition-colors ${
                   isVoiceOutputEnabled ? 'text-cyan-300 hover:bg-cyan-950/60' : 'text-slate-500 hover:bg-slate-800/60'
                 }`}
-                title={isVoiceOutputEnabled ? 'Voz de SAMI activa (SAMI te habla en voz alta) Ã¢â‚¬Â¢ Clic para silenciar' : 'Voz de SAMI silenciada Ã¢â‚¬Â¢ Clic para activar respuesta hablada'}
+                title={isVoiceOutputEnabled ? 'Voz de SAMI activa (SAMI te habla en voz alta) Ãƒ€š‚í Clic para silenciar' : 'Voz de SAMI silenciada Ãƒ€š‚í Clic para activar respuesta hablada'}
               >
                 {isVoiceOutputEnabled ? (
                   <Volume2 className={`w-4 h-4 text-cyan-400 ${isSpeaking ? 'animate-bounce' : ''}`} />
@@ -717,7 +717,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                 type="button"
                 onClick={handleClearHistory}
                 className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition-colors"
-                title="Reiniciar conversaciÃƒÂ³n"
+                title="Reiniciar conversaciÃƒÆ’Ã‚ón"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -726,7 +726,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                 type="button"
                 onClick={() => setIsExpanded(!isExpanded)}
                 className="hidden sm:inline-flex p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 rounded-lg transition-colors"
-                title={isExpanded ? 'Restaurar tamaÃƒÂ±o normal' : 'Expandir ventana'}
+                title={isExpanded ? 'Restaurar tamaÃƒÆ’Ã‚o normal' : 'Expandir ventana'}
               >
                 {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
               </button>
@@ -748,7 +748,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
               <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2">
                 <div className="flex items-center gap-2 text-cyan-200 font-bold text-sm">
                   <SlidersHorizontal className="w-4 h-4 text-cyan-400" />
-                  <span>ConfiguraciÃƒÂ³n de Voz y Lectura MÃƒÂ©dica</span>
+                  <span>ConfiguraciÃƒÆ’Ã‚ón de Voz y Lectura MÃƒÆ’Ã‚dica</span>
                   <span className="text-[10px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded font-mono font-semibold">
                     {availableVoices.length} {availableVoices.length === 1 ? 'voz' : 'voces'}
                   </span>
@@ -810,7 +810,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                     Modelo de Voz del Dispositivo
                   </label>
                   <span className="text-[10px] text-cyan-400 font-medium">
-                    {availableVoices.filter((v) => v.lang.toLowerCase().startsWith('es')).length} en espaÃƒÂ±ol
+                    {availableVoices.filter((v) => v.lang.toLowerCase().startsWith('es')).length} en espaÃƒÆ’Ã‚ol
                   </span>
                 </div>
                 <select
@@ -831,7 +831,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                       .trim();
                     return (
                       <option key={v.voiceURI} value={v.voiceURI} className="bg-slate-900 text-slate-100">
-                        {isSpanish ? 'Ã°Å¸â€¡ÂªÃ°Å¸â€¡Â¸ ' : 'Ã°Å¸Å’Â '} {cleanName} ({v.lang})
+                        {isSpanish ? 'Ãƒ…‚‚ƒ…‚‚í ' : 'Ãƒ……â€™Ã‚í '} {cleanName} ({v.lang})
                       </option>
                     );
                   })}
@@ -859,8 +859,8 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                   />
                   <div className="flex justify-between text-[9px] text-slate-500 mt-1 font-mono">
                     <span>0.85x (Pausado)</span>
-                    <span>1.05x (EstÃƒÂ¡ndar)</span>
-                    <span>1.35x (RÃƒÂ¡pido)</span>
+                    <span>1.05x (EstÃƒÆ’Ã‚óndar)</span>
+                    <span>1.35x (RÃƒÆ’Ã‚pido)</span>
                   </div>
                 </div>
 
@@ -889,10 +889,10 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                 </div>
               </div>
 
-              {/* ExtensiÃƒÂ³n de Lectura */}
+              {/* ExtensiÃƒÆ’Ã‚ón de Lectura */}
               <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-2.5">
                 <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block mb-2">
-                  ExtensiÃƒÂ³n del Audio
+                  ExtensiÃƒÆ’Ã‚ón del Audio
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
@@ -906,7 +906,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                   >
                     <div className="font-bold text-xs flex items-center justify-between">
                       <span>Resumen Ejecutivo</span>
-                      {voiceSettings.readMode === 'executive' && <span className="text-cyan-400 font-bold">Ã¢â€”Â</span>}
+                      {voiceSettings.readMode === 'executive' && <span className="text-cyan-400 font-bold">Ãƒ‚€‚</span>}
                     </div>
                     <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">
                       ~15-20 seg (primeros 480 caracteres). Ideal para consulta activa.
@@ -924,7 +924,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                   >
                     <div className="font-bold text-xs flex items-center justify-between">
                       <span>Lectura Completa</span>
-                      {voiceSettings.readMode === 'full' && <span className="text-cyan-400 font-bold">Ã¢â€”Â</span>}
+                      {voiceSettings.readMode === 'full' && <span className="text-cyan-400 font-bold">Ãƒ‚€‚</span>}
                     </div>
                     <p className="text-[10px] text-slate-400 mt-0.5 leading-snug">
                       Lee el 100% de la respuesta, escalas e indicaciones sin cortes.
@@ -986,9 +986,9 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
               <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5 animate-pulse" />
               <div className="flex-1 min-w-0">
                 <div className="font-extrabold text-red-200 flex items-center justify-between">
-                  <span className="tracking-wide">TRIAGE INTELIGENTE Ã¢â‚¬Â¢ RED FLAGS CLÃƒÂNICAS ({redFlags.length})</span>
+                  <span className="tracking-wide">TRIAGE INTELIGENTE Ãƒ€š‚í RED FLAGS CLÃƒÆ’Ã‚NICAS ({redFlags.length})</span>
                   <span className="text-[10px] bg-red-500/30 text-red-200 px-1.5 py-0.5 rounded border border-red-500/40 uppercase font-mono font-bold">
-                    Alerta ClÃƒÂ­nica
+                    Alerta ClÃƒÆ’Ã‚ónica
                   </span>
                 </div>
                 <ul className="mt-1 space-y-0.5 list-disc list-inside text-[11px] text-red-100 font-medium">
@@ -997,7 +997,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                   ))}
                 </ul>
                 <p className="text-[10px] text-red-300/80 mt-1 italic">
-                  Aviso de seguridad para el mÃƒÂ©dico tratante: verifique ajuste metabÃƒÂ³lico y estabilidad hemodinÃƒÂ¡mica.
+                  Aviso de seguridad para el mÃƒÆ’Ã‚dico tratante: verifique ajuste metabÃƒÆ’Ã‚lico y estabilidad hemodinÃƒÆ’Ã‚mica.
                 </p>
               </div>
             </div>
@@ -1028,7 +1028,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
             </div>
           )}
 
-          {/* ATAJOS RÃƒÂPIDOS CLÃƒÂNICOS HORIZONTALES */}
+          {/* ATAJOS RÃƒÆ’Ã‚PIDOS CLÃƒÆ’Ã‚NICOS HORIZONTALES */}
           <div className="px-3 py-2 bg-slate-950/60 border-b border-slate-800/80 overflow-x-auto no-scrollbar flex items-center gap-1.5 shrink-0">
             {quickPrompts.map((qp, idx) => (
               <button
@@ -1043,7 +1043,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
             ))}
           </div>
 
-          {/* ÃƒÂREA DE MENSAJES CON SCROLL */}
+          {/* ÃƒÆ’Ã‚REA DE MENSAJES CON SCROLL */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 text-sm">
             {messages.map((msg) => {
               const isUser = msg.role === 'user';
@@ -1085,7 +1085,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                     >
                       <span className="flex items-center gap-1 font-mono">
                         {msg.modelUsed && <span className="text-cyan-400">{msg.modelUsed}</span>}
-                        {msg.modelUsed && <span>Ã¢â‚¬Â¢</span>}
+                        {msg.modelUsed && <span>Ãƒ€š‚</span>}
                         <span>{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       </span>
 
@@ -1127,7 +1127,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
               );
             })}
 
-            {/* AnimaciÃƒÂ³n de Pensamiento (Thinking Indicator) */}
+            {/* AnimaciÃƒÆ’Ã‚ón de Pensamiento (Thinking Indicator) */}
             {isThinking && (
               <div className="flex gap-3 items-start animate-fade-in">
                 <SamiAvatar size="sm" isThinking={true} isOnline={true} showHalo={false} />
@@ -1138,7 +1138,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                       <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
-                    <span className="font-medium text-slate-300">SAMI analizando conocimiento neuroquirÃƒÂºrgico...</span>
+                    <span className="font-medium text-slate-300">SAMI analizando conocimiento neuroquirÃƒÆ’Ã‚rgico...</span>
                   </div>
                   <button
                     type="button"
@@ -1147,7 +1147,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                       const fallbackMsg: SamiChatMessage = {
                         id: `model-${Date.now()}`,
                         role: 'model',
-                        text: `Ã‚Â¡Hola Dr. Samir! AquÃƒÂ­ estoy. Ã‚Â¿En quÃƒÂ© caso clÃƒÂ­nico, escala o prescripciÃƒÂ³n desea que nos concentremos hoy?`,
+                        text: `Ãƒâ€šÃ‚Hola Dr. Samir! AquÃƒÆ’Ã‚í estoy. Ãƒâ€šÃ‚En quÃƒÆ’Ã‚í caso clÃƒÆ’Ã‚ónico, escala o prescripciÃƒÆ’Ã‚ón desea que nos concentremos hoy?`,
                         timestamp: new Date().toISOString(),
                         modelUsed: 'SAMI-Respuesta-Inmediata',
                       };
@@ -1193,13 +1193,13 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="PregÃƒÂºntale a SAMI (ej: posologÃƒÂ­a pregabalina, escala Nurick, tÃƒÂ©cnica TLIF)..."
+                placeholder="PregÃƒÆ’Ã‚óntale a SAMI (ej: posologÃƒÆ’Ã‚a pregabalina, escala Nurick, tÃƒÆ’Ã‚cnica TLIF)..."
                 rows={1}
                 className="flex-1 bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none max-h-28 py-1.5 px-1 leading-relaxed"
                 style={{ minHeight: '36px' }}
               />
 
-              {/* BotÃƒÂ³n de Dictado por Voz */}
+              {/* BotÃƒÆ’Ã‚ón de Dictado por Voz */}
               {speechSupported && (
                 <button
                   type="button"
@@ -1215,7 +1215,7 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
                 </button>
               )}
 
-              {/* BotÃƒÂ³n de Enviar */}
+              {/* BotÃƒÆ’Ã‚ón de Enviar */}
               <button
                 type="button"
                 onClick={() => handleSendMessage()}
@@ -1227,10 +1227,10 @@ export const SamiCopilot: React.FC<SamiCopilotProps> = ({
               </button>
             </div>
 
-            {/* Disclaimer MÃƒÂ©dico de Seguridad */}
+            {/* Disclaimer MÃƒÆ’Ã‚dico de Seguridad */}
             <p className="text-[10px] text-slate-400 text-center mt-1.5 flex items-center justify-center gap-1">
               <ShieldCheck className="w-3 h-3 text-cyan-400 inline" />
-              <span>SAMI es un copiloto clÃƒÂ­nico asistencial orientativo para el mÃƒÂ©dico tratante del CCMI.</span>
+              <span>SAMI es un copiloto clÃƒÆ’Ã‚ónico asistencial orientativo para el mÃƒÆ’Ã‚dico tratante del CCMI.</span>
             </p>
           </div>
         </div>

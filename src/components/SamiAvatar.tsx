@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Brain, Sparkles, Activity } from 'lucide-react';
 
 interface SamiAvatarProps {
@@ -68,7 +68,7 @@ export const SamiAvatar: React.FC<SamiAvatarProps> = ({
           />
         )}
 
-        {/* Pequeño destello de IA */}
+        {/* PequeÃ±o destello de IA */}
         <Sparkles
           className={`absolute top-0.5 right-0.5 w-2 h-2 text-amber-300 pointer-events-none ${
             isThinking ? 'animate-spin opacity-90' : 'opacity-60'
@@ -76,13 +76,13 @@ export const SamiAvatar: React.FC<SamiAvatarProps> = ({
         />
       </div>
 
-      {/* Indicador de estado en línea */}
+      {/* Indicador de estado en lÃ­nea */}
       {isOnline && (
         <span
           className={`absolute bottom-0 right-0 ${currentSize.badge} rounded-full ring-1.5 ring-slate-900 ${
             isThinking ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
           }`}
-          title={isThinking ? 'SAMI pensando...' : 'SAMI en línea (Gemini Pro/Flash)'}
+          title={isThinking ? 'SAMI pensando...' : 'SAMI en lÃ­nea (Gemini Pro/Flash)'}
         />
       )}
     </div>
