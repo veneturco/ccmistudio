@@ -1168,6 +1168,67 @@ Clasificación del dolor raquídeo y neuropático:
 * **Instrumentación:** Tornillos pediculares poliaxiales guiados por radioscopia biplanar (arco en C) y barras de titanio precorvadas con compresión axial final.`;
   }
 
+    if (q.includes('lab') || q.includes('laboratorio') || q.includes('orden') || q.includes('preoperatorio') || q.includes('perfil') || q.includes('coagulacion') || q.includes('coagulación')) {
+    return `### 🔬 Perfil Preoperatorio Quirúrgico Oficial (CCMI)
+
+Estimado Dr. Samir, para intervención quirúrgica de raquis o procedimiento neuroquirúrgico, el protocolo institucional estandarizado comprende:
+
+1. **Hematología y Coagulación Completa (Imprescindible):**
+   * **Hematología Completa & Plaquetas:** Descarte de anemia, leucocitosis y trombocitopenia.
+   * **Tiempos de Coagulación:** PT (Tiempo de Protrombina), PTT (Tiempo Parcial de Tromboplastina), INR y Dosificación de Fibrinógeno.
+   * **Tipaje Sanguíneo:** Grupo Sanguíneo y Factor Rh (D).
+
+2. **Química Sanguínea & Función Renal:**
+   * **Glicemia en ayunas:** Control metabólico prequirúrgico.
+   * **Urea y Creatinina sérica:** Evaluación de filtrado glomerular para uso de medios de contraste y AINEs.
+
+3. **Serología y Uroanálisis:**
+   * **Serologías Infecciosas:** VIH 1 y 2, VDRL (RPR).
+   * **Examen General de Orina:** Descarte de bacteriuria asintomática para evitar siembra hematógena en implantes e instrumentación de titanio.
+
+💡 *Acción Rápida:* Puede activar y emitir la **Orden de Laboratorio** directamente en la papelería oficial con todos los campos pre-tildados.`;
+  }
+
+  if (q.includes('informe') || q.includes('informe medico') || q.includes('informe médico')) {
+    return `### 📋 Redacción de Informe Médico Neuroquirúrgico Oficial
+
+El modelo oficial de **Informe Médico CCMI** del Dr. Samir Moucharrafie se estructura según el estándar médico-legal internacional:
+
+1. **Datos de Filiación:** Nombre del paciente, Cédula de Identidad y Fecha de Evaluación.
+2. **Diagnóstico Principal:** Identificación nosológica clara (Ej: *Estenosis de canal lumbar L4-L5 con radiculopatía bilateral refractaria a tratamiento médico*).
+3. **Resumen Clínico & Hallazgos:** Síntomas cardinales, tiempo de evolución, examen físico neurológico y correlación con estudios de imagen (RMN / TAC).
+4. **Plan Terapéutico:** Conducta propuesta (Tratamiento conservador protocolizado / Intervención quirúrgica descompresiva e instrumentada tipo TLIF / Cirugía MIS).
+5. **Validación:** Firma, sello digital y credenciales MPPS 61231, CMEB 5331 con código de trazabilidad.`;
+  }
+
+  if (q.includes('historia') || q.includes('anamnesis') || q.includes('examen fisico') || q.includes('examen físico') || q.includes('neurologico') || q.includes('neurológico')) {
+    return `### 🩺 Historia Clínica Neuroquirúrgica Especializada (CCMI)
+
+La ficha de Historia Clínica oficial está calibrada en formato A4 para abarcar los 5 pilares fundamentales:
+
+1. **Motivo de Consulta & Enfermedad Actual:** Desglose cronológico de dolor axial, claudicación neurógena de la marcha y parestesias.
+2. **Antecedentes Patológicos & Alergias:** Banderas rojas en hipertensión, diabetes mellitus y reacciones a fármacos analgésicos/anestésicos.
+3. **Examen Neurológico por Miotomas:**
+   * L4: Cuádriceps y dorsiflexión del pie.
+   * L5: Extensión del hallux (primer dedo) y marcha sobre talones.
+   * S1: Flexión plantar (gemelos) y marcha sobre puntas.
+   * Reflejos osteotendinosos: Rotuliano (L3-L4) y Aquiliano (S1).
+   * Maniobras radiculares: Lasègue, Bragard y Spurling (en columna cervical).
+4. **Diagnóstico Presuntivo & Conducta:** Plan de imagenología de alta resolución y terapéutica dirigida.`;
+  }
+
+  if (q.includes('constancia') || q.includes('reposo') || q.includes('incapacidad') || q.includes('licencia')) {
+    return `### 📄 Constancia Médica de Reposo Laboral Oficial
+
+La constancia médica oficial del CCMI emite la certificación médica legal con los siguientes requisitos:
+
+* **Identificación del Paciente:** Nombre completo y Cédula.
+* **Diagnóstico Codificado:** Patología de columna o postoperatorio neuroquirúrgico.
+* **Período de Reposo:** Cantidad de días en cifras y letras (Ej: *15 (quince) días continuos de reposo médico laboral*).
+* **Vigencia:** Fecha de inicio y fecha de reincorporación laboral sugerida.
+* **Certificación:** Expedida en Caracas, con firma, sello y códigos colegiados del Dr. Samir.`;
+  }
+
   if (q.includes('recipe') || q.includes('récipe') || q.includes('papeleria') || q.includes('papelería') || q.includes('doble')) {
     return `### 📄 Guía de Emisión: Récipe Doble Talón Oficial CCMI
 
@@ -1250,7 +1311,7 @@ app.post('/api/sami/chat', async (req, res) => {
           });
 
           const timeoutPromise = new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error(`Timeout en modelo ${modelName} tras 2.5s`)), 2500)
+            setTimeout(() => reject(new Error(`Timeout en modelo ${modelName} tras 8s`)), 8000)
           );
 
           const response: any = await Promise.race([modelPromise, timeoutPromise]);

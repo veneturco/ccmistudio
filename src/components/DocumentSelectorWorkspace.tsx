@@ -567,11 +567,41 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       const detail = e.detail;
       if (!detail) return;
       if (detail.type === 'RECETA') {
+        setActiveDoc('RECETA');
         setRecipeData(prev => ({ 
           ...prev, 
           rxLeft: detail.rxLeft || prev.rxLeft, 
           indicationsRight: detail.indicationsRight || prev.indicationsRight 
         }));
+      } else if (detail.type === 'ORDEN' || detail.type === 'LABORATORIO') {
+        setActiveDoc('ORDEN');
+        if (detail.labTests) {
+          setLabTests(prev => ({ ...prev, ...detail.labTests }));
+        }
+        if (detail.neuroimagingTests) {
+          setNeuroimagingTests(prev => ({ ...prev, ...detail.neuroimagingTests }));
+        }
+        if (detail.labPresumptiveDx) {
+          setLabPresumptiveDx(detail.labPresumptiveDx);
+        }
+        if (detail.labOtherExams) {
+          setLabOtherExams(detail.labOtherExams);
+        }
+      } else if (detail.type === 'INFORME') {
+        setActiveDoc('INFORME');
+        if (detail.bodyText) {
+          setInformeData(prev => ({ ...prev, bodyText: detail.bodyText }));
+        }
+      } else if (detail.type === 'CONSTANCIA') {
+        setActiveDoc('CONSTANCIA');
+        if (detail.constanciaData) {
+          setConstanciaData(prev => ({ ...prev, ...detail.constanciaData }));
+        }
+      } else if (detail.type === 'HISTORIA') {
+        setActiveDoc('HISTORIA');
+        if (detail.historiaData) {
+          setHistoriaData(prev => ({ ...prev, ...detail.historiaData }));
+        }
       }
     };
     window.addEventListener('sami-autofill', handleSamiAutofill);

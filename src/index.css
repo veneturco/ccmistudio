@@ -417,24 +417,29 @@ body {
   animation: ekg-pulse-anim 2s infinite;
 }
 
-/* 4. SAMI Copilot Synaptic Capsule */
+/* 4. SAMI Copilot Synaptic Capsule & Google Assistant M3 UI */
 @keyframes spin-slow {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-@keyframes sami-breathe {
-  0%, 100% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.2), inset 0 0 10px rgba(6, 182, 212, 0.1); }
-  50% { box-shadow: 0 0 35px rgba(6, 182, 212, 0.6), inset 0 0 20px rgba(6, 182, 212, 0.3); }
+@keyframes sami-gemini-glow {
+  0%, 100% {
+    box-shadow: 0 4px 25px -4px rgba(6, 182, 212, 0.35), 0 0 15px 0 rgba(99, 102, 241, 0.25);
+  }
+  50% {
+    box-shadow: 0 8px 35px -2px rgba(6, 182, 212, 0.6), 0 0 25px 2px rgba(168, 85, 247, 0.4);
+  }
 }
 
 .sami-capsule {
   position: relative;
   overflow: hidden;
-  animation: sami-breathe 4s ease-in-out infinite;
-  background: rgba(15, 23, 42, 0.7); /* slate-900 with transparency */
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  animation: sami-gemini-glow 5s ease-in-out infinite;
+  background: rgba(11, 19, 41, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
 .sami-synaptic-border {
@@ -443,8 +448,16 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: conic-gradient(from 0deg, transparent 0%, transparent 60%, rgba(6, 182, 212, 0.9) 80%, rgba(16, 185, 129, 0.9) 100%);
-  animation: spin-slow 4s linear infinite;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 45%,
+    rgba(6, 182, 212, 0.9) 70%,
+    rgba(99, 102, 241, 0.85) 85%,
+    rgba(168, 85, 247, 0.9) 95%,
+    rgba(16, 185, 129, 0.9) 100%
+  );
+  animation: spin-slow 5s linear infinite;
   z-index: 0;
 }
 
