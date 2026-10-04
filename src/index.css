@@ -448,3 +448,36 @@ html, body {
   border-radius: inherit;
   margin: 1.5px; /* Border thickness */
 }
+
+/* Responsive A4 Zoom for Mobile to prevent layout breakage */
+@media (max-width: 500px) {
+  .a4-responsive-container {
+    zoom: 0.45;
+  }
+}
+@media (min-width: 501px) and (max-width: 639px) {
+  .a4-responsive-container {
+    zoom: 0.6;
+  }
+}
+@media (min-width: 640px) and (max-width: 768px) {
+  .a4-responsive-container {
+    zoom: 0.75;
+  }
+}
+@media (min-width: 769px) and (max-width: 1023px) {
+  .a4-responsive-container {
+    zoom: 0.85;
+  }
+}
+@media (min-width: 1024px) {
+  .a4-responsive-container {
+    zoom: 1;
+  }
+}
+/* Print should always be 100% */
+@media print {
+  .a4-responsive-container {
+    zoom: 1 !important;
+  }
+}

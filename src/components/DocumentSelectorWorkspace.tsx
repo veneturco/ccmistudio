@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { 
   Pill, 
   FileText, 
@@ -121,8 +121,8 @@ function mapTestsToCanonical(testItems: string[], currentLabTests: Record<string
     const s = str.trim();
     if (/\b(orden_p1|orden_p2|cb_|clinical\.|patient\.|document\.|recipe\.|certificate\.|labTests\.|lab_order)\b/i.test(s)) return true;
     if (s.includes('.')) return true;
-    if (/^(rmn|tac|radiologia|radiología|rx|eeg|emg|pess|valoracion|valoración|resonancia|tomografia|tomografía|radiografia|radiografía|rayos\s*x|electroencefalograma|electromiografia|electromiografía|potenciales\s*evocados|riesgo\s*quirurgico|riesgo\s*quirúrgico)$/i.test(s)) return true;
-    if (/^(perfil\s*(preoperatorio|20|lipidico|lipídico|hepatico|hepático|tiroideo|renal)|laboratorio|laboratorios|tests|estudios)$/i.test(s)) return true;
+    if (/^(rmn|tac|radiologia|radiologÃ­a|rx|eeg|emg|pess|valoracion|valoraciÃ³n|resonancia|tomografia|tomografÃ­a|radiografia|radiografÃ­a|rayos\s*x|electroencefalograma|electromiografia|electromiografÃ­a|potenciales\s*evocados|riesgo\s*quirurgico|riesgo\s*quirÃºrgico)$/i.test(s)) return true;
+    if (/^(perfil\s*(preoperatorio|20|lipidico|lipÃ­dico|hepatico|hepÃ¡tico|tiroideo|renal)|laboratorio|laboratorios|tests|estudios)$/i.test(s)) return true;
     return false;
   };
 
@@ -147,12 +147,12 @@ function mapTestsToCanonical(testItems: string[], currentLabTests: Record<string
 
     const norm = normalize(test);
 
-    // B. Reglas semánticas clínicas hacia casillas físicas del Master
+    // B. Reglas semÃ¡nticas clÃ­nicas hacia casillas fÃ­sicas del Master
     if (/\b(sodio|potasio|cloro|electrolito|electrolitos|ionograma|na|k|cl)\b/.test(norm)) {
-      newLab['Electrolitos Séricos (Na, K, Cl)'] = true;
+      newLab['Electrolitos SÃ©ricos (Na, K, Cl)'] = true;
       matched = true;
     } else if (/\b(calcio|fosforo|calcemia|ca|p)\b/.test(norm)) {
-      newLab['Calcio Sérico / Fósforo'] = true;
+      newLab['Calcio SÃ©rico / FÃ³sforo'] = true;
       matched = true;
     } else if (/\b(transaminasas|tgo|tgp|ast|alt)\b/.test(norm)) {
       newLab['Transaminasas (TGO / TGP)'] = true;
@@ -164,7 +164,7 @@ function mapTestsToCanonical(testItems: string[], currentLabTests: Record<string
       newLab['T3, T4 Libre y TSH'] = true;
       matched = true;
     } else if (/\b(hematologia|hemograma|formula|leucocitos|hemoglobina|hematocrito|cbc)\b/.test(norm)) {
-      newLab['Hematología Completa'] = true;
+      newLab['HematologÃ­a Completa'] = true;
       matched = true;
     } else if (/\b(glicemia|glucosa|hba1c|insulina|azucar)\b/.test(norm)) {
       newLab['Glicemia'] = true;
@@ -181,7 +181,7 @@ function mapTestsToCanonical(testItems: string[], currentLabTests: Record<string
     } else if (/\b(preoperatorio)\b/.test(norm)) {
       newLab['Perfil Preoperatorio Completo'] = true;
       matched = true;
-    } else if (/\b(coagulacion|coagulación|tiempos de coagulacion|tiempos de coagulación|hemostasia)\b/.test(norm)) {
+    } else if (/\b(coagulacion|coagulaciÃ³n|tiempos de coagulacion|tiempos de coagulaciÃ³n|hemostasia)\b/.test(norm)) {
       newLab['Pt (Tiempo Protrombina)'] = true;
       newLab['Ptt (Tiempo Parcial de Tromboplastina)'] = true;
       matched = true;
@@ -191,29 +191,29 @@ function mapTestsToCanonical(testItems: string[], currentLabTests: Record<string
     } else if (/\b(tpt|ptt|tromboplastina)\b/.test(norm)) {
       newLab['Ptt (Tiempo Parcial de Tromboplastina)'] = true;
       matched = true;
-    } else if (/\b(fibrinogeno|fibrinógeno)\b/.test(norm)) {
-      newLab['Dosificación de Fibrinógeno'] = true;
+    } else if (/\b(fibrinogeno|fibrinÃ³geno)\b/.test(norm)) {
+      newLab['DosificaciÃ³n de FibrinÃ³geno'] = true;
       matched = true;
     } else if (/\b(plaqueta|plaquetas|plaquetario)\b/.test(norm)) {
       newLab['Plaquetas'] = true;
       matched = true;
-    } else if (/\b(vsg|eritrosedimentacion|eritrosedimentación)\b/.test(norm)) {
-      newLab['Eritrosedimentación (VSG)'] = true;
+    } else if (/\b(vsg|eritrosedimentacion|eritrosedimentaciÃ³n)\b/.test(norm)) {
+      newLab['EritrosedimentaciÃ³n (VSG)'] = true;
       matched = true;
     } else if (/\b(grupo|rh|tipiaje|factor rh)\b/.test(norm)) {
-      newLab['Grupo Sanguíneo, Factor Rh (D)'] = true;
+      newLab['Grupo SanguÃ­neo, Factor Rh (D)'] = true;
       matched = true;
     } else if (/\b(hiv|vih|sida)\b/.test(norm)) {
       newLab['HIV'] = true;
       matched = true;
-    } else if (/\b(vdrl|rpr|luetica|luética|sifilis|sífilis)\b/.test(norm)) {
+    } else if (/\b(vdrl|rpr|luetica|luÃ©tica|sifilis|sÃ­filis)\b/.test(norm)) {
       newLab['VDRL'] = true;
       matched = true;
-    } else if (/\b(pcr|proteina c reactiva|proteína c reactiva)\b/.test(norm)) {
+    } else if (/\b(pcr|proteina c reactiva|proteÃ­na c reactiva)\b/.test(norm)) {
       newLab['Proteina "C" Reactiva'] = true;
       matched = true;
-    } else if (/\b(acido urico|ácido úrico|uricemia)\b/.test(norm)) {
-      newLab['Ácido Úrico'] = true;
+    } else if (/\b(acido urico|Ã¡cido Ãºrico|uricemia)\b/.test(norm)) {
+      newLab['Ãcido Ãšrico'] = true;
       matched = true;
     } else if (/\b(bilirrubina|bilirrubinas)\b/.test(norm)) {
       newLab['Bilirrubina Total y Fraccionada'] = true;
@@ -227,12 +227,12 @@ function mapTestsToCanonical(testItems: string[], currentLabTests: Record<string
     } else if (/\b(urocultivo)\b/.test(norm)) {
       newLab['Urocultivo y Antibiograma'] = true;
       matched = true;
-    } else if (/\b(coproanalisis|coproanálisis|heces)\b/.test(norm)) {
-      newLab['Coproanálisis'] = true;
+    } else if (/\b(coproanalisis|coproanÃ¡lisis|heces)\b/.test(norm)) {
+      newLab['CoproanÃ¡lisis'] = true;
       matched = true;
     }
 
-    // C. Búsqueda normalizada contra todos los checkboxes del Master
+    // C. BÃºsqueda normalizada contra todos los checkboxes del Master
     if (!matched) {
       for (const cb of MASTER_P1_CHECKBOXES) {
         const rawKey = cb.dataKey.replace(/^labTests\./, '');
@@ -246,7 +246,7 @@ function mapTestsToCanonical(testItems: string[], currentLabTests: Record<string
       }
     }
 
-    // D. Si no es checkbox físico, pasa a Otros Exámenes (ej: Magnesio)
+    // D. Si no es checkbox fÃ­sico, pasa a Otros ExÃ¡menes (ej: Magnesio)
     if (!matched) {
       unmapped.push(test);
     }
@@ -282,12 +282,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
 }) => {
   const { isClinicalLight, isAutoSchedule, toggleTheme } = useTheme();
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState<boolean>(false);
-  // Modo Consulta Silenciosa (Ergonomía No Invasiva para Doctores)
+  // Modo Consulta Silenciosa (ErgonomÃ­a No Invasiva para Doctores)
   const [isZenMode, setIsZenMode] = useState<boolean>(true);
   // 1. Selector del Documento Activo (Exactamente las 5 Plantillas Oficiales)
   const [activeDoc, setActiveDoc] = useState<DocType>(initialDocType || 'RECIPES');
 
-  // 2. Controles de Visualización, Zonas Editables y Sello Oficial
+  // 2. Controles de VisualizaciÃ³n, Zonas Editables y Sello Oficial
   const [showZoneGuides, setShowZoneGuides] = useState<boolean>(true);
   const [showStamp, setShowStamp] = useState<boolean>(true);
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
@@ -332,7 +332,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     };
   }, [isMoreMenuOpen, isShareMenuOpen]);
 
-  // === MODO PROGRAMADOR / TALLER DE CALIBRACIÓN MAESTRA & MOTOR IA ===
+  // === MODO PROGRAMADOR / TALLER DE CALIBRACIÃ“N MAESTRA & MOTOR IA ===
   const [isDeveloperMode, setIsDeveloperMode] = useState<boolean>(false);
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
@@ -346,7 +346,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
   }));
   const [calibVersion, setCalibVersion] = useState<number>(0);
 
-  // Calibraciones Maestras Dinámicas V2 y Guardadas
+  // Calibraciones Maestras DinÃ¡micas V2 y Guardadas
   const isCalibrating = false;
   const currentCalibration = activeCalibrations?.[activeDoc] || DEFAULT_CALIBRATIONS?.[activeDoc] || {};
 
@@ -429,7 +429,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
   const handleSaveAsFactoryDefault = () => {
     saveStoredCalibration(activeDoc, currentCalibration);
     setHasUnsavedChanges(false);
-    setSaveStatus(`¡Calibración de fábrica guardada con éxito para ${DOCUMENT_DEFINITIONS[activeDoc]?.shortName || activeDoc}!`);
+    setSaveStatus(`Â¡CalibraciÃ³n de fÃ¡brica guardada con Ã©xito para ${DOCUMENT_DEFINITIONS[activeDoc]?.shortName || activeDoc}!`);
     setTimeout(() => setSaveStatus(null), 4000);
   };
 
@@ -440,7 +440,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       [activeDoc]: resetCalib,
     }));
     setHasUnsavedChanges(false);
-    setSaveStatus(`Coordenadas restablecidas a valores por defecto de fábrica.`);
+    setSaveStatus(`Coordenadas restablecidas a valores por defecto de fÃ¡brica.`);
     setTimeout(() => setSaveStatus(null), 3000);
   };
 
@@ -468,8 +468,8 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     }).catch(err => console.warn('[SYNAPSIS SYNC] Fallo subiendo template:', err));
 
     const docName = DOCUMENT_DEFINITIONS[docType as DocType]?.shortName || 
-      (docType === 'ORDEN_LAB_P2' ? 'Orden Lab (Página 2)' : (docType === 'ORDEN_LAB' ? 'Orden Lab (Página 1)' : docType));
-    setSaveStatus(`Papelería oficial para ${docName} actualizada.`);
+      (docType === 'ORDEN_LAB_P2' ? 'Orden Lab (PÃ¡gina 2)' : (docType === 'ORDEN_LAB' ? 'Orden Lab (PÃ¡gina 1)' : docType));
+    setSaveStatus(`PapelerÃ­a oficial para ${docName} actualizada.`);
     setTimeout(() => setSaveStatus(null), 4000);
   };
 
@@ -477,23 +477,23 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     const { [docType]: _, ...rest } = customBgs;
     setCustomBgs(rest);
     await removeCustomTemplate(docType);
-    setSaveStatus('Plantilla restablecida a la papelería oficial base.');
+    setSaveStatus('Plantilla restablecida a la papelerÃ­a oficial base.');
     setTimeout(() => setSaveStatus(null), 3000);
   };
 
   const handleResetAllTemplates = async () => {
     setCustomBgs({});
     await resetAllCustomTemplates();
-    setSaveStatus('Todas las plantillas han sido restablecidas a la papelería oficial base.');
+    setSaveStatus('Todas las plantillas han sido restablecidas a la papelerÃ­a oficial base.');
     setTimeout(() => setSaveStatus(null), 3000);
   };
 
   useEffect(() => {
-    // Precarga instantánea de las 5 plantillas oficiales base (300 DPI) para zero layout shifts
+    // Precarga instantÃ¡nea de las 5 plantillas oficiales base (300 DPI) para zero layout shifts
     preloadAllOfficialTemplates();
     loadLocalTemplates();
 
-    // Sincronización en tiempo real con el Editor de Zonas A4 y Calibrador Milimétrico V2
+    // SincronizaciÃ³n en tiempo real con el Editor de Zonas A4 y Calibrador MilimÃ©trico V2
     const handleCalibrationSync = (e: any) => {
       const { docType, calibration } = e.detail || {};
       if (docType && calibration) {
@@ -505,7 +505,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       setCalibVersion((v) => v + 1);
     };
 
-    // Sincronización en tiempo real de papelería oficial desde la nube Firestore
+    // SincronizaciÃ³n en tiempo real de papelerÃ­a oficial desde la nube Firestore
     const handleStationerySync = (e: any) => {
       const { docType, dataUrl } = e.detail || {};
       if (docType && dataUrl) {
@@ -526,7 +526,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     };
   }, []);
 
-  // Determinar la imagen de fondo activa para la plantilla actual (Custom local si existe, o fija de fábrica)
+  // Determinar la imagen de fondo activa para la plantilla actual (Custom local si existe, o fija de fÃ¡brica)
   const activeBgUrl = customBgs[activeDoc] || getOfficialTemplateUrl(activeDoc);
 
   // 3. Datos del Paciente Compartidos
@@ -548,20 +548,20 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     onPatientChange?.(patient);
   }, [patient, onPatientChange]);
 
-  // Modo de Vista Móvil: 'sheet' (Hoja A4 Física Calibrada por defecto) o 'card' (Ficha de Bolsillo)
+  // Modo de Vista MÃ³vil: 'sheet' (Hoja A4 FÃ­sica Calibrada por defecto) o 'card' (Ficha de Bolsillo)
   const [mobileViewMode, setMobileViewMode] = useState<'card' | 'sheet'>('sheet');
 
   // ==========================================
   // ESTADOS DE LOS 5 DOCUMENTOS OFICIALES
   // ==========================================
 
-  // --- 1. RÉCIPE MÉDICO (DOBLE TALÓN) ---
+  // --- 1. RÃ‰CIPE MÃ‰DICO (DOBLE TALÃ“N) ---
   const [recipeData, setRecipeData] = useState({
     rxLeft: '',
     indicationsRight: '',
   });
 
-  // === MEJORA: AGENTE AUTÓNOMO SAMI (AUTO-FILL) ===
+  // === MEJORA: AGENTE AUTÃ“NOMO SAMI (AUTO-FILL) ===
   useEffect(() => {
     const handleSamiAutofill = (e: any) => {
       const detail = e.detail;
@@ -580,37 +580,37 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
   // ===============================================
 
 
-  // --- 2. INFORME MÉDICO ---
+  // --- 2. INFORME MÃ‰DICO ---
   const [informeData, setInformeData] = useState({
     bodyText: '',
   });
 
-  // --- 3. ORDEN DE LABORATORIO / IMÁGENES ---
+  // --- 3. ORDEN DE LABORATORIO / IMÃGENES ---
   const [labTests, setLabTests] = useState<Record<string, boolean>>({
-    'Hematología Completa': false,
+    'HematologÃ­a Completa': false,
     'Plaquetas': false,
-    'Eritrosedimentación (VSG)': false,
+    'EritrosedimentaciÃ³n (VSG)': false,
     'Pt (Tiempo Protrombina)': false,
     'Ptt (Tiempo Parcial de Tromboplastina)': false,
-    'Dosificación de Fibrinógeno': false,
+    'DosificaciÃ³n de FibrinÃ³geno': false,
     'Glicemia': false,
     'Urea': false,
     'Creatinina': false,
     'HIV': false,
     'VDRL': false,
-    'Grupo Sanguíneo, Factor Rh (D)': false,
+    'Grupo SanguÃ­neo, Factor Rh (D)': false,
     'Proteina "C" Reactiva': false,
     'Examen General de Orina': false,
   });
 
   const [neuroimagingTests, setNeuroimagingTests] = useState<Record<string, boolean>>({
-    'RADIOLOGÍA': false,
-    'TOMOGRAFÍA AXIAL COMPUTARIZADA': false,
-    'RESONANCIA MAGNÉTICA': false,
+    'RADIOLOGÃA': false,
+    'TOMOGRAFÃA AXIAL COMPUTARIZADA': false,
+    'RESONANCIA MAGNÃ‰TICA': false,
     'ELECTROENCEFALOGRAMA': false,
     'ELECTROMIOGRAFIA': false,
     'POTENCIALES EVOCADOS': false,
-    'VALORACIÓN': false,
+    'VALORACIÃ“N': false,
   });
 
   const [neuroimagingDetails, setNeuroimagingDetails] = useState<Record<string, string>>({});
@@ -619,7 +619,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
   const [labOtherExams, setLabOtherExams] = useState<string>('');
   const [labViewMode, setLabViewMode] = useState<'p1' | 'p2' | 'both'>('both');
 
-  // --- 4. CONSTANCIA MÉDICA / REPOSO ---
+  // --- 4. CONSTANCIA MÃ‰DICA / REPOSO ---
   const [constanciaData, setConstanciaData] = useState({
     attendedDate: defaultPatient.date,
     condition: (defaultPatient.condition || 'Paciente') as 'Paciente' | 'Familiar',
@@ -634,7 +634,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     requestYear: new Date().getFullYear().toString(),
   });
 
-  // --- 5. HISTORIA CLÍNICA ---
+  // --- 5. HISTORIA CLÃNICA ---
   const [historiaData, setHistoriaData] = useState({
     motivoConsulta: '',
     enfermedadActual: '',
@@ -643,7 +643,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     diagnostico: '',
   });
 
-  // Hidratación directa desde Widgets de Acceso Rápido Clínico
+  // HidrataciÃ³n directa desde Widgets de Acceso RÃ¡pido ClÃ­nico
   useEffect(() => {
     if (!initialPresetData) return;
 
@@ -658,7 +658,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       setLabPresumptiveDx(initialPresetData.diagnosis);
       setInformeData((prev) => ({
         ...prev,
-        bodyText: `DIAGNÓSTICO:\n${initialPresetData.diagnosis}${initialPresetData.cie10 ? ` (CIE-10: ${initialPresetData.cie10})` : ''}\n\nPLAN Y CONDUCTA:\n${initialPresetData.indications || 'Manejo protocolizado en Centro Médico Orinokia.'}`,
+        bodyText: `DIAGNÃ“STICO:\n${initialPresetData.diagnosis}${initialPresetData.cie10 ? ` (CIE-10: ${initialPresetData.cie10})` : ''}\n\nPLAN Y CONDUCTA:\n${initialPresetData.indications || 'Manejo protocolizado en Centro MÃ©dico Orinokia.'}`,
       }));
       setConstanciaData((prev) => ({
         ...prev,
@@ -669,26 +669,26 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     }
 
     if (initialPresetData.labProfile === 'Neuroimagen de Columna') {
-      setNeuroimagingTests((prev) => ({ ...prev, 'RESONANCIA MAGNÉTICA': true }));
+      setNeuroimagingTests((prev) => ({ ...prev, 'RESONANCIA MAGNÃ‰TICA': true }));
       setNeuroimagingDetails((prev) => ({
         ...prev,
-        'RESONANCIA MAGNÉTICA': initialPresetData.indications || 'RMN Columna Lumbar con cortes sagitales y axiales.',
+        'RESONANCIA MAGNÃ‰TICA': initialPresetData.indications || 'RMN Columna Lumbar con cortes sagitales y axiales.',
       }));
     } else if (initialPresetData.labProfile === 'Preoperatorio Completo') {
       setLabTests((prev) => ({
         ...prev,
-        'Hematología Completa': true,
+        'HematologÃ­a Completa': true,
         'Pt (Tiempo Protrombina)': true,
         'Ptt (Tiempo Parcial de Tromboplastina)': true,
-        'Dosificación de Fibrinógeno': true,
+        'DosificaciÃ³n de FibrinÃ³geno': true,
         'Glicemia': true,
         'Urea': true,
         'Creatinina': true,
         'HIV': true,
         'VDRL': true,
       }));
-      setNeuroimagingTests((prev) => ({ ...prev, 'RADIOLOGÍA': true, 'VALORACIÓN': true }));
-      setLabOtherExams('Electrocardiograma (EKG) con valoración cardiovascular preoperatoria.');
+      setNeuroimagingTests((prev) => ({ ...prev, 'RADIOLOGÃA': true, 'VALORACIÃ“N': true }));
+      setLabOtherExams('Electrocardiograma (EKG) con valoraciÃ³n cardiovascular preoperatoria.');
     }
   }, [initialPresetData]);
 
@@ -708,12 +708,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     }
   };
 
-  // Sincronización Global desde el Dictado de Voz (Gemini 2.5 Flash)
+  // SincronizaciÃ³n Global desde el Dictado de Voz (Gemini 2.5 Flash)
   const handleSyncAllDocuments = (extractedData: any) => {
     if (!extractedData) return;
     const updated = new Set<string>();
 
-    // 1. Datos del Paciente (Normalización garantizada de nombres y cédula)
+    // 1. Datos del Paciente (NormalizaciÃ³n garantizada de nombres y cÃ©dula)
     const patientCondition = (extractedData.patient?.condition || 
       (extractedData.restCertificate?.condition?.toUpperCase() === 'FAMILIAR' ? 'Familiar' : 'Paciente')) as 'Paciente' | 'Familiar';
 
@@ -733,7 +733,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     if (extractedData.patient?.date) updated.add('patient.date');
     if (extractedData.patient?.guideNumber) updated.add('patient.guideNumber');
 
-    // 2. Récipe (Coalescencia estricta de claves duales: recipeDual, recipe legado, treatment e indications)
+    // 2. RÃ©cipe (Coalescencia estricta de claves duales: recipeDual, recipe legado, treatment e indications)
     const finalRxLeft = 
       extractedData.recipeDual?.pharmacy || 
       extractedData.recipe?.rxLeft || 
@@ -755,24 +755,24 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       if (finalRxRight) updated.add('recipe.indicationsRight');
     }
 
-    // 3. Informe Médico (Soporta clinicalReport e informe)
+    // 3. Informe MÃ©dico (Soporta clinicalReport e informe)
     const reportText = extractedData.clinicalReport || (extractedData.informe?.bodyText);
     if (reportText) {
       setInformeData({ bodyText: reportText });
       updated.add('informe.bodyText');
     } else if (extractedData.informe) {
       const infText = [
-        `Por medio de la presente se hace constar que el/la paciente ${(extractedData.patient?.fullName || patient.fullName).toUpperCase()}, titular de la C.I. ${extractedData.patient?.idNumber || patient.idNumber}, de ${extractedData.patient?.age || patient.age} años de edad, se encuentra bajo control por el servicio de Neurocirugía y Cirugía de Columna Mínimamente Invasiva.`,
+        `Por medio de la presente se hace constar que el/la paciente ${(extractedData.patient?.fullName || patient.fullName).toUpperCase()}, titular de la C.I. ${extractedData.patient?.idNumber || patient.idNumber}, de ${extractedData.patient?.age || patient.age} aÃ±os de edad, se encuentra bajo control por el servicio de NeurocirugÃ­a y CirugÃ­a de Columna MÃ­nimamente Invasiva.`,
         '',
         `MOTIVO Y ANTECEDENTES:\n${extractedData.informe.motivo || ''}\n${extractedData.informe.antecedentes || ''}`,
         '',
         `ENFERMEDAD ACTUAL:\n${extractedData.informe.enfermedadActual || ''}`,
         '',
-        `EXAMEN FÍSICO NEUROLÓGICO:\n${extractedData.informe.examenFisico || ''}`,
+        `EXAMEN FÃSICO NEUROLÃ“GICO:\n${extractedData.informe.examenFisico || ''}`,
         '',
-        `CORRELACIÓN DE ESTUDIOS PARACLÍNICOS:\n${extractedData.informe.estudiosParaclinicos || ''}`,
+        `CORRELACIÃ“N DE ESTUDIOS PARACLÃNICOS:\n${extractedData.informe.estudiosParaclinicos || ''}`,
         '',
-        `DIAGNÓSTICO:\n${extractedData.diagnosisPrincipal || extractedData.informe.diagnostico || ''}`,
+        `DIAGNÃ“STICO:\n${extractedData.diagnosisPrincipal || extractedData.informe.diagnostico || ''}`,
         '',
         `PLAN Y CONDUCTA:\n${extractedData.informe.planConducta || ''}`,
       ].join('\n');
@@ -780,7 +780,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       updated.add('informe.bodyText');
     }
 
-    // 4. Orden Lab e Imágenes
+    // 4. Orden Lab e ImÃ¡genes
     const labSource = extractedData.ordenLab || extractedData.labAndImagesOrder || (extractedData as any).laboratory;
     if (extractedData.diagnosisPrincipal && !labPresumptiveDx) {
       setLabPresumptiveDx(extractedData.diagnosisPrincipal);
@@ -792,7 +792,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         updated.add('ordenLab.diagnosticoPresuntivo');
       }
 
-      // Procesar laboratorios con desglosamiento canónico
+      // Procesar laboratorios con desglosamiento canÃ³nico
       const rawLabList: string[] = [];
       const appendItems = (arr: any) => {
         if (Array.isArray(arr)) {
@@ -874,11 +874,11 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         rawNeuroList.forEach((item: string) => {
           const norm = item.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
           if (norm.includes('rmn') || norm.includes('resonancia') || norm.includes('mri')) {
-            newNeuro['RESONANCIA MAGNÉTICA'] = true;
+            newNeuro['RESONANCIA MAGNÃ‰TICA'] = true;
           } else if (norm.includes('tac') || norm.includes('tomograf')) {
-            newNeuro['TOMOGRAFÍA AXIAL COMPUTARIZADA'] = true;
+            newNeuro['TOMOGRAFÃA AXIAL COMPUTARIZADA'] = true;
           } else if (norm.includes('rx') || norm.includes('radiolog')) {
-            newNeuro['RADIOLOGÍA'] = true;
+            newNeuro['RADIOLOGÃA'] = true;
           } else if (norm.includes('eeg') || norm.includes('electroencefal')) {
             newNeuro['ELECTROENCEFALOGRAMA'] = true;
           } else if (norm.includes('emg') || norm.includes('electromiogr')) {
@@ -886,7 +886,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           } else if (norm.includes('pess') || norm.includes('potenciales')) {
             newNeuro['POTENCIALES EVOCADOS'] = true;
           } else if (norm.includes('valoraci') || norm.includes('cardiovascular')) {
-            newNeuro['VALORACIÓN'] = true;
+            newNeuro['VALORACIÃ“N'] = true;
           } else {
             Object.keys(newNeuro).forEach((k) => {
               if (k.toLowerCase().includes(norm) || norm.includes(k.toLowerCase())) {
@@ -900,7 +900,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       }
     }
 
-    // 5. Constancia Médica
+    // 5. Constancia MÃ©dica
     const restSource = extractedData.restCertificate || extractedData.constancia;
     if (restSource) {
       const isNeedsRest = typeof restSource.needsRest === 'boolean' 
@@ -927,7 +927,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       updated.add('constancia.condition');
     }
 
-    // 6. Historia Clínica
+    // 6. Historia ClÃ­nica
     const histSource = extractedData.clinicalHistory || extractedData.historia;
     if (histSource) {
       setHistoriaData((prev) => ({
@@ -941,7 +941,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       updated.add('historia.motivo');
     }
 
-    // Manejo de campos inciertos para semáforo visual
+    // Manejo de campos inciertos para semÃ¡foro visual
     if (Array.isArray(extractedData.uncertainFields)) {
       setUncertainFields(extractedData.uncertainFields);
     }
@@ -949,7 +949,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     setRecentlyUpdatedFields(updated);
     setTimeout(() => setRecentlyUpdatedFields(new Set()), 3500);
 
-    setSaveStatus('✓ Datos sincronizados automáticamente en los 5 documentos oficiales');
+    setSaveStatus('âœ“ Datos sincronizados automÃ¡ticamente en los 5 documentos oficiales');
     setTimeout(() => setSaveStatus(null), 4000);
   };
 
@@ -979,7 +979,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     if (rec.documentStates?.informe) {
       setInformeData({
         bodyText: [
-          `Por medio de la presente se hace constar que ${rec.fullName.toUpperCase()} (C.I. ${rec.nationalId}, ${rec.age} años) se encuentra bajo control neuroquirúrgico.`,
+          `Por medio de la presente se hace constar que ${rec.fullName.toUpperCase()} (C.I. ${rec.nationalId}, ${rec.age} aÃ±os) se encuentra bajo control neuroquirÃºrgico.`,
           '',
           rec.documentStates.informe.motivo,
           rec.documentStates.informe.enfermedadActual,
@@ -1031,13 +1031,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       documentStates: {
         recipe: recipeData,
         informe: {
-          motivo: 'Evaluación de Neurocirugía',
+          motivo: 'EvaluaciÃ³n de NeurocirugÃ­a',
           antecedentes: 'Revisados',
           enfermedadActual: informeData.bodyText.slice(0, 300),
           examenFisico: 'Evaluado',
           estudiosParaclinicos: 'RMN/TAC',
           diagnostico: historiaData.diagnostico,
-          planConducta: 'Manejo ambulatorio/quirúrgico',
+          planConducta: 'Manejo ambulatorio/quirÃºrgico',
         },
         ordenLab: {
           perfilPreoperatorio: Object.keys(labTests).filter(k => labTests[k]),
@@ -1067,13 +1067,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     setIsWhatsAppPdfModalOpen(true);
   };
 
-  // Carga rápida de protocolos habituales de Neurocirugía en 1 clic
+  // Carga rÃ¡pida de protocolos habituales de NeurocirugÃ­a en 1 clic
   const handleApplyPreset = (preset: ClinicalProtocolPreset) => {
     if (preset.targetDoc) {
       setActiveDoc(preset.targetDoc);
     }
 
-    // 1. Récipe (Soporte directo para formato clinical_presets.json y legacy)
+    // 1. RÃ©cipe (Soporte directo para formato clinical_presets.json y legacy)
     const rxLeftText = (preset as any).treatment || preset.prescription?.pharmacy || '';
     const rxRightText = (preset as any).instructions || preset.prescription?.patientIndications || '';
     const diagText = (preset as any).diagnosis || preset.labOrders?.presumptiveDx || (preset as any).informe?.diagnosis || '';
@@ -1085,7 +1085,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       });
     }
 
-    // 2. Diagnóstico en laboratorio y constancia
+    // 2. DiagnÃ³stico en laboratorio y constancia
     if (diagText) {
       setLabPresumptiveDx(diagText);
       setConstanciaData(prev => ({
@@ -1094,7 +1094,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       }));
     }
 
-    // 3. Orden de laboratorio e imágenes
+    // 3. Orden de laboratorio e imÃ¡genes
     if (preset.labOrders) {
       if (preset.labOrders.presumptiveDx) {
         setLabPresumptiveDx(preset.labOrders.presumptiveDx);
@@ -1139,17 +1139,17 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     // 4. Informe
     if (preset.informe) {
       const informeText = [
-        `Por medio de la presente se hace constar que el/la paciente ${(patient.fullName || 'PACIENTE').toUpperCase()}, titular de la C.I. ${patient.idNumber || 'V-00.000.000'}, de ${patient.age || '45'} años de edad, se encuentra bajo control por el servicio de Neurocirugía y Cirugía de Columna Mínimamente Invasiva.`,
+        `Por medio de la presente se hace constar que el/la paciente ${(patient.fullName || 'PACIENTE').toUpperCase()}, titular de la C.I. ${patient.idNumber || 'V-00.000.000'}, de ${patient.age || '45'} aÃ±os de edad, se encuentra bajo control por el servicio de NeurocirugÃ­a y CirugÃ­a de Columna MÃ­nimamente Invasiva.`,
         '',
-        `RESUMEN CLÍNICO:\n${preset.informe.clinicalSummary}`,
+        `RESUMEN CLÃNICO:\n${preset.informe.clinicalSummary}`,
         '',
-        `DIAGNÓSTICO:\n${preset.informe.diagnosis}`,
+        `DIAGNÃ“STICO:\n${preset.informe.diagnosis}`,
         '',
-        `PLAN TERAPÉUTICO Y CONDUCTA:\n${preset.informe.plan}`,
+        `PLAN TERAPÃ‰UTICO Y CONDUCTA:\n${preset.informe.plan}`,
       ].join('\n');
       setInformeData({ bodyText: informeText });
     } else if (diagText && rxLeftText) {
-      const autoInforme = `EVALUACIÓN DE NEUROCIRUGÍA Y CIRUGÍA DE COLUMNA:\n\nPaciente ${(patient.fullName || 'PACIENTE').toUpperCase()} evaluado en consulta especializada.\n\nIMPRESIÓN DIAGNÓSTICA:\n${diagText} ${preset.icd10 ? `(CIE-10: ${preset.icd10})` : ''}\n\nPLAN Y TRATAMIENTO:\n${rxLeftText}\n\nINDICACIONES:\n${rxRightText}`;
+      const autoInforme = `EVALUACIÃ“N DE NEUROCIRUGÃA Y CIRUGÃA DE COLUMNA:\n\nPaciente ${(patient.fullName || 'PACIENTE').toUpperCase()} evaluado en consulta especializada.\n\nIMPRESIÃ“N DIAGNÃ“STICA:\n${diagText} ${preset.icd10 ? `(CIE-10: ${preset.icd10})` : ''}\n\nPLAN Y TRATAMIENTO:\n${rxLeftText}\n\nINDICACIONES:\n${rxRightText}`;
       setInformeData({ bodyText: autoInforme });
     }
 
@@ -1167,7 +1167,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     setTimeout(() => setSaveStatus(null), 3000);
   };
 
-  // Manejo de clic fuera del menú de herramientas y atajos de teclado
+  // Manejo de clic fuera del menÃº de herramientas y atajos de teclado
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (toolsMenuRef.current && !toolsMenuRef.current.contains(event.target as Node)) {
@@ -1190,15 +1190,15 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     };
   }, []);
 
-  // Impresión Directa Canónica 100% Calibrada con Fondo Master Oficial
+  // ImpresiÃ³n Directa CanÃ³nica 100% Calibrada con Fondo Master Oficial
   const handleDirectPrint = async () => {
     if (!patient.fullName || patient.fullName.trim() === '' || patient.fullName.trim() === 'Paciente') {
       const confirmContinue = window.confirm(
-        '⚠️ El Nombre del Paciente está vacío en el encabezado.\n\nPor normativa médico-legal del MPPS, todo documento debe identificar al paciente.\n\n¿Desea imprimir de todos modos?'
+        'âš ï¸ El Nombre del Paciente estÃ¡ vacÃ­o en el encabezado.\n\nPor normativa mÃ©dico-legal del MPPS, todo documento debe identificar al paciente.\n\nÂ¿Desea imprimir de todos modos?'
       );
       if (!confirmContinue) {
         document.getElementById('patient-name-input')?.focus();
-        setSaveStatus('⚠️ Por favor ingrese el Nombre y Cédula del Paciente en la barra superior.');
+        setSaveStatus('âš ï¸ Por favor ingrese el Nombre y CÃ©dula del Paciente en la barra superior.');
         setTimeout(() => setSaveStatus(null), 4000);
         return;
       }
@@ -1264,12 +1264,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       document.body.appendChild(iframe);
       iframe.onload = () => {
         try {
-          // Detectar si estamos en un dispositivo móvil donde los iframes ocultos no soportan window.print()
+          // Detectar si estamos en un dispositivo mÃ³vil donde los iframes ocultos no soportan window.print()
           const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
           if (isMobile) {
-            // En móvil, descargar directamente el PDF oficial 300 DPI con membrete para evitar que Android imprima en blanco
+            // En mÃ³vil, descargar directamente el PDF oficial 300 DPI con membrete para evitar que Android imprima en blanco
             downloadBlob(result.pdfBytes, result.fileName);
-            setSaveStatus('PDF oficial con membrete generado y descargado para impresión.');
+            setSaveStatus('PDF oficial con membrete generado y descargado para impresiÃ³n.');
             setTimeout(() => setSaveStatus(null), 4000);
           } else {
             iframe.contentWindow?.focus();
@@ -1287,8 +1287,8 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         }, 60000);
       };
     } catch (e) {
-      console.warn('Fallo en generación de PDF para impresión:', e);
-      setSaveStatus('Error preparando impresión: ' + ((e as any)?.message || 'Intente descargar PDF'));
+      console.warn('Fallo en generaciÃ³n de PDF para impresiÃ³n:', e);
+      setSaveStatus('Error preparando impresiÃ³n: ' + ((e as any)?.message || 'Intente descargar PDF'));
       setTimeout(() => setSaveStatus(null), 5000);
     }
   };
@@ -1336,11 +1336,11 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
   const handleDownloadCurrentPdf = async () => {
     if (!patient.fullName || patient.fullName.trim() === '' || patient.fullName.trim() === 'Paciente') {
       const confirmContinue = window.confirm(
-        '⚠️ El Nombre del Paciente está vacío en el encabezado.\n\nPor normativa médico-legal del MPPS, todo documento debe identificar al paciente.\n\n¿Desea descargar el documento de todos modos?'
+        'âš ï¸ El Nombre del Paciente estÃ¡ vacÃ­o en el encabezado.\n\nPor normativa mÃ©dico-legal del MPPS, todo documento debe identificar al paciente.\n\nÂ¿Desea descargar el documento de todos modos?'
       );
       if (!confirmContinue) {
         document.getElementById('patient-name-input')?.focus();
-        setSaveStatus('⚠️ Por favor ingrese el Nombre y Cédula del Paciente en la barra superior.');
+        setSaveStatus('âš ï¸ Por favor ingrese el Nombre y CÃ©dula del Paciente en la barra superior.');
         setTimeout(() => setSaveStatus(null), 4000);
         return;
       }
@@ -1396,7 +1396,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
 
       const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName, customBgs[activeDoc] || null);
       downloadBlob(result.pdfBytes, result.fileName);
-      const reviewNotice = result.requiresReview ? ' (Nota: El documento requiere revisión)' : '';
+      const reviewNotice = result.requiresReview ? ' (Nota: El documento requiere revisiÃ³n)' : '';
       setSaveStatus(`PDF oficial de ${def.label} generado exitosamente sobre PDF original${reviewNotice}`);
       setTimeout(() => setSaveStatus(null), 4000);
     } catch (err: any) {
@@ -1408,7 +1408,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     }
   };
 
-  // Cargar caso clínico de prueba instantáneo para verificar el autollenado
+  // Cargar caso clÃ­nico de prueba instantÃ¡neo para verificar el autollenado
   const handleLoadDemoCase = () => {
     const demoExtract = {
       patient: {
@@ -1416,23 +1416,23 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         idNumber: '14.892.304',
         age: '54',
         phone: '0424-938.16.74',
-        address: 'Puerto Ordaz, Edo. Bolívar',
+        address: 'Puerto Ordaz, Edo. BolÃ­var',
         date: new Date().toLocaleDateString('es-VE')
       },
       recipeDual: {
-        pharmacy: '1. Pregabalina 75 mg - Cápsulas.\n   Tomar 1 cápsula vía oral cada 12 horas por 14 días.\n\n2. Ketoprofeno 100 mg - Comprimidos.\n   Tomar 1 comprimido vía oral cada 8 horas con protector gástrico por 5 días.\n\n3. Tramadol + Paracetamol 37.5/325 mg.\n   Tomar 1 comprimido cada 8 horas en caso de dolor moderado o severo.',
-        patientIndications: '• Tomar Pregabalina de noche para evitar mareo inicial.\n• Reposo en cama semi-fowler. Evitar flexiones de columna y cargas de peso.\n• Aplicar calor local suave en región lumbar por 20 minutos dos veces al día.\n• Control médico al culminar los estudios de neuroimagen.'
+        pharmacy: '1. Pregabalina 75 mg - CÃ¡psulas.\n   Tomar 1 cÃ¡psula vÃ­a oral cada 12 horas por 14 dÃ­as.\n\n2. Ketoprofeno 100 mg - Comprimidos.\n   Tomar 1 comprimido vÃ­a oral cada 8 horas con protector gÃ¡strico por 5 dÃ­as.\n\n3. Tramadol + Paracetamol 37.5/325 mg.\n   Tomar 1 comprimido cada 8 horas en caso de dolor moderado o severo.',
+        patientIndications: 'â€¢ Tomar Pregabalina de noche para evitar mareo inicial.\nâ€¢ Reposo en cama semi-fowler. Evitar flexiones de columna y cargas de peso.\nâ€¢ Aplicar calor local suave en regiÃ³n lumbar por 20 minutos dos veces al dÃ­a.\nâ€¢ Control mÃ©dico al culminar los estudios de neuroimagen.'
       },
       informe: {
-        bodyText: 'INFORME CLÍNICO NEUROQUIRÚRGICO\n\nPaciente masculino de 54 años de edad quien acude a consulta especializada por presentar cuadro clínico de 3 semanas de evolución caracterizado por dolor lumbociático severo irradiado al dermatoma L5-S1 izquierdo, acompañado de parestesias en cara lateral de pierna y pie.\n\nEXAMEN FÍSICO:\nMarcha antiálgica. Maniobra de Lasègue positiva a 35° en miembro inferior izquierdo. Reflejo aquileo izquierdo disminuido. Paresia 4/5 en extensor propio del hallux izquierdo.\n\nDIAGNÓSTICO:\nHernia Discal Lumbar L5-S1 izquierda extruida con radiculopatía aguda.\n\nPLAN Y CONDUCTA:\nSe instaura tratamiento médico farmacológico de desinflamación radicular. Se solicita Resonancia Magnética Lumbar de alta resolución para valorar criterio de Microdiscectomía / Cirugía de Columna Mínimamente Invasiva.'
+        bodyText: 'INFORME CLÃNICO NEUROQUIRÃšRGICO\n\nPaciente masculino de 54 aÃ±os de edad quien acude a consulta especializada por presentar cuadro clÃ­nico de 3 semanas de evoluciÃ³n caracterizado por dolor lumbociÃ¡tico severo irradiado al dermatoma L5-S1 izquierdo, acompaÃ±ado de parestesias en cara lateral de pierna y pie.\n\nEXAMEN FÃSICO:\nMarcha antiÃ¡lgica. Maniobra de LasÃ¨gue positiva a 35Â° en miembro inferior izquierdo. Reflejo aquileo izquierdo disminuido. Paresia 4/5 en extensor propio del hallux izquierdo.\n\nDIAGNÃ“STICO:\nHernia Discal Lumbar L5-S1 izquierda extruida con radiculopatÃ­a aguda.\n\nPLAN Y CONDUCTA:\nSe instaura tratamiento mÃ©dico farmacolÃ³gico de desinflamaciÃ³n radicular. Se solicita Resonancia MagnÃ©tica Lumbar de alta resoluciÃ³n para valorar criterio de MicrodiscectomÃ­a / CirugÃ­a de Columna MÃ­nimamente Invasiva.'
       },
       ordenLab: {
         neuroimagen: ['rmn_columna', 'rx_columna'],
         laboratorios: ['hematologia', 'glicemia', 'urea_creatinina', 'tp_tpt', 'vih_vdrl'],
-        diagnosticoPresuntivo: 'Hernia Discal Lumbar L5-S1 con radiculopatía'
+        diagnosticoPresuntivo: 'Hernia Discal Lumbar L5-S1 con radiculopatÃ­a'
       },
       constancia: {
-        idx: 'Hernia Discal Lumbar L5-S1 izquierda con radiculopatía aguda',
+        idx: 'Hernia Discal Lumbar L5-S1 izquierda con radiculopatÃ­a aguda',
         daysNumber: '10',
         daysWords: 'DIEZ',
         startDate: new Date().toISOString().split('T')[0],
@@ -1440,22 +1440,22 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       },
       historia: {
         motivoConsulta: 'Lumbociatalgia izquierda severa e incapacitante',
-        enfermedadActual: 'Paciente masculino de 54 años con cuadro de lumbociatalgia izquierda irradiada a dermatoma L5-S1 de 3 semanas de evolución, que no cede con AINEs convencionales.',
-        antecedentes: 'Hipertensión arterial controlada.',
-        examenNeurologico: 'Lasègue izquierdo positivo a 35°. Paresia 4/5 extensor hallux. Reflejo aquileo izquierdo hipoactivo.',
+        enfermedadActual: 'Paciente masculino de 54 aÃ±os con cuadro de lumbociatalgia izquierda irradiada a dermatoma L5-S1 de 3 semanas de evoluciÃ³n, que no cede con AINEs convencionales.',
+        antecedentes: 'HipertensiÃ³n arterial controlada.',
+        examenNeurologico: 'LasÃ¨gue izquierdo positivo a 35Â°. Paresia 4/5 extensor hallux. Reflejo aquileo izquierdo hipoactivo.',
         diagnostico: 'Hernia Discal Lumbar L5-S1 izquierda extruida'
       }
     };
     handleSyncAllDocuments(demoExtract);
   };
 
-  // Pestañas Oficiales: Las 5 Plantillas Idénticas
+  // PestaÃ±as Oficiales: Las 5 Plantillas IdÃ©nticas
   const tabs: { id: DocType; label: string; number: string; icon: React.ReactNode }[] = [
-    { id: 'RECIPES', label: 'Récipe (Doble Talón)', number: '1', icon: <Pill className="w-4 h-4" /> },
-    { id: 'INFORME', label: 'Informe Médico', number: '2', icon: <FileText className="w-4 h-4" /> },
-    { id: 'ORDEN_LAB', label: 'Orden Lab / Imágenes', number: '3', icon: <FlaskConical className="w-4 h-4" /> },
+    { id: 'RECIPES', label: 'RÃ©cipe (Doble TalÃ³n)', number: '1', icon: <Pill className="w-4 h-4" /> },
+    { id: 'INFORME', label: 'Informe MÃ©dico', number: '2', icon: <FileText className="w-4 h-4" /> },
+    { id: 'ORDEN_LAB', label: 'Orden Lab / ImÃ¡genes', number: '3', icon: <FlaskConical className="w-4 h-4" /> },
     { id: 'CONSTANCIA', label: 'Constancia de Reposo', number: '4', icon: <CalendarCheck className="w-4 h-4" /> },
-    { id: 'HISTORIA', label: 'Historia Clínica', number: '5', icon: <ClipboardList className="w-4 h-4" /> },
+    { id: 'HISTORIA', label: 'Historia ClÃ­nica', number: '5', icon: <ClipboardList className="w-4 h-4" /> },
   ];
 
   // Obtener estado actual del documento activo para correcciones de voz
@@ -1469,7 +1469,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
     }
   };
 
-  // Aplicar corrección rápida de voz puntual
+  // Aplicar correcciÃ³n rÃ¡pida de voz puntual
   const handleApplyCorrection = (updated: any, cmd: string) => {
     switch (activeDoc) {
       case 'RECIPES':
@@ -1541,13 +1541,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           const list: string[] = Array.isArray(nSource) ? nSource : Object.keys(nSource).filter(k => nSource[k]);
           list.forEach((x: string) => {
             const norm = x.toLowerCase();
-            if (norm.includes('rmn') || norm.includes('resonancia')) newNeuro['RESONANCIA MAGNÉTICA'] = true;
-            else if (norm.includes('tac') || norm.includes('tomograf')) newNeuro['TOMOGRAFÍA AXIAL COMPUTARIZADA'] = true;
-            else if (norm.includes('rx') || norm.includes('radiolog')) newNeuro['RADIOLOGÍA'] = true;
+            if (norm.includes('rmn') || norm.includes('resonancia')) newNeuro['RESONANCIA MAGNÃ‰TICA'] = true;
+            else if (norm.includes('tac') || norm.includes('tomograf')) newNeuro['TOMOGRAFÃA AXIAL COMPUTARIZADA'] = true;
+            else if (norm.includes('rx') || norm.includes('radiolog')) newNeuro['RADIOLOGÃA'] = true;
             else if (norm.includes('eeg') || norm.includes('electroencefal')) newNeuro['ELECTROENCEFALOGRAMA'] = true;
             else if (norm.includes('emg') || norm.includes('electromiogr')) newNeuro['ELECTROMIOGRAFIA'] = true;
             else if (norm.includes('pess') || norm.includes('potenciales')) newNeuro['POTENCIALES EVOCADOS'] = true;
-            else if (norm.includes('valoraci')) newNeuro['VALORACIÓN'] = true;
+            else if (norm.includes('valoraci')) newNeuro['VALORACIÃ“N'] = true;
             else newNeuro[x] = true;
           });
           setNeuroimagingTests(newNeuro);
@@ -1564,11 +1564,11 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         setHistoriaData(prev => ({ ...prev, ...updated }));
         break;
     }
-    setSaveStatus(`Corrección aplicada al documento: "${cmd}"`);
+    setSaveStatus(`CorrecciÃ³n aplicada al documento: "${cmd}"`);
     setTimeout(() => setSaveStatus(null), 3500);
   };
 
-  // Bundle clínico unificado para generación canónica (descarga y WhatsApp)
+  // Bundle clÃ­nico unificado para generaciÃ³n canÃ³nica (descarga y WhatsApp)
   const currentClinicalDataBundle: ClinicalDataBundle = {
     recipeData: {
       pharmacy: recipeData.pharmacy,
@@ -1662,9 +1662,9 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             })}
           </div>
 
-          {/* Right: Actions Cluster (SAMI Dictado, Imprimir, Compartir, ⋯ Más) */}
+          {/* Right: Actions Cluster (SAMI Dictado, Imprimir, Compartir, â‹¯ MÃ¡s) */}
           <div className="flex items-center gap-1.5 shrink-0 relative flex-wrap justify-end">
-            {/* Dictado SAMI / Cápsula integrada */}
+            {/* Dictado SAMI / CÃ¡psula integrada */}
             <ClinicalDictationCapsule
               onSyncAllDocuments={handleSyncAllDocuments}
               onProgressiveSync={handleProgressiveSync}
@@ -1710,7 +1710,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   }`}
                 >
                   <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                    Compartir & Emisión
+                    Compartir & EmisiÃ³n
                   </div>
                   <button
                     type="button"
@@ -1746,7 +1746,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                     </div>
                     <div>
                       <div className="font-bold leading-tight">Descargar PDF Oficial</div>
-                      <div className="text-[10px] text-slate-400">Resolución 300 DPI con fondo</div>
+                      <div className="text-[10px] text-slate-400">ResoluciÃ³n 300 DPI con fondo</div>
                     </div>
                   </button>
 
@@ -1765,14 +1765,14 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                     </div>
                     <div>
                       <div className="font-bold leading-tight">Transferir por QR</div>
-                      <div className="text-[10px] text-slate-400">Al celular o secretaría</div>
+                      <div className="text-[10px] text-slate-400">Al celular o secretarÃ­a</div>
                     </div>
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Menú '⋯ Más' (Dropdown de herramientas secundarias) */}
+            {/* MenÃº 'â‹¯ MÃ¡s' (Dropdown de herramientas secundarias) */}
             <div className="relative shrink-0" ref={moreMenuRef}>
               <button
                 type="button"
@@ -1784,12 +1784,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                     ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
                     : 'bg-[#070d1e] hover:bg-slate-800 text-slate-300 border-slate-800'
                 }`}
-                title="Más herramientas y opciones clínicas"
+                title="MÃ¡s herramientas y opciones clÃ­nicas"
               >
                 <MoreHorizontal className="w-4 h-4" />
               </button>
 
-              {/* Popover Más Opciones (⋯) */}
+              {/* Popover MÃ¡s Opciones (â‹¯) */}
               {isMoreMenuOpen && (
                 <div 
                   className={`absolute right-0 top-full mt-2 w-64 rounded-2xl p-2 shadow-2xl z-50 animate-fade-in border font-sans text-xs space-y-1 ${
@@ -1799,7 +1799,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   }`}
                 >
                   <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                    Clínica & Consulta
+                    ClÃ­nica & Consulta
                   </div>
                   <button
                     type="button"
@@ -1830,7 +1830,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   >
                     <History className="w-3.5 h-3.5 text-cyan-400" />
                     <div>
-                      <div className="font-bold leading-tight">Expediente 360°</div>
+                      <div className="font-bold leading-tight">Expediente 360Â°</div>
                       <div className="text-[10px] text-slate-400">Historial previo del paciente</div>
                     </div>
                   </button>
@@ -1854,7 +1854,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
 
                   <div className="my-1 border-t border-slate-700/50" />
                   <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                    Calibración & Herramientas
+                    CalibraciÃ³n & Herramientas
                   </div>
 
                   <button
@@ -1869,7 +1869,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   >
                     <Sliders className="w-3.5 h-3.5 text-cyan-400" />
                     <div>
-                      <div className="font-bold leading-tight">Calibrador Milimétrico V2</div>
+                      <div className="font-bold leading-tight">Calibrador MilimÃ©trico V2</div>
                       <div className="text-[10px] text-slate-400">Ajustar posiciones drag & drop</div>
                     </div>
                   </button>
@@ -1886,7 +1886,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   >
                     <UploadCloud className="w-3.5 h-3.5 text-amber-400" />
                     <div>
-                      <div className="font-bold leading-tight">Cargar Papelería Master</div>
+                      <div className="font-bold leading-tight">Cargar PapelerÃ­a Master</div>
                       <div className="text-[10px] text-slate-400">Subir PDF o imagen escaneada</div>
                     </div>
                   </button>
@@ -1903,7 +1903,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   >
                     <div className="flex items-center gap-2">
                       <Eye className="w-3.5 h-3.5 text-cyan-400" />
-                      <span>Guías Visuales</span>
+                      <span>GuÃ­as Visuales</span>
                     </div>
                     <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
                       showZoneGuides ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-800 text-slate-400'
@@ -1940,14 +1940,14 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           {/* Biometric MRI Scan Line (Triggers on mount or patient change) */}
           <div key={patient.idNumber || patient.fullName} className="mri-scan-line" />
 
-          {/* Cédula */}
+          {/* CÃ©dula */}
           <div className="relative flex items-center min-w-[120px] sm:w-40 shrink-0">
             <Search className="w-3.5 h-3.5 absolute left-2.5 text-slate-400 pointer-events-none" />
             <input
               type="text"
               value={patient.idNumber}
               onChange={(e) => handleCedulaChange(e.target.value)}
-              placeholder="Cédula / ID"
+              placeholder="CÃ©dula / ID"
               className={`w-full rounded-lg pl-7 pr-2 py-1.5 text-xs font-mono font-bold outline-none border transition relative z-10 ${
                 isClinicalLight
                   ? 'bg-white border-slate-300/80 text-blue-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600/30'
@@ -1974,7 +1974,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             />
             {/* EKG Pulse Indicator (Shows when patient is active in dark mode) */}
             {patient.fullName && !isClinicalLight && (
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center" title="Expediente Clínico Activo">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20 flex items-center justify-center" title="Expediente ClÃ­nico Activo">
                 <div className="ekg-pulse-dot"></div>
               </div>
             )}
@@ -1982,7 +1982,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
 
           <div className="hidden sm:block w-px h-6 bg-slate-700/40 shrink-0" />
 
-          {/* Fila móvil para Edad, Teléfono y Acciones */}
+          {/* Fila mÃ³vil para Edad, TelÃ©fono y Acciones */}
           <div className="flex items-center gap-1.5 shrink-0">
             {/* Edad */}
             <div className="w-16">
@@ -1999,13 +1999,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               />
             </div>
 
-            {/* Teléfono */}
+            {/* TelÃ©fono */}
             <div className="w-28 sm:w-32">
               <input
                 type="text"
                 value={patient.phone}
                 onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
-                placeholder="Teléfono"
+                placeholder="TelÃ©fono"
                 className={`w-full rounded-lg px-2 py-1.5 text-xs font-mono font-medium outline-none border transition ${
                   isClinicalLight
                     ? 'bg-white border-slate-300/80 text-slate-900 focus:border-blue-600'
@@ -2014,7 +2014,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               />
             </div>
 
-            {/* Botón Frecuentes rápido */}
+            {/* BotÃ³n Frecuentes rÃ¡pido */}
             <button
               type="button"
               onClick={() => setIsPresetsModalOpen(true)}
@@ -2025,11 +2025,11 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               }`}
               title="Ver protocolos frecuentes de consulta"
             >
-              <span>⚡</span>
+              <span>âš¡</span>
               <span className="hidden md:inline">Protocolos</span>
             </button>
 
-            {/* Botón Limpiar */}
+            {/* BotÃ³n Limpiar */}
             <button
               type="button"
               onClick={handleClearPatient}
@@ -2047,7 +2047,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             isClinicalLight ? 'bg-blue-50 border-blue-200 text-blue-900' : 'bg-cyan-950/40 border-cyan-500/40 text-cyan-200'
           }`}>
             <span className="truncate">
-              <strong>Paciente recurrente:</strong> {foundPatientAlert.fullName} ({foundPatientAlert.age} años)
+              <strong>Paciente recurrente:</strong> {foundPatientAlert.fullName} ({foundPatientAlert.age} aÃ±os)
             </span>
             <button
               type="button"
@@ -2062,7 +2062,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         {uncertainFields.length > 0 && (
           <div className="p-2 bg-amber-950/60 border border-amber-500/40 rounded-xl text-amber-200 text-xs flex items-center justify-between animate-fade-in font-mono">
             <span className="truncate">
-              ⚠️ <strong>Validar:</strong> {uncertainFields.join(', ')}
+              âš ï¸ <strong>Validar:</strong> {uncertainFields.join(', ')}
             </span>
             <button
               type="button"
@@ -2075,7 +2075,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         )}
       </header>
 
-      {/* 2. VISTA MÓVIL ADAPTATIVA (Ficha de Bolsillo para Celulares) */}
+      {/* 2. VISTA MÃ“VIL ADAPTATIVA (Ficha de Bolsillo para Celulares) */}
       {mobileViewMode === 'card' && (
         <div className="w-full max-w-[840px] px-2 print:hidden mb-4">
           <MobileDocumentCardView
@@ -2095,7 +2095,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
       {/* ============================================================ */}
       {/* 3. LIENZO A4 VECTORIAL / OVERLAY CON MEDIDAS EXACTAS (794x1123px) */}
       {/* ============================================================ */}
-      <div className={`relative print:p-0 my-2 ${mobileViewMode === 'card' ? 'hidden md:block print:block' : 'block'}`}>
+      <div className={`relative print:p-0 my-2 w-full flex justify-center a4-responsive-container ${mobileViewMode === 'card' ? 'hidden md:flex print:flex' : 'flex'}`}>
         {activeDoc === 'ORDEN_LAB' ? (
           <OfficialLabOrderTwoPageSheet
             key={`lab-order-sheet-${calibVersion}`}
@@ -2169,7 +2169,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             />
 
         {/* ========================================================= */}
-        {/* PLANTILLA 1: RÉCIPE MÉDICO (DOBLE TALÓN)                  */}
+        {/* PLANTILLA 1: RÃ‰CIPE MÃ‰DICO (DOBLE TALÃ“N)                  */}
         {/* ========================================================= */}
         {activeDoc === 'RECIPES' && (
           <RecipesMedicalSheet
@@ -2188,7 +2188,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         )}
 
         {/* ========================================================= */}
-        {/* PLANTILLA 2: INFORME MÉDICO                               */}
+        {/* PLANTILLA 2: INFORME MÃ‰DICO                               */}
         {/* ========================================================= */}
         {activeDoc === 'INFORME' && (
           <div id="informe-official-sheet" className="relative w-[794px] h-[1123px]">
@@ -2274,7 +2274,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 value={informeData.bodyText}
                 onChange={(e) => setInformeData({ ...informeData, bodyText: e.target.value })}
                 className={`w-full h-full bg-transparent text-slate-900 leading-relaxed font-medium outline-none resize-none font-sans p-2 border-none text-justify ${getHighlightClass('informe.bodyText')}`}
-                placeholder="Redacte o edite el cuerpo estructurado del informe médico..."
+                placeholder="Redacte o edite el cuerpo estructurado del informe mÃ©dico..."
               />
             </InteractiveField>
 
@@ -2298,7 +2298,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
 
         {/* ========================================================= */}
         {/* ========================================================= */}
-        {/* PLANTILLA 4: CONSTANCIA MÉDICA / REPOSO (Estampado Puro)  */}
+        {/* PLANTILLA 4: CONSTANCIA MÃ‰DICA / REPOSO (Estampado Puro)  */}
         {/* ========================================================= */}
         {activeDoc === 'CONSTANCIA' && (
           <div id="constancia-official-sheet" className="relative w-[794px] h-[1123px]">
@@ -2320,7 +2320,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               />
             </InteractiveField>
 
-            {/* 2. Cédula de Identidad */}
+            {/* 2. CÃ©dula de Identidad */}
             <InteractiveField
               calibration={getCalib('patient.idNumber')}
               isCalibrating={isCalibrating}
@@ -2376,7 +2376,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   setPatient((prev) => ({ ...prev, condition: 'Paciente' }));
                 }}
                 className="w-full h-full flex items-center justify-center font-black text-xs text-[#0a2540] hover:bg-blue-100/40 cursor-pointer rounded-xs"
-                title="Condición: Paciente"
+                title="CondiciÃ³n: Paciente"
               >
                 {(constanciaData.condition || patient.condition || 'Paciente') === 'Paciente' ? 'X' : ''}
               </button>
@@ -2398,13 +2398,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   setPatient((prev) => ({ ...prev, condition: 'Familiar' }));
                 }}
                 className="w-full h-full flex items-center justify-center font-black text-xs text-[#0a2540] hover:bg-blue-100/40 cursor-pointer rounded-xs"
-                title="Condición: Familiar"
+                title="CondiciÃ³n: Familiar"
               >
                 {(constanciaData.condition || patient.condition) === 'Familiar' ? 'X' : ''}
               </button>
             </InteractiveField>
 
-            {/* 6. Casilla Reposo Sí [X] */}
+            {/* 6. Casilla Reposo SÃ­ [X] */}
             <InteractiveField
               calibration={getCalib('constancia.reposo_si')}
               isCalibrating={isCalibrating}
@@ -2421,12 +2421,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                     ...prev,
                     needsRest: true,
                     restDays: days,
-                    restDaysWords: `${days} días continuos`,
+                    restDaysWords: `${days} dÃ­as continuos`,
                     restTo: prev.restTo === '-' ? new Date(Date.now() + 7 * 86400000).toLocaleDateString('es-VE') : prev.restTo,
                   }));
                 }}
                 className="w-full h-full flex items-center justify-center font-black text-xs text-[#0a2540] hover:bg-blue-100/40 cursor-pointer rounded-xs"
-                title="Amerita Reposo: SÍ"
+                title="Amerita Reposo: SÃ"
               >
                 {constanciaData.needsRest !== false && (Number(constanciaData.restDays) > 0 || constanciaData.restDays !== '00') ? 'X' : ''}
               </button>
@@ -2459,7 +2459,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               </button>
             </InteractiveField>
 
-            {/* 8. Campo Días (Número y Letras) */}
+            {/* 8. Campo DÃ­as (NÃºmero y Letras) */}
             <InteractiveField
               calibration={getCalib('constancia.restDays')}
               isCalibrating={isCalibrating}
@@ -2470,7 +2470,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             >
               <input
                 type="text"
-                value={constanciaData.restDaysWords || (constanciaData.restDays ? `${constanciaData.restDays} días` : '')}
+                value={constanciaData.restDaysWords || (constanciaData.restDays ? `${constanciaData.restDays} dÃ­as` : '')}
                 onChange={(e) => {
                   const val = e.target.value;
                   const cleanDays = val.replace(/\D/g, '');
@@ -2498,7 +2498,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                   });
                 }}
                 className="w-full h-full bg-transparent text-slate-900 font-bold px-1 outline-none border-none text-center"
-                placeholder="Días"
+                placeholder="DÃ­as"
               />
             </InteractiveField>
 
@@ -2541,7 +2541,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               />
             </InteractiveField>
 
-            {/* 11. Diagnóstico Formal (IDX) */}
+            {/* 11. DiagnÃ³stico Formal (IDX) */}
             <InteractiveField
               calibration={getCalib('constancia.idx')}
               isCalibrating={isCalibrating}
@@ -2554,11 +2554,11 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 value={constanciaData.idx || ''}
                 onChange={(e) => setConstanciaData({ ...constanciaData, idx: e.target.value })}
                 className={`w-full h-full bg-transparent text-slate-900 leading-relaxed font-semibold outline-none resize-none font-sans p-1 border-none text-left ${getHighlightClass('constancia.idx')}`}
-                placeholder="Diagnóstico formal e indicación médica..."
+                placeholder="DiagnÃ³stico formal e indicaciÃ³n mÃ©dica..."
               />
             </InteractiveField>
 
-            {/* 12. Expedición (Días, Mes, Año) */}
+            {/* 12. ExpediciÃ³n (DÃ­as, Mes, AÃ±o) */}
             <InteractiveField
               calibration={getCalib('constancia.requestDay')}
               isCalibrating={isCalibrating}
@@ -2569,14 +2569,14 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
             >
               <input
                 type="text"
-                value={constanciaData.requestDay ? `Caracas, a los ${constanciaData.requestDay} días del mes de ${constanciaData.requestMonth || 'septiembre'} de ${constanciaData.requestYear || '2026'}` : `Caracas, ${patient.date || ''}`}
+                value={constanciaData.requestDay ? `Caracas, a los ${constanciaData.requestDay} dÃ­as del mes de ${constanciaData.requestMonth || 'septiembre'} de ${constanciaData.requestYear || '2026'}` : `Caracas, ${patient.date || ''}`}
                 onChange={(e) => setConstanciaData({ ...constanciaData, requestDay: e.target.value })}
                 className="w-full h-full bg-transparent text-slate-900 font-bold px-2 outline-none border-none text-left"
-                placeholder="Caracas, fecha de expedición"
+                placeholder="Caracas, fecha de expediciÃ³n"
               />
             </InteractiveField>
 
-            {/* 13. Sello Médico Oficial */}
+            {/* 13. Sello MÃ©dico Oficial */}
             {showStamp && (
               <InteractiveField
                 calibration={getCalib('stamp')}
@@ -2595,7 +2595,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         )}
 
         {/* ========================================================= */}
-        {/* PLANTILLA 5: HISTORIA CLÍNICA                             */}
+        {/* PLANTILLA 5: HISTORIA CLÃNICA                             */}
         {/* ========================================================= */}
         {activeDoc === 'HISTORIA' && (
           <div id="historia-official-sheet" className="relative w-[794px] h-[1123px]">
@@ -2646,7 +2646,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 type="text"
                 value={patient.address || ''}
                 onChange={(e) => setPatient({ ...patient, address: e.target.value })}
-                placeholder="Dirección del paciente"
+                placeholder="DirecciÃ³n del paciente"
                 className={`w-full h-full bg-transparent text-slate-900 font-bold px-2 outline-none border-none ${getHighlightClass('patient.address')}`}
               />
             </InteractiveField>
@@ -2685,7 +2685,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               />
             </InteractiveField>
 
-            {/* 2. CAMPOS CLÍNICOS DEL CUERPO */}
+            {/* 2. CAMPOS CLÃNICOS DEL CUERPO */}
             <InteractiveField
               calibration={getCalib('historia.motivo')}
               isCalibrating={isCalibrating}
@@ -2713,7 +2713,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               <textarea
                 value={historiaData.enfermedadActual || ''}
                 onChange={(e) => setHistoriaData({ ...historiaData, enfermedadActual: e.target.value })}
-                placeholder="Evolución del cuadro actual..."
+                placeholder="EvoluciÃ³n del cuadro actual..."
                 className="w-full h-full bg-transparent resize-none font-sans text-slate-900 leading-relaxed outline-none border-none p-1"
               />
             </InteractiveField>
@@ -2729,7 +2729,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               <textarea
                 value={historiaData.antecedentes || ''}
                 onChange={(e) => setHistoriaData({ ...historiaData, antecedentes: e.target.value })}
-                placeholder="Quirúrgicos, patológicos, alérgicos..."
+                placeholder="QuirÃºrgicos, patolÃ³gicos, alÃ©rgicos..."
                 className="w-full h-full bg-transparent resize-none font-sans text-slate-900 leading-relaxed outline-none border-none p-1"
               />
             </InteractiveField>
@@ -2745,7 +2745,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               <textarea
                 value={historiaData.examenNeurologico || ''}
                 onChange={(e) => setHistoriaData({ ...historiaData, examenNeurologico: e.target.value })}
-                placeholder="Examen físico segmentario y neurológico..."
+                placeholder="Examen fÃ­sico segmentario y neurolÃ³gico..."
                 className="w-full h-full bg-transparent resize-none font-sans text-slate-900 leading-relaxed outline-none border-none p-1"
               />
             </InteractiveField>
@@ -2761,7 +2761,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               <textarea
                 value={historiaData.diagnostico || ''}
                 onChange={(e) => setHistoriaData({ ...historiaData, diagnostico: e.target.value })}
-                placeholder="Diagnóstico formal definitivo / diferencial..."
+                placeholder="DiagnÃ³stico formal definitivo / diferencial..."
                 className={`w-full h-full bg-transparent resize-none font-sans font-bold text-slate-900 leading-relaxed outline-none border-none p-1 ${getHighlightClass('historia.diagnostico')}`}
               />
             </InteractiveField>
@@ -2788,14 +2788,14 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         )}
       </div>
 
-      {/* Modal de Protocolos Clínicos Frecuentes de Neurocirugía y Columna */}
+      {/* Modal de Protocolos ClÃ­nicos Frecuentes de NeurocirugÃ­a y Columna */}
       <ClinicalPresetsModal
         isOpen={isPresetsModalOpen}
         onClose={() => setIsPresetsModalOpen(false)}
         onSelectPreset={handleApplyPreset}
       />
 
-      {/* Modal de Envío de Documentos Oficiales en PDF por WhatsApp */}
+      {/* Modal de EnvÃ­o de Documentos Oficiales en PDF por WhatsApp */}
       <WhatsAppPdfModal
         isOpen={isWhatsAppPdfModalOpen}
         onClose={() => setIsWhatsAppPdfModalOpen(false)}
@@ -2805,21 +2805,21 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         clinicalDataBundle={currentClinicalDataBundle}
       />
 
-      {/* Modal de Tarjeta de Presentación Oficial CMI del Dr. Samir Moucharrafie */}
+      {/* Modal de Tarjeta de PresentaciÃ³n Oficial CMI del Dr. Samir Moucharrafie */}
       <DoctorBusinessCard
         isModal
         isOpen={isDoctorCardOpen}
         onClose={() => setIsDoctorCardOpen(false)}
       />
 
-      {/* Modal de Sincronización y Transferencia Celular ⇄ PC */}
+      {/* Modal de SincronizaciÃ³n y Transferencia Celular â‡„ PC */}
       <SyncTemplatesModal
         isOpen={isSyncModalOpen}
         onClose={() => setIsSyncModalOpen(false)}
         onTemplatesUpdated={loadLocalTemplates}
       />
 
-      {/* Modal de Carga de Papelería Original Escaneada con Calibración IA y soporte Multipágina */}
+      {/* Modal de Carga de PapelerÃ­a Original Escaneada con CalibraciÃ³n IA y soporte MultipÃ¡gina */}
       <StationeryTemplateUploaderModal
         isOpen={isUploaderOpen}
         onClose={() => setIsUploaderOpen(false)}
@@ -2837,7 +2837,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         initialDoc={activeDoc}
       />
 
-      {/* Modal de Calibración Milimétrica V2 en Vivo (Drag & Drop) */}
+      {/* Modal de CalibraciÃ³n MilimÃ©trica V2 en Vivo (Drag & Drop) */}
       {isLiveCalibratorOpen && (
         <LiveCoordinateCalibratorModal
           initialDocType={activeDoc}
@@ -2847,13 +2847,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           onClose={() => setIsLiveCalibratorOpen(false)}
           onApplyCoordinates={() => {
             FirestoreStationerySync.pushLocalCalibrationToCloud().catch(err => console.warn(err));
-            setSaveStatus(`¡Coordenadas calibradas aplicadas exitosamente al generador de PDF!`);
+            setSaveStatus(`Â¡Coordenadas calibradas aplicadas exitosamente al generador de PDF!`);
             setTimeout(() => setSaveStatus(null), 3000);
           }}
         />
       )}
 
-      {/* Modal de Herramientas Técnicas y de Soporte (Calibración, Sincronización, Papelería) */}
+      {/* Modal de Herramientas TÃ©cnicas y de Soporte (CalibraciÃ³n, SincronizaciÃ³n, PapelerÃ­a) */}
       <TechnicalToolsModal
         isOpen={isTechModalOpen}
         onClose={() => setIsTechModalOpen(false)}
@@ -2867,13 +2867,13 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         onLoadDemoCase={handleLoadDemoCase}
       />
 
-      {/* Modal de Configuración de Usuario y Modo Visual */}
+      {/* Modal de ConfiguraciÃ³n de Usuario y Modo Visual */}
       <UserSettingsModal
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
       />
 
-      {/* Drawer: Expediente 360° del Paciente con Línea de Tiempo */}
+      {/* Drawer: Expediente 360Â° del Paciente con LÃ­nea de Tiempo */}
       <PatientTimelineDrawer
         isOpen={isTimelineOpen}
         onClose={() => setIsTimelineOpen(false)}
@@ -2896,20 +2896,20 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           }));
           if (diag) {
             setConstanciaData((prev) => ({ ...prev, idx: diag, diagnosis: diag }));
-            setInformeData((prev) => ({ ...prev, bodyText: `Diagnóstico: ${diag}\n\n${prev.bodyText || ''}` }));
+            setInformeData((prev) => ({ ...prev, bodyText: `DiagnÃ³stico: ${diag}\n\n${prev.bodyText || ''}` }));
           }
           setActiveDoc('RECIPES');
-          setSaveStatus('¡Tratamiento previo cargado en el Récipe con 1 solo clic!');
+          setSaveStatus('Â¡Tratamiento previo cargado en el RÃ©cipe con 1 solo clic!');
           setTimeout(() => setSaveStatus(null), 3500);
         }}
         onCopyDiagnosis={(diag) => {
           setConstanciaData((prev) => ({ ...prev, idx: diag, diagnosis: diag }));
-          setSaveStatus('Diagnóstico copiado a los documentos.');
+          setSaveStatus('DiagnÃ³stico copiado a los documentos.');
           setTimeout(() => setSaveStatus(null), 3000);
         }}
       />
 
-      {/* Modal: Transferencia Rápida por Código QR al Celular / Secretaría */}
+      {/* Modal: Transferencia RÃ¡pida por CÃ³digo QR al Celular / SecretarÃ­a */}
       <PatientQrHandoffModal
         isOpen={isQrHandoffOpen}
         onClose={() => setIsQrHandoffOpen(false)}
@@ -2922,12 +2922,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         isOpen={isStampStudioOpen}
         onClose={() => setIsStampStudioOpen(false)}
         onStampSaved={() => {
-          setSaveStatus('Sello húmedo y firma transparente actualizados.');
+          setSaveStatus('Sello hÃºmedo y firma transparente actualizados.');
           setTimeout(() => setSaveStatus(null), 3000);
         }}
       />
 
-      {/* Modal: Dictado Clínico Inteligente Integral (SAMI Voice) */}
+      {/* Modal: Dictado ClÃ­nico Inteligente Integral (SAMI Voice) */}
       <SmartConsultationDictationModal
         isOpen={isSmartDictationOpen}
         onClose={() => setIsSmartDictationOpen(false)}
@@ -2963,12 +2963,12 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
           if (parsed.labImaging) {
             setLabOtherExams((prev) => (prev ? `${prev}\n${parsed.labImaging}` : parsed.labImaging));
           }
-          setSaveStatus('¡Consulta dictada estructurada en los 5 documentos oficiales!');
+          setSaveStatus('Â¡Consulta dictada estructurada en los 5 documentos oficiales!');
           setTimeout(() => setSaveStatus(null), 4000);
         }}
       />
 
-      {/* Notificación Flotante de Auto-Calibración por IA */}
+      {/* NotificaciÃ³n Flotante de Auto-CalibraciÃ³n por IA */}
       {calibratingAiToast && (
         <div className="fixed bottom-6 right-6 z-50 p-4 bg-slate-950/95 text-white border-2 border-cyan-400 rounded-2xl shadow-2xl flex items-center gap-3 animate-fade-in text-xs font-bold max-w-md ring-4 ring-cyan-500/20 backdrop-blur-md">
           <Sparkles className="w-5 h-5 text-cyan-300 animate-spin shrink-0" />
