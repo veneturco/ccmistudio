@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { 
   FileText, 
   History, 
-  Printer, 
-  UserCheck, 
   ChevronRight, 
   CreditCard, 
   Pill, 
@@ -13,16 +11,10 @@ import {
   Boxes,
   Menu,
   X,
-  Stethoscope,
-  Sliders,
-  Layers,
-  Sparkles,
   Code2,
-  Lock,
-  Wrench,
   Home
 } from 'lucide-react';
-import { ActiveNavTab, ProcessedDocumentResult, DocType } from '../types';
+import { ProcessedDocumentResult, DocType } from '../types';
 import { BrandLogo } from './BrandLogo';
 import { CmiSpecialtiesPortal } from './CmiSpecialtiesPortal';
 import { DocumentSelectorWorkspace } from './DocumentSelectorWorkspace';
@@ -44,13 +36,13 @@ const INITIAL_HISTORY: ProcessedDocumentResult[] = [
       nationalId: '14.230.198',
       age: '42',
       gender: 'F',
-      allergies: 'Negadías',
+      allergies: 'Negadas',
       phone: '0412-9841029',
     },
     structuredData: {
-      diagnosis?Principal: 'Cervicalgia tensional aguda + Espasmo paravertebral',
+      diagnosisPrincipal: 'Cervicalgia tensional aguda + Espasmo paravertebral',
       secondaryDiagnoses: [],
-      cie10?Suggestions: ['M54.2'],
+      cie10Suggestions: ['M54.2'],
       medications: [
         {
           id: 'm1',
@@ -69,7 +61,7 @@ const INITIAL_HISTORY: ProcessedDocumentResult[] = [
           instructions: 'Junto con protector gástrico.',
         },
       ],
-      generalIndications: ['Calor local seco 15 min 2 veces al día', 'Evitar posturas forzadías'],
+      generalIndications: ['Calor local seco 15 min 2 veces al día', 'Evitar posturas forzadas'],
       summaryNote: 'Paciente con dolor en región cervical de 3 días de evolución posterior a sobrecarga laboral.',
     },
     templateName: 'Plantilla Oficial CcMi - Récipe Médico (Doble Talón)',
@@ -94,11 +86,11 @@ const INITIAL_HISTORY: ProcessedDocumentResult[] = [
       phone: '0416-5541299',
     },
     structuredData: {
-      diagnosis?Principal: 'Lumbociatalgia izquierda por hernia discal L5-S1',
+      diagnosisPrincipal: 'Lumbociatalgia izquierda por hernia discal L5-S1',
       secondaryDiagnoses: [],
       medications: [],
       generalIndications: ['Reposo físico relativo', 'Crioterapia lumbar'],
-      restDays?: 7,
+      restDays: 7,
       summaryNote: 'Evaluación de columna lumbar. Requiere reposo e inicio de terapia física.',
     },
     templateName: 'Plantilla Oficial CcMi - Constancia de Reposo / Asistencia',
@@ -135,7 +127,7 @@ export const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div id="socs-díashboard-root" className="min-h-screen bg-slate-100/80 text-slate-900 flex flex-col font-sans">
+    <div id="socs-dashboard-root" className="min-h-screen bg-slate-100/80 text-slate-900 flex flex-col font-sans">
       {/* 1. TOP EXECUTIVE CLINICAL BAR */}
       <header className="bg-[#092347] text-white border-b border-blue-950/80 sticky top-0 z-40 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
@@ -167,9 +159,63 @@ export const Dashboard: React.FC = () => {
 
           {/* Navegación Principal: Portal CMI + Selector de 5 Documentos A4 */}
           <div className="hidden md:flex items-center bg-[#061833] p-1 rounded-xl border border-blue-900/60 gap-1">
-            
+            <button
+              type="button"
+              onClick={() => setActiveTab('portal')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                activeTab === 'portal'
+                  ? 'bg-cyan-600 text-white shadow-sm ring-1 ring-cyan-300'
+                  : 'text-cyan-300 hover:text-white hover:bg-blue-900/40'
+              }`}
+              title="Portal CMI de Especialidades Médicas"
+            >
+              <Home className="w-3.5 h-3.5" />
+              <span>Portal CMI</span>
+            </button>
 
-            {/* BOTÓN EXCLUSIVO: DEVELOPER STUDIO (Calibración & Formas PDF) */}
+            <div className="h-4 w-px bg-blue-800/80 mx-0.5" />
+
+            {docTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === 'workspace' && selectedDoc === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedDoc(tab.id);
+                    setActiveTab('workspace');
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-300 hover:text-white hover:bg-blue-900/40'
+                  }`}
+                >
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-cyan-300' : 'text-slate-400'}`} />
+                  <span>{tab.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Acciones Rápidas */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab(activeTab === 'quoter' ? 'portal' : 'quoter')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition cursor-pointer ${
+                activeTab === 'quoter'
+                  ? 'bg-emerald-600 text-white border-emerald-400 shadow-sm'
+                  : 'bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 border-emerald-700/50'
+              }`}
+              title="Cotizador Logístico Quirúrgico Synapsis"
+            >
+              <Boxes className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Cotizador</span>
+            </button>
+
+            {/* BOTÓN EXCLUSIVO: DEVELOPER STUDIO */}
             <button
               type="button"
               onClick={() => setActiveTab(activeTab === 'developer_studio' ? 'workspace' : 'developer_studio')}
@@ -178,7 +224,7 @@ export const Dashboard: React.FC = () => {
                   ? 'bg-amber-400 text-slate-950 border-amber-300 ring-2 ring-amber-400/50'
                   : 'bg-slate-900/90 hover:bg-slate-800 text-amber-300 border-amber-400/30 hover:border-amber-400'
               }`}
-              title="Área exclusiva de Desarrollador: Calibración milimétrica sobre fondos originales fijos, editor de formas PDF (X, ✓, cuadros con punta) y exportador para Gemini AI"
+              title="Área exclusiva de Desarrollador: Calibración milimétrica sobre fondos originales fijos, editor de formas PDF y exportador para Gemini AI"
             >
               <Code2 className="w-3.5 h-3.5 text-amber-400" />
               <span className="hidden sm:inline">Dev Studio</span>
@@ -218,7 +264,7 @@ export const Dashboard: React.FC = () => {
               className="md:hidden p-2 text-blue-200 hover:text-white rounded-lg hover:bg-blue-900/50 cursor-pointer"
               aria-label="Abrir menú"
             >
-              {/* Mobile menu removed in favor of BottomNav */}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -308,9 +354,9 @@ export const Dashboard: React.FC = () => {
         )}
       </header>
 
-      {/* 2. MAIN CENTERPIECE: PORTAL CMI / A4 WORKSTATION / QUOTER / DEV STUDIO */}
+      {/* 2. MAIN CENTERPIECE */}
       <main className="flex-1 py-4 sm:py-6 px-2 sm:px-6 max-w-7xl mx-auto w-full">
-        {/* Portal Principal CMI: Dr. Samir Moucharrafie, Especialidades, Quirófano, Testimonios y Sedes */}
+        {/* Portal Principal CMI */}
         {activeTab === 'portal' && (
           <div className="w-full animate-fade-in">
             <CmiSpecialtiesPortal
@@ -330,7 +376,7 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Vista Clínica Oficial de Trabajo para el Dr. Samir Moucharrafie */}
+        {/* Vista Clínica Oficial de Trabajo */}
         {activeTab === 'workspace' && (
           <div className="w-full space-y-3">
             <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200/80 shadow-xs">
@@ -351,125 +397,4 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setActiveTab('portal')}
                 className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer transition flex items-center gap-1"
               >
-                <span>← Volver al Portal CMI</span>
-              </button>
-            </div>
-
-            <DocumentSelectorWorkspace 
-              initialDocType={selectedDoc} 
-              key={selectedDoc} 
-              onOpenZoneEditor={() => setActiveTab('developer_studio')}
-            />
-          </div>
-        )}
-
-        {/* Zona Exclusiva para Desarrollador: Calibración sobre Fondo Fijo + Formas PDF + Gemini Copier */}
-        {activeTab === 'developer_studio' && (
-          <div className="w-full space-y-3">
-            <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200/80 shadow-xs">
-              <div className="flex items-center gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('portal')}
-                  className="text-blue-700 hover:text-blue-900 font-bold flex items-center gap-1 cursor-pointer"
-                >
-                  <Home className="w-3.5 h-3.5" />
-                  <span>Portal CMI</span>
-                </button>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-slate-600 font-medium">Developer Studio (Calibración & Formas PDF)</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveTab('portal')}
-                className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer transition flex items-center gap-1"
-              >
-                <span>← Volver al Portal CMI</span>
-              </button>
-            </div>
-
-            <DocumentZoneEditorStudio
-              initialDoc={selectedDoc}
-              onClose={() => setActiveTab('workspace')}
-              onNavigateToWorkspace={(doc) => {
-                setSelectedDoc(doc);
-                setActiveTab('workspace');
-              }}
-            />
-          </div>
-        )}
-
-        {activeTab === 'history' && (
-          <div className="space-y-4 max-w-5xl mx-auto">
-            <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-              <div>
-                <h2 className="text-base font-bold text-slate-900">
-                  Historial de Documentos Emitidos
-                </h2>
-                <p className="text-xs text-slate-500">
-                  Registro de récipes, informes y constancias generadías en esta sesión.
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('portal')}
-                  className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold cursor-pointer transition"
-                >
-                  ← Portal CMI
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('workspace')}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold cursor-pointer"
-                >
-                  Hoja de Trabajo A4
-                </button>
-              </div>
-            </div>
-            <HistoryList documents={documentsHistory} />
-          </div>
-        )}
-
-        {activeTab === 'quoter' && (
-          <div className="space-y-4 max-w-5xl mx-auto">
-            <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-              <div>
-                <h2 className="text-base font-bold text-slate-900">
-                  Cotizador Logístico Quirúrgico Synapsis
-                </h2>
-                <p className="text-xs text-slate-500">
-                  Presupuestos de implantes, prótesis y tornillos de columna / cráneo.
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('portal')}
-                  className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold cursor-pointer transition"
-                >
-                  ← Portal CMI
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('workspace')}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold cursor-pointer"
-                >
-                  Hoja de Trabajo A4
-                </button>
-              </div>
-            </div>
-            <LogisticsQuoter />
-          </div>
-        )}
-      </main>
-
-      {/* Modal de Tarjeta de Presentación Digital */}
-      <DoctorBusinessCard
-        isModal
-        isOpen={isCardModalOpen}
-        onClose={() => setIsCardModalOpen(false)}
-      />
-    </div>
-  );
-};
+                <span>← Volver al Portal CMI
