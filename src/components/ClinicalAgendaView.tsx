@@ -283,7 +283,6 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
     const url = clean ? `https://wa.me/${clean}?text=${text}` : `https://wa.me/?text=${text}`;
     window.open(url, '_blank');
   };
-  };
 
   const shiftDate = (days: number) => {
     const current = new Date(selectedDate + 'T00:00:00');
