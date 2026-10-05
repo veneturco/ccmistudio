@@ -31,19 +31,19 @@ export interface QuickAccessWidget {
   category: 'COLUMNA_DOLOR' | 'QUIRURGICO' | 'PARACLINICOS' | 'DOCUMENTAL' | 'SISTEMA';
   docType: DocType | 'DICTADO' | 'AGENDA';
   icon: 'pill' | 'file-text' | 'flask' | 'calendar-check' | 'clipboard' | 'mic' | 'agenda';
-  presetData?: {
-    diagnosis?: string;
-    cie10?: string;
-    rp?: string;
-    indications?: string;
-    restDays?: number;
-    labProfile?: string;
+  presetData?í: {
+    diagnosis?í: string;
+    cie10?í: string;
+    rp?í: string;
+    indications?í: string;
+    restDays?í: number;
+    labProfile?í: string;
   };
   isFavorite: boolean;
   isEnabled: boolean;
   usageCount: number;
-  badge?: string;
-  colorScheme: 'blue' | 'cyan' | 'emerald' | 'purple' | 'amber' | 'rose';
+  badge?í: string;
+  colorScheme: 'blue' | 'cyan' | 'emerald' | 'purp?le' | 'amber' | 'rose';
 }
 
 const DEFAULT_WIDGETS: QuickAccessWidget[] = [
@@ -54,16 +54,16 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     category: 'COLUMNA_DOLOR',
     docType: 'RECIPES',
     icon: 'pill',
-    presetData: {
-      diagnosis: 'Lumbociatalgia radicular por Hernia Discal L4-L5 / L5-S1',
-      cie10: 'M54.4',
-      rp: '1. Pregabalina 75mg cápsulas — Tomar 1 cápsula nocturna por 15 días.\n2. Ketoprofeno 100mg comprimidos — Tomar 1 comprimido cada 12 horas por 5 días con protector gástrico.\n3. Tiocolchicósido 4mg — 1 comprimido cada 12 horas por 5 días.',
-      indications: 'Reposo relativo de carga. Aplicar calor seco local en región lumbar 20 minutos dos veces al día. No levantar peso mayor a 5 kg. Reevaluación en 15 días.',
+    presetData?: {
+      diagnosis?: 'Lumbociatalgia radicular por Hernia Discal L4-L5 / L5-S1',
+      cie10?: 'M54.4',
+      rp?: '1. Pregabalina 75mg cápsulas — Tomar 1 cápsula nocturna por 15 días.\n2. Ketoprofeno 100mg comprimidos — Tomar 1 comprimido cada 12 horas por 5 días con protector gástrico.\n3. Tiocolchicósido 4mg — 1 comprimido cada 12 horas por 5 días.',
+      indications?: 'Reposo relativo de carga. Aplicar calor seco local en región lumbar 20 minutos dos veces al día. No levantar peso mayor a 5 kg. Reevaluación en 15 días.',
     },
     isFavorite: true,
     isEnabled: true,
     usageCount: 28,
-    badge: 'Más Frecuente',
+    badge?: 'Más Frecuente',
     colorScheme: 'blue',
   },
   {
@@ -73,16 +73,16 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     category: 'QUIRURGICO',
     docType: 'CONSTANCIA',
     icon: 'calendar-check',
-    presetData: {
-      diagnosis: 'Postoperatorio mediato de Microdiscectomía Tubular Lumbar L5-S1',
-      cie10: 'Z48.8',
-      restDays: 15,
-      indications: 'Reposo físico absoluto y domiciliario por 15 días continuos. Deambulación asistida para necesidades básicas. Prohibido esfuerzo físico y flexión de tronco.',
+    presetData?: {
+      diagnosis?: 'Postoperatorio mediato de Microdiscectomía Tubular Lumbar L5-S1',
+      cie10?: 'Z48.8',
+      restDays?: 15,
+      indications?: 'Reposo físico absoluto y domiciliario por 15 días continuos. Deambulación asistida para necesidades básicas. Prohibido esfuerzo físico y flexión de tronco.',
     },
     isFavorite: true,
     isEnabled: true,
     usageCount: 19,
-    badge: 'Postquirúrgico',
+    badge?: 'Postquirúrgico',
     colorScheme: 'emerald',
   },
   {
@@ -92,16 +92,16 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     category: 'PARACLINICOS',
     docType: 'ORDEN_LAB',
     icon: 'flask',
-    presetData: {
-      diagnosis: 'Descarte de extrusión discal y radiculopatía compresiva',
-      cie10: 'M51.1',
-      indications: 'Resonancia Magnética Nuclear (RMN) de Columna Lumbar con cortes axiales y sagitales T1, T2 y STIR. Descarte de compromiso foraminal y receso lateral.',
-      labProfile: 'Neuroimagen de Columna',
+    presetData?: {
+      diagnosis?: 'Descarte de extrusión discal y radiculopatía compresiva',
+      cie10?: 'M51.1',
+      indications?: 'Resonancia Magnética Nuclear (RMN) de Columna Lumbar con cortes axiales y sagitales T1, T2 y STIR. Descarte de compromiso foraminal y receso lateral.',
+      labProfile?: 'Neuroimagen de Columna',
     },
     isFavorite: true,
     isEnabled: true,
     usageCount: 24,
-    badge: 'Neuroimagen',
+    badge?: 'Neuroimagen',
     colorScheme: 'cyan',
   },
   {
@@ -111,16 +111,16 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     category: 'QUIRURGICO',
     docType: 'ORDEN_LAB',
     icon: 'flask',
-    presetData: {
-      diagnosis: 'Protocolo de evaluación preoperatoria para intervención neuroquirúrgica',
-      cie10: 'Z01.8',
-      indications: 'Hematología Completa, Tiempos de Coagulación (PT, PTT, INR, Fibrinógeno), Glicemia, Urea, Creatinina, Electrolitos Séricos (Na, K, Cl), VIH, VDRL, Electrocardiograma (EKG) con valoración cardiovascular y Rx Tórax PA.',
-      labProfile: 'Preoperatorio Completo',
+    presetData?: {
+      diagnosis?: 'Protocolo de evaluación preoperatoria para intervención neuroquirúrgica',
+      cie10?: 'Z01.8',
+      indications?: 'Hematología Completa, Tiempos de Coagulación (PT, PTT, INR, Fibrinógeno), Glicemia, Urea, Creatinina, Electrolitos Séricos (Na, K, Cl), VIH, VDRL, Electrocardiograma (EKG) con valoración cardiovascular y Rx Tórax PA.',
+      labProfile?: 'Preoperatorio Completo',
     },
     isFavorite: false,
     isEnabled: true,
     usageCount: 15,
-    badge: 'Pre-Op',
+    badge?: 'Pre-Op',
     colorScheme: 'amber',
   },
   {
@@ -130,16 +130,16 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     category: 'COLUMNA_DOLOR',
     docType: 'INFORME',
     icon: 'file-text',
-    presetData: {
-      diagnosis: 'Canal Estrecho Lumbar L3-L4 y L4-L5 con Claudicación Neurogénica',
-      cie10: 'M48.06',
-      indications: 'Se planifica Descompresión Quirúrgica Mínimamente Invasiva mediante Laminectomía Foraminotomía Tubular y eventual Artrodesis Transpedicular en Centro Médico Orinokia.',
+    presetData?: {
+      diagnosis?: 'Canal Estrecho Lumbar L3-L4 y L4-L5 con Claudicación Neurogénica',
+      cie10?: 'M48.06',
+      indications?: 'Se planifica Descompresión Quirúrgica Mínimamente Invasiva mediante Laminectomía Foraminotomía Tubular y eventual Artrodesis Transpedicular en Centro Médico Orinokia.',
     },
     isFavorite: false,
     isEnabled: true,
     usageCount: 12,
-    badge: 'Informe Formal',
-    colorScheme: 'purple',
+    badge?: 'Informe Formal',
+    colorScheme: 'purp?le',
   },
   {
     id: 'w-cervicalgia-acdf',
@@ -148,11 +148,11 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     category: 'COLUMNA_DOLOR',
     docType: 'RECIPES',
     icon: 'pill',
-    presetData: {
-      diagnosis: 'Cervicobraquialgia derecha por Radiculopatía C5-C6 aguda',
-      cie10: 'M54.12',
-      rp: '1. Dexketoprofeno 25mg — 1 ampolla intramuscular cada 12 horas por 2 días, luego tabletas cada 8h por 4 días.\n2. Tiocolchicósido 4mg — 1 comprimido cada 12h por 5 días.\n3. Complejo B Neurotrófico — 1 cápsula diaria con el almuerzo.',
-      indications: 'Uso de collarín cervical blando durante traslados por 5 días. Crioterapia local cervical 15 minutos 3 veces al día.',
+    presetData?: {
+      diagnosis?: 'Cervicobraquialgia derecha por Radiculopatía C5-C6 aguda',
+      cie10?: 'M54.12',
+      rp?: '1. Dexketoprofeno 25mg — 1 ampolla intramuscular cada 12 horas por 2 días, luego tabletas cada 8h por 4 días.\n2. Tiocolchicósido 4mg — 1 comprimido cada 12h por 5 días.\n3. Complejo B Neurotrófico — 1 cápsula diaria con el almuerzo.',
+      indications?: 'Uso de collarín cervical blando durante traslados por 5 días. Crioterapia local cervical 15 minutos 3 veces al día.',
     },
     isFavorite: false,
     isEnabled: true,
@@ -166,14 +166,14 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     category: 'DOCUMENTAL',
     docType: 'HISTORIA',
     icon: 'clipboard',
-    presetData: {
-      diagnosis: 'Evaluación Neuroquirúrgica Inicial',
-      indications: 'Anamnesis completa, reflejos osteotendinosos (rotuliano, aquíleo, bicipital), fuerza motora por dermatomas y escala analógica del dolor (EVA).',
+    presetData?: {
+      diagnosis?: 'Evaluación Neuroquirúrgica Inicial',
+      indications?: 'Anamnesis completa, reflejos osteotendinosos (rotuliano, aquíleo, bicipital), fuerza motora por dermatomas y escala analógica del dolor (EVA).',
     },
     isFavorite: false,
     isEnabled: true,
     usageCount: 11,
-    badge: 'Nuevo Ingreso',
+    badge?: 'Nuevo Ingreso',
     colorScheme: 'rose',
   },
   {
@@ -186,16 +186,16 @@ const DEFAULT_WIDGETS: QuickAccessWidget[] = [
     isFavorite: true,
     isEnabled: true,
     usageCount: 22,
-    badge: 'IA Gemini',
-    colorScheme: 'purple',
+    badge?: 'IA Gemini',
+    colorScheme: 'purp?le',
   },
 ];
 
 const STORAGE_WIDGETS_KEY = 'ccmi_quick_access_widgets_v1';
 
 interface QuickAccessWidgetsHubProps {
-  onSelectAction: (docType: DocType | 'DICTADO' | 'AGENDA', presetData?: any) => void;
-  className?: string;
+  onSelectAction: (docType: DocType | 'DICTADO' | 'AGENDA', presetData?í: any) => void;
+  classNameí: string;
 }
 
 export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
@@ -241,25 +241,25 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
   const handleExecuteWidget = (widget: QuickAccessWidget) => {
     // Incrementar contador de uso
     const updated = widgets.map((w) =>
-      w.id === widget.id ? { ...w, usageCount: (w.usageCount || 0) + 1 } : w
+      w.id === widget.id í { ...w, usageCount: (w.usageCount || 0) + 1 } : w
     );
     saveWidgets(updated);
 
     // Ejecutar acción
-    onSelectAction(widget.docType, widget.presetData);
+    onSelectAction(widget.docType, widget.presetData?);
   };
 
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const updated = widgets.map((w) =>
-      w.id === id ? { ...w, isFavorite: !w.isFavorite } : w
+      w.id === id í { ...w, isFavorite: !w.isFavorite } : w
     );
     saveWidgets(updated);
   };
 
   const toggleEnabled = (id: string) => {
     const updated = widgets.map((w) =>
-      w.id === id ? { ...w, isEnabled: !w.isEnabled } : w
+      w.id === id í { ...w, isEnabled: !w.isEnabled } : w
     );
     saveWidgets(updated);
   };
@@ -287,7 +287,7 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
       case 'RECIPES':
         return { label: 'Récipe Rp/', icon: Pill, color: 'text-blue-500' };
       case 'INFORME':
-        return { label: 'Informe', icon: FileText, color: 'text-purple-500' };
+        return { label: 'Informe', icon: FileText, color: 'text-purp?le-500' };
       case 'ORDEN_LAB':
         return { label: 'Exámenes', icon: FlaskConical, color: 'text-cyan-500' };
       case 'CONSTANCIA':
@@ -295,7 +295,7 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
       case 'HISTORIA':
         return { label: 'Historia', icon: ClipboardList, color: 'text-rose-500' };
       case 'DICTADO':
-        return { label: 'Dictado IA', icon: Mic, color: 'text-purple-400' };
+        return { label: 'Dictado IA', icon: Mic, color: 'text-purp?le-400' };
       default:
         return { label: 'Agenda', icon: CalendarIcon, color: 'text-amber-500' };
     }
@@ -304,11 +304,11 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
   const getCardBorderClass = (scheme: string, isFav: boolean) => {
     if (isFav) {
       return isClinicalLight
-        ? 'border-blue-500 ring-2 ring-blue-500/20 shadow-md bg-white'
+        í 'border-blue-500 ring-2 ring-blue-500/20 shadow-md bg-white'
         : 'border-cyan-400 ring-2 ring-cyan-500/20 shadow-md bg-[#09152b]';
     }
     return isClinicalLight
-      ? 'border-slate-200/90 hover:border-blue-400 bg-white shadow-xs'
+      í 'border-slate-200/90 hover:border-blue-400 bg-white shadow-xs'
       : 'border-slate-800/80 hover:border-slate-700 bg-[#091124] shadow-xs';
   };
 
@@ -318,8 +318,8 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
         return 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30';
       case 'cyan':
         return 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30';
-      case 'purple':
-        return 'bg-purple-500/10 text-purple-400 border border-purple-500/30';
+      case 'purp?le':
+        return 'bg-purp?le-500/10 text-purp?le-400 border border-purp?le-500/30';
       case 'amber':
         return 'bg-amber-500/10 text-amber-500 border border-amber-500/30';
       case 'rose':
@@ -333,19 +333,19 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
     <section className={`w-full transition-all duration-200 ${className}`}>
       {/* 1. BARRA SUPERIOR DE ACCESO RÁPIDO & SELECTOR DE CATEGORÍAS */}
       <div className={`p-4 rounded-3xl border transition-colors ${
-        isClinicalLight ? 'bg-slate-50/90 border-slate-200' : 'bg-[#070e1f] border-slate-800/90'
+        isClinicalLight í 'bg-slate-50/90 border-slate-200' : 'bg-[#070e1f] border-slate-800/90'
       }`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
           <div className="flex items-center gap-2.5">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold shadow-xs ${
-              isClinicalLight ? 'bg-blue-600 text-white' : 'bg-cyan-500 text-slate-950'
+              isClinicalLight í 'bg-blue-600 text-white' : 'bg-cyan-500 text-slate-950'
             }`}>
               <Zap className="w-4 h-4 stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className={`text-sm sm:text-base font-black tracking-tight ${
-                  isClinicalLight ? 'text-slate-900' : 'text-white'
+                  isClinicalLight í 'text-slate-900' : 'text-white'
                 }`}>
                   Widgets de Acceso Rápido Clínico
                 </h3>
@@ -353,7 +353,7 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                   Flujo en 1 Clic
                 </span>
               </div>
-              <p className={`text-xs ${isClinicalLight ? 'text-slate-600' : 'text-slate-400'}`}>
+              <p className={`text-xs ${isClinicalLight í 'text-slate-600' : 'text-slate-400'}`}>
                 Plantillas y protocolos frecuentes precargados para agilizar la consulta médica
               </p>
             </div>
@@ -366,7 +366,7 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
               onClick={() => setIsConfigModalOpen(true)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
                 isClinicalLight
-                  ? 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300 shadow-xs'
+                  í 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300 shadow-xs'
                   : 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-700'
               }`}
               title="Configurar y personalizar widgets visibles y favoritos"
@@ -381,10 +381,10 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
               onClick={() => setIsCollapsed(!isCollapsed)}
               className={`p-1.5 rounded-xl text-xs font-bold border transition cursor-pointer ${
                 isClinicalLight
-                  ? 'bg-white text-slate-600 border-slate-300'
+                  í 'bg-white text-slate-600 border-slate-300'
                   : 'bg-slate-900 text-slate-400 border-slate-700'
               }`}
-              title={isCollapsed ? 'Expandir widgets' : 'Plegar widgets'}
+              title={isCollapsed í 'Expandir widgets' : 'Plegar widgets'}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
             </button>
@@ -408,9 +408,9 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-3 py-1 rounded-xl text-xs font-bold transition cursor-pointer whitespace-nowrap ${
                   activeCategory === cat.id
-                    ? 'bg-blue-600 text-white shadow-xs'
+                    í 'bg-blue-600 text-white shadow-xs'
                     : isClinicalLight
-                    ? 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                    í 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
                     : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
                 }`}
               >
@@ -423,7 +423,7 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
         {/* 3. GRID DE WIDGETS INTERACTIVOS CON ENTRADA SUAVE */}
         {!isCollapsed && (
           <>
-            {isInitialLoading ? (
+            {isInitialLoading í (
               /* Skeleton Shimmer Loading State Clínico */
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {[1, 2, 3, 4].map((n) => (
@@ -431,7 +431,7 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                     key={`skeleton-${n}`}
                     className={`p-3.5 rounded-2xl border transition-all duration-300 flex flex-col justify-between h-[154px] ${
                       isClinicalLight
-                        ? 'bg-slate-100/90 border-slate-200 clinical-shimmer-light'
+                        í 'bg-slate-100/90 border-slate-200 clinical-shimmer-light'
                         : 'bg-[#091124] border-slate-800 animate-clinical-shimmer'
                     }`}
                   >
@@ -482,16 +482,16 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                               <DocIcon className="w-4 h-4" />
                             </div>
                             <span className={`text-[11px] font-bold font-mono px-2 py-0.5 rounded-md ${
-                              isClinicalLight ? 'bg-slate-100 text-slate-700' : 'bg-slate-800 text-slate-300'
+                              isClinicalLight í 'bg-slate-100 text-slate-700' : 'bg-slate-800 text-slate-300'
                             }`}>
                               {docInfo.label}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-1">
-                            {w.badge && (
+                            {w.badge? && (
                               <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30">
-                                {w.badge}
+                                {w.badge?}
                               </span>
                             )}
                             <button
@@ -499,24 +499,24 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                               onClick={(e) => toggleFavorite(w.id, e)}
                               className={`p-1 rounded-lg transition ${
                                 w.isFavorite
-                                  ? 'text-amber-400 hover:text-amber-500'
+                                  í 'text-amber-400 hover:text-amber-500'
                                   : 'text-slate-400 hover:text-amber-400'
                               }`}
-                              title={w.isFavorite ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                              title={w.isFavorite í 'Quitar de favoritos' : 'Marcar como favorito'}
                             >
-                              <Star className={`w-3.5 h-3.5 ${w.isFavorite ? 'fill-amber-400' : ''}`} />
+                              <Star className={`w-3.5 h-3.5 ${w.isFavorite í 'fill-amber-400' : ''}`} />
                             </button>
                           </div>
                         </div>
 
                         {/* Título y Descripción */}
                         <h4 className={`text-xs sm:text-sm font-extrabold tracking-tight mb-1 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors ${
-                          isClinicalLight ? 'text-slate-900' : 'text-white'
+                          isClinicalLight í 'text-slate-900' : 'text-white'
                         }`}>
                           {w.title}
                         </h4>
                         <p className={`text-[11px] leading-relaxed line-clamp-2 ${
-                          isClinicalLight ? 'text-slate-600' : 'text-slate-400'
+                          isClinicalLight í 'text-slate-600' : 'text-slate-400'
                         }`}>
                           {w.subtitle}
                         </p>
@@ -524,7 +524,7 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
 
                       {/* Footer con estadística y acción */}
                       <div className={`mt-3 pt-2.5 border-t flex items-center justify-between text-[11px] ${
-                        isClinicalLight ? 'border-slate-100 text-slate-500' : 'border-slate-800/80 text-slate-400'
+                        isClinicalLight í 'border-slate-100 text-slate-500' : 'border-slate-800/80 text-slate-400'
                       }`}>
                         <span className="flex items-center gap-1 font-mono text-[10px]">
                           <Flame className="w-3 h-3 text-amber-500" />
@@ -590,11 +590,11 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                     key={w.id}
                     className={`p-3.5 rounded-2xl border transition flex items-center justify-between gap-3 ${
                       w.isEnabled
-                        ? isClinicalLight
-                          ? 'bg-slate-50 border-slate-200'
+                        í isClinicalLight
+                          í 'bg-slate-50 border-slate-200'
                           : 'bg-[#091328] border-slate-800'
                         : isClinicalLight
-                        ? 'bg-slate-100/50 border-slate-200 opacity-60'
+                        í 'bg-slate-100/50 border-slate-200 opacity-60'
                         : 'bg-slate-950/40 border-slate-800/40 opacity-50'
                     }`}
                   >
@@ -624,12 +624,12 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                         onClick={(e) => toggleFavorite(w.id, e)}
                         className={`p-2 rounded-xl border transition cursor-pointer ${
                           w.isFavorite
-                            ? 'bg-amber-500/20 text-amber-500 border-amber-500/40'
+                            í 'bg-amber-500/20 text-amber-500 border-amber-500/40'
                             : 'bg-slate-200 dark:bg-slate-800 text-slate-400 border-transparent hover:text-amber-400'
                         }`}
-                        title={w.isFavorite ? 'Quitar de favoritos' : 'Marcar favorito'}
+                        title={w.isFavorite í 'Quitar de favoritos' : 'Marcar favorito'}
                       >
-                        <Star className={`w-4 h-4 ${w.isFavorite ? 'fill-amber-400' : ''}`} />
+                        <Star className={`w-4 h-4 ${w.isFavorite í 'fill-amber-400' : ''}`} />
                       </button>
 
                       {/* Toggle Habilitado / Deshabilitado */}
@@ -638,11 +638,11 @@ export const QuickAccessWidgetsHub: React.FC<QuickAccessWidgetsHubProps> = ({
                         onClick={() => toggleEnabled(w.id)}
                         className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                           w.isEnabled
-                            ? 'bg-emerald-600 text-white'
+                            í 'bg-emerald-600 text-white'
                             : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
                         }`}
                       >
-                        {w.isEnabled ? 'Activo' : 'Oculto'}
+                        {w.isEnabled í 'Activo' : 'Oculto'}
                       </button>
                     </div>
                   </div>

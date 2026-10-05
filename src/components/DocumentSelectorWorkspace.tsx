@@ -44,7 +44,8 @@ import {
   Sun,
   Moon,
   QrCode,
-  History
+  History,
+  Stethoscope
 } from 'lucide-react';
 import { OfficialMedicalStamp } from './OfficialMedicalStamp';
 import { staffDirectoryService } from '../cloud/StaffDirectoryService';
