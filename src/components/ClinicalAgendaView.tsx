@@ -27,6 +27,8 @@ import { ClinicalAppointment, AppointmentType, AppointmentStatus, ConsultationMo
 import { PatientData, DocType } from '../types';
 import { FirestoreAgendaSync } from '../cloud/FirestoreAgendaSync';
 import { formatWhatsAppPhone } from '../utils/pdfExportHelpers';
+import { staffDirectoryService } from '../cloud/StaffDirectoryService';
+import { AuthorizedPersonnel } from '../auth/userDirectory';
 
 interface ClinicalAgendaViewProps {
   onStartConsultationForPatient: (patient: PatientData, docType?: DocType) => void;
@@ -146,6 +148,19 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
     return () => unsub();
   }, []);
 
+  // Lista de Médicos Activos del Directorio Institucional
+  const [doctorsList, setDoctorsList] = useState<AuthorizedPersonnel[]>([]);
+  const [selectedDoctorFilter, setSelectedDoctorFilter] = useState<string>('ALL');
+
+  useEffect(() => {
+    staffDirectoryService.initialize();
+    const unsubStaff = staffDirectoryService.subscribe((list) => {
+      const activeDoctors = list.filter((m) => m.role === 'MEDICO' && m.status !== 'INACTIVO');
+      setDoctorsList(activeDoctors);
+    });
+    return () => unsubStaff();
+  }, []);
+
   // Formulario de Nueva Cita
   const [formData, setFormData] = useState({
     patientName: '',
@@ -155,6 +170,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
     durationMinutes: 45,
     type: 'PRIMERA_VEZ' as AppointmentType,
     modality: 'PRESENCIAL' as ConsultationModality,
+    doctorEmail: 'moucharrafiepc@gmail.com',
     reasonForVisit: '',
     notes: '',
   });
@@ -171,14 +187,20 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
   // Citas del día seleccionado
   const dayAppointments = appointments.filter((apt) => apt.date === selectedDate);
 
-  // Filtradas por búsqueda y estado
+  // Filtradas por búsqueda, estado y médico
   const filteredAppointments = dayAppointments.filter((apt) => {
     const matchesStatus = filterStatus === 'TODAS' || apt.status === filterStatus;
     const matchesSearch = 
       apt.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       apt.patientNationalId.includes(searchTerm) ||
+      (apt.doctorName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (apt.reasonForVisit || '').toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesSearch;
+
+    const matchesDoctor = selectedDoctorFilter === 'ALL' ||
+      apt.doctorUserId === selectedDoctorFilter ||
+      (selectedDoctorFilter === 'moucharrafiepc@gmail.com' && (apt.doctorUserId === 'dr-samir' || !apt.doctorUserId));
+
+    return matchesStatus && matchesSearch && matchesDoctor;
   });
 
   // Métricas rápidas
@@ -207,10 +229,16 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
     e.preventDefault();
     if (!formData.patientName.trim()) return;
 
+    const assignedDoc = doctorsList.find(d => d.email === formData.doctorEmail) || doctorsList[0];
+    const docName = assignedDoc?.displayName || 'Dr. Samir Moucharrafie Naime';
+    const docSpecialty = assignedDoc?.specialty || 'Neurocirugía y Cirugía de Columna';
+
     const newApt: ClinicalAppointment = {
       id: `apt-${Date.now()}`,
       tenantId: 'CCMI-DR-SAMIR',
-      doctorUserId: 'dr-samir',
+      doctorUserId: formData.doctorEmail || 'moucharrafiepc@gmail.com',
+      doctorName: docName,
+      doctorSpecialty: docSpecialty,
       patientId: `V-${formData.patientNationalId.replace(/\D/g, '')}`,
       patientName: formData.patientName.trim(),
       patientNationalId: formData.patientNationalId.trim(),
@@ -239,6 +267,7 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
       durationMinutes: 45,
       type: 'PRIMERA_VEZ',
       modality: 'PRESENCIAL',
+      doctorEmail: 'moucharrafiepc@gmail.com',
       reasonForVisit: '',
       notes: '',
     });
@@ -247,11 +276,13 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
   const handleSendWhatsAppReminder = (apt: ClinicalAppointment) => {
     if (!apt.patientPhone) return;
     const clean = formatWhatsAppPhone(apt.patientPhone);
+    const doctorName = apt.doctorName || 'Dr. Samir Moucharrafie';
     const text = encodeURIComponent(
-      `Hola ${apt.patientName}, le recordamos su cita con el *Dr. Samir Moucharrafie* en el *Centro Clínico Médico Integral (CCMI - Orinokia Piso 2)* programada para el día *${apt.date}* a las *${apt.startTime}*.\n\n_Por favor confirmar su asistencia._`
+      `Hola ${apt.patientName}, le recordamos su cita médica con el *${doctorName}* en el *Centro Clínico Médico Integral (CCMI - Orinokia Piso 2)* programada para el día *${apt.date}* a las *${apt.startTime}*.\n\n_Por favor confirmar su asistencia._`
     );
     const url = clean ? `https://wa.me/${clean}?text=${text}` : `https://wa.me/?text=${text}`;
     window.open(url, '_blank');
+  };
   };
 
   const shiftDate = (days: number) => {
@@ -431,16 +462,37 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
       </div>
 
       {/* 3. FILTROS Y BÚSQUEDA */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-[#091328] p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-        <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Buscar por nombre o cédula..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 rounded-xl text-xs bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-cyan-500"
-          />
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-3 bg-white dark:bg-[#091328] p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
+          <div className="relative w-full sm:w-64">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Buscar por paciente o cédula..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 rounded-xl text-xs bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 outline-none focus:border-cyan-500"
+            />
+          </div>
+
+          {/* Filtro por Médico Especialista */}
+          <div className="flex items-center gap-1.5 w-full sm:w-auto px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+            <Stethoscope className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+            <select
+              value={selectedDoctorFilter}
+              onChange={(e) => setSelectedDoctorFilter(e.target.value)}
+              className="bg-transparent font-bold text-slate-700 dark:text-cyan-300 outline-none cursor-pointer text-xs w-full sm:w-auto"
+            >
+              <option value="ALL" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                Todos los Especialistas ({doctorsList.length})
+              </option>
+              {doctorsList.map((doc) => (
+                <option key={doc.email} value={doc.email} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                  {doc.displayName} ({doc.specialty ? doc.specialty.split(' ')[0] : 'Médico'})
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
@@ -521,6 +573,11 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
                       <span className={`flex items-center gap-1 font-semibold ${typeBadge.color}`}>
                         <TypeIcon className="w-3.5 h-3.5" />
                         <span>{typeBadge.label}</span>
+                      </span>
+                      <span>•</span>
+                      <span className="flex items-center gap-1 font-semibold text-blue-600 dark:text-cyan-300">
+                        <Stethoscope className="w-3.5 h-3.5" />
+                        <span>{apt.doctorName || 'Dr. Samir Moucharrafie'}</span>
                       </span>
                       <span>•</span>
                       <span className="flex items-center gap-1">
@@ -666,6 +723,23 @@ export const ClinicalAgendaView: React.FC<ClinicalAgendaViewProps> = ({
             </div>
 
             <form onSubmit={handleCreateAppointment} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
+                  Médico Especialista Tratante *
+                </label>
+                <select
+                  value={formData.doctorEmail}
+                  onChange={(e) => setFormData({ ...formData, doctorEmail: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-2xl text-sm bg-slate-100 dark:bg-[#0b1426] text-slate-900 dark:text-cyan-300 font-bold border border-slate-200 dark:border-white/5 outline-none focus:border-blue-500 cursor-pointer"
+                >
+                  {doctorsList.map((doc) => (
+                    <option key={doc.email} value={doc.email} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                      {doc.displayName} ({doc.specialty || 'Especialista'}) {doc.officeLocation ? `• ${doc.officeLocation}` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">
                   Nombre Completo del Paciente *

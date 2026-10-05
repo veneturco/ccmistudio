@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { AuthorizedPersonnel } from '../auth/userDirectory';
 
 interface StampProps {
   className?: string;
   inkColor?: 'navy' | 'blue' | 'black';
   size?: 'sm' | 'md' | 'lg';
   withBorder?: boolean;
+  doctor?: AuthorizedPersonnel | null;
 }
 
 export const OfficialMedicalStamp: React.FC<StampProps> = ({
@@ -12,6 +14,7 @@ export const OfficialMedicalStamp: React.FC<StampProps> = ({
   inkColor = 'navy',
   size = 'md',
   withBorder = false,
+  doctor = null,
 }) => {
   const [customStampPng, setCustomStampPng] = useState<string | null>(null);
 
@@ -36,18 +39,26 @@ export const OfficialMedicalStamp: React.FC<StampProps> = ({
     lg: 'scale-100 origin-center',
   };
 
-  // Si el médico configuró su firma y sello transparente con el extractor inteligente
-  if (customStampPng) {
+  // 1. Si el médico tiene su propio sello digitalizado configurado
+  const activeStampImage = doctor?.stampBase64 || customStampPng;
+
+  if (activeStampImage) {
     return (
       <div className={`inline-flex items-center justify-center select-none holographic-foil ${scaleMap[size]} ${className}`}>
         <img 
-          src={customStampPng} 
-          alt="Sello y Firma Médica Oficial" 
+          src={activeStampImage} 
+          alt={`Sello y Firma de ${doctor?.displayName || 'Médico Especialista'}`} 
           className="max-h-24 max-w-full object-contain filter drop-shadow-xs relative z-10" 
         />
       </div>
     );
   }
+
+  const doctorName = doctor?.displayName || 'Dr. Samir Moucharrafie Naime';
+  const doctorSpecialty = (doctor?.specialty || 'Neurocirujano').toUpperCase();
+  const mpps = doctor?.mppsNumber || '62.431';
+  const cmeb = doctor?.cmebNumber || '3.842';
+  const isSamir = !doctor || doctor.email === 'moucharrafiepc@gmail.com' || doctorName.toLowerCase().includes('samir');
 
   return (
     <div
@@ -60,7 +71,7 @@ export const OfficialMedicalStamp: React.FC<StampProps> = ({
         className="text-2xl font-bold tracking-tight mb-1 text-center leading-none"
         style={{ fontFamily: "'Dancing Script', cursive, sans-serif" }}
       >
-        Dr. Samir Moucharrafie Naime
+        {doctorName}
       </div>
 
       <div className="flex items-center gap-3">
@@ -80,14 +91,16 @@ export const OfficialMedicalStamp: React.FC<StampProps> = ({
 
         <div className="flex flex-col text-left">
           <span className="font-black tracking-wider text-xs uppercase leading-none">
-            NEUROCIRUJANO
+            {doctorSpecialty}
           </span>
           <span className="font-bold text-[10px] tracking-tight mt-1 leading-tight">
-            MPPS: 61231 / CMEB: 5331
+            MPPS: {mpps} / CMEB: {cmeb}
           </span>
-          <span className="font-bold text-[10px] tracking-tight leading-tight">
-            RPPS (Francia): 10100476323
-          </span>
+          {isSamir && (
+            <span className="font-bold text-[10px] tracking-tight leading-tight">
+              RPPS (Francia): 10100476323
+            </span>
+          )}
         </div>
       </div>
     </div>

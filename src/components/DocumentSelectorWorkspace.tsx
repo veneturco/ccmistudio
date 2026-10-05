@@ -47,6 +47,8 @@ import {
   History
 } from 'lucide-react';
 import { OfficialMedicalStamp } from './OfficialMedicalStamp';
+import { staffDirectoryService } from '../cloud/StaffDirectoryService';
+import { AuthorizedPersonnel } from '../auth/userDirectory';
 import { ClinicalDictationCapsule } from './ClinicalDictationCapsule';
 import { SamiCopilot } from './SamiCopilot';
 import { QuickVoiceCorrectionWidget } from './QuickVoiceCorrectionWidget';
@@ -301,6 +303,25 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
   const [isTechModalOpen, setIsTechModalOpen] = useState<boolean>(false);
   const [foundPatientAlert, setFoundPatientAlert] = useState<PatientRecord | null>(null);
   const [customBgs, setCustomBgs] = useState<Record<string, string>>({});
+  const [doctorsList, setDoctorsList] = useState<AuthorizedPersonnel[]>([]);
+  const [selectedDoctor, setSelectedDoctor] = useState<AuthorizedPersonnel | null>(null);
+
+  useEffect(() => {
+    staffDirectoryService.initialize();
+    const unsubStaff = staffDirectoryService.subscribe((list) => {
+      const docs = list.filter((m) => m.role === 'MEDICO' && m.status !== 'INACTIVO');
+      setDoctorsList(docs);
+      setSelectedDoctor((prev) => {
+        if (prev) {
+          const updated = docs.find((d) => d.email === prev.email);
+          return updated || prev;
+        }
+        const samir = docs.find((d) => d.email === 'moucharrafiepc@gmail.com');
+        return samir || docs[0] || null;
+      });
+    });
+    return () => unsubStaff();
+  }, []);
   const [isUploaderOpen, setIsUploaderOpen] = useState<boolean>(false);
   const [isLiveCalibratorOpen, setIsLiveCalibratorOpen] = useState<boolean>(false);
   const [isOriginalPdfModalOpen, setIsOriginalPdfModalOpen] = useState<boolean>(false);
@@ -2058,6 +2079,30 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               <span className="hidden md:inline">Protocolos</span>
             </button>
 
+            {/* Selector de Médico Emisor Tratante */}
+            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-xs shrink-0 transition ${
+              isClinicalLight
+                ? 'bg-white border-slate-300 text-slate-800'
+                : 'bg-[#09152b] border-cyan-500/30 text-cyan-200'
+            }`}>
+              <Stethoscope className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <select
+                value={selectedDoctor?.email || ''}
+                onChange={(e) => {
+                  const found = doctorsList.find(d => d.email === e.target.value);
+                  if (found) setSelectedDoctor(found);
+                }}
+                className="bg-transparent font-bold outline-none cursor-pointer text-xs max-w-[160px] truncate"
+                title="Médico Tratante que emite este documento"
+              >
+                {doctorsList.map((doc) => (
+                  <option key={doc.email} value={doc.email} className="bg-slate-900 text-white">
+                    {doc.displayName.replace('Dr. ', '').replace('Dra. ', '')} ({doc.specialty ? doc.specialty.split(' ')[0] : 'Médico'})
+                  </option>
+                ))}
+              </select>
+            </div>
+
             {/* Botón Limpiar */}
             <button
               type="button"
@@ -2318,7 +2363,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 showZoneGuides={showZoneGuides}
               >
                 <div className="w-full h-full pointer-events-none scale-85 origin-top-left flex items-center justify-center">
-                  <OfficialMedicalStamp size="md" inkColor="navy" />
+                  <OfficialMedicalStamp size="md" inkColor="navy" doctor={selectedDoctor} />
                 </div>
               </InteractiveField>
             )}
@@ -2616,7 +2661,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 showZoneGuides={showZoneGuides}
               >
                 <div className="w-full h-full pointer-events-none scale-85 origin-top-left flex items-center justify-center">
-                  <OfficialMedicalStamp size="md" inkColor="navy" />
+                  <OfficialMedicalStamp size="md" inkColor="navy" doctor={selectedDoctor} />
                 </div>
               </InteractiveField>
             )}
@@ -2806,7 +2851,7 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
                 showZoneGuides={showZoneGuides}
               >
                 <div className="w-full h-full pointer-events-none scale-85 origin-top-left flex items-center justify-center">
-                  <OfficialMedicalStamp size="md" inkColor="navy" />
+                  <OfficialMedicalStamp size="md" inkColor="navy" doctor={selectedDoctor} />
                 </div>
               </InteractiveField>
             )}

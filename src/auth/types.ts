@@ -8,6 +8,13 @@ export type AuthStatus =
   | 'SESSION_EXPIRED'
   | 'UNAUTHORIZED';
 
+export interface StaffPermissions {
+  canViewFullHistory: boolean;
+  canAccessQuoter: boolean;
+  canCalibrateA4: boolean;
+  canManageStaff: boolean;
+}
+
 export interface SynapsisUser {
   uid: string;
   email: string | null;
@@ -17,6 +24,8 @@ export interface SynapsisUser {
   isVerified: boolean;
   photoURL?: string | null;
   deviceAuthenticated?: boolean;
+  permissions?: StaffPermissions;
+  status?: 'ACTIVO' | 'INACTIVO' | 'VACACIONES';
 }
 
 export interface AuthContextType {

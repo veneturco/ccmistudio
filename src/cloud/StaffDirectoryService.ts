@@ -1,7 +1,12 @@
 import { collection, doc, getDocs, getDoc, setDoc, deleteDoc, onSnapshot, query } from 'firebase/firestore';
 import { db, CLINICAL_TENANT_ID } from '../firebase/config';
-import { AuthorizedPersonnel, AUTHORIZED_PERSONNEL_DIRECTORY } from '../auth/userDirectory';
-import { SynapsisRole } from '../auth/types';
+import { 
+  AuthorizedPersonnel, 
+  AUTHORIZED_PERSONNEL_DIRECTORY, 
+  PersonnelStatus, 
+  getDefaultPermissionsForRole 
+} from '../auth/userDirectory';
+import { SynapsisRole, StaffPermissions } from '../auth/types';
 
 const LOCAL_STORAGE_STAFF_KEY = 'socs_authorized_staff_directory_v2';
 
@@ -37,7 +42,14 @@ export class StaffDirectoryService {
           const parsed: AuthorizedPersonnel[] = JSON.parse(stored);
           parsed.forEach((m) => {
             if (m.email) {
-              this.cachedMembers.set(m.email.trim().toLowerCase(), m);
+              const clean = m.email.trim().toLowerCase();
+              const base = this.cachedMembers.get(clean);
+              this.cachedMembers.set(clean, {
+                ...base,
+                ...m,
+                permissions: m.permissions || base?.permissions || getDefaultPermissionsForRole(m.role || 'MEDICO'),
+                status: m.status || base?.status || 'ACTIVO',
+              });
             }
           });
         }
@@ -78,13 +90,31 @@ export class StaffDirectoryService {
             snapshot.docs.forEach((docSnap) => {
               const data = docSnap.data() as AuthorizedPersonnel;
               if (data && data.email) {
-                this.cachedMembers.set(data.email.trim().toLowerCase(), {
-                  email: data.email.trim().toLowerCase(),
-                  displayName: data.displayName || data.email,
-                  role: data.role || 'MEDICO',
-                  specialty: data.specialty || '',
-                  description: data.description || '',
-                });
+                const cleanEmail = data.email.trim().toLowerCase();
+                const existing = this.cachedMembers.get(cleanEmail) || AUTHORIZED_PERSONNEL_DIRECTORY[cleanEmail];
+                const merged: AuthorizedPersonnel = {
+                  ...existing,
+                  ...data,
+                  email: cleanEmail,
+                  displayName: data.displayName || existing?.displayName || cleanEmail,
+                  role: data.role || existing?.role || 'MEDICO',
+                  specialty: data.specialty !== undefined ? data.specialty : (existing?.specialty || ''),
+                  description: data.description !== undefined ? data.description : (existing?.description || ''),
+                  status: data.status || existing?.status || 'ACTIVO',
+                  nationalId: data.nationalId || existing?.nationalId || '',
+                  mppsNumber: data.mppsNumber || existing?.mppsNumber || '',
+                  cmebNumber: data.cmebNumber || existing?.cmebNumber || '',
+                  phone: data.phone || existing?.phone || '',
+                  avatarUrl: data.avatarUrl || existing?.avatarUrl || '',
+                  consultationDays: data.consultationDays || existing?.consultationDays || [],
+                  consultationHours: data.consultationHours || existing?.consultationHours || '',
+                  officeLocation: data.officeLocation || existing?.officeLocation || '',
+                  permissions: data.permissions || existing?.permissions || getDefaultPermissionsForRole(data.role || existing?.role || 'MEDICO'),
+                  stampBase64: data.stampBase64 || existing?.stampBase64 || '',
+                  signatureBase64: data.signatureBase64 || existing?.signatureBase64 || '',
+                  updatedAt: data.updatedAt || new Date().toISOString(),
+                };
+                this.cachedMembers.set(cleanEmail, merged);
               }
             });
             this.saveToLocalStorage();
@@ -109,9 +139,16 @@ export class StaffDirectoryService {
     return this.cachedMembers.get(email.trim().toLowerCase()) || null;
   }
 
+  public getActiveDoctors(): AuthorizedPersonnel[] {
+    return Array.from(this.cachedMembers.values()).filter(
+      (m) => m.role === 'MEDICO' && m.status !== 'INACTIVO'
+    );
+  }
+
   public isEmailAuthorized(email: string): boolean {
     if (!email) return false;
-    return this.cachedMembers.has(email.trim().toLowerCase());
+    const member = this.cachedMembers.get(email.trim().toLowerCase());
+    return !!member && member.status !== 'INACTIVO';
   }
 
   public async addOrUpdateMember(member: AuthorizedPersonnel): Promise<{ success: boolean; message: string }> {
@@ -120,12 +157,29 @@ export class StaffDirectoryService {
       return { success: false, message: 'Correo electrónico inválido' };
     }
 
+    const existing = this.cachedMembers.get(cleanEmail) || AUTHORIZED_PERSONNEL_DIRECTORY[cleanEmail];
+    
     const payload: AuthorizedPersonnel = {
+      ...existing,
+      ...member,
       email: cleanEmail,
-      displayName: member.displayName.trim() || cleanEmail.split('@')[0],
-      role: member.role,
-      specialty: member.specialty?.trim() || '',
-      description: member.description?.trim() || '',
+      displayName: member.displayName?.trim() || existing?.displayName || cleanEmail.split('@')[0],
+      role: member.role || existing?.role || 'MEDICO',
+      specialty: member.specialty !== undefined ? member.specialty.trim() : (existing?.specialty || ''),
+      description: member.description !== undefined ? member.description.trim() : (existing?.description || ''),
+      status: member.status || existing?.status || 'ACTIVO',
+      nationalId: member.nationalId !== undefined ? member.nationalId.trim() : (existing?.nationalId || ''),
+      mppsNumber: member.mppsNumber !== undefined ? member.mppsNumber.trim() : (existing?.mppsNumber || ''),
+      cmebNumber: member.cmebNumber !== undefined ? member.cmebNumber.trim() : (existing?.cmebNumber || ''),
+      phone: member.phone !== undefined ? member.phone.trim() : (existing?.phone || ''),
+      avatarUrl: member.avatarUrl !== undefined ? member.avatarUrl : (existing?.avatarUrl || ''),
+      consultationDays: member.consultationDays || existing?.consultationDays || [],
+      consultationHours: member.consultationHours !== undefined ? member.consultationHours.trim() : (existing?.consultationHours || ''),
+      officeLocation: member.officeLocation !== undefined ? member.officeLocation.trim() : (existing?.officeLocation || ''),
+      permissions: member.permissions || existing?.permissions || getDefaultPermissionsForRole(member.role || existing?.role || 'MEDICO'),
+      stampBase64: member.stampBase64 !== undefined ? member.stampBase64 : (existing?.stampBase64 || ''),
+      signatureBase64: member.signatureBase64 !== undefined ? member.signatureBase64 : (existing?.signatureBase64 || ''),
+      updatedAt: new Date().toISOString(),
     };
 
     // Actualizar caché local inmediatamente
@@ -138,7 +192,6 @@ export class StaffDirectoryService {
       const memberDocRef = doc(db, 'tenants', CLINICAL_TENANT_ID, 'members', cleanEmail);
       await setDoc(memberDocRef, {
         ...payload,
-        updatedAt: new Date().toISOString(),
         tenantId: CLINICAL_TENANT_ID,
       }, { merge: true });
 
@@ -150,6 +203,27 @@ export class StaffDirectoryService {
         message: `Guardado en dispositivo local. Se sincronizará con la nube al conectar.` 
       };
     }
+  }
+
+  public async updateMemberStatus(email: string, status: PersonnelStatus): Promise<boolean> {
+    const member = this.getMember(email);
+    if (!member) return false;
+    const res = await this.addOrUpdateMember({ ...member, status });
+    return res.success;
+  }
+
+  public async saveDoctorStamp(email: string, stampBase64: string): Promise<boolean> {
+    const member = this.getMember(email);
+    if (!member) return false;
+    const res = await this.addOrUpdateMember({ ...member, stampBase64 });
+    return res.success;
+  }
+
+  public async saveDoctorSignature(email: string, signatureBase64: string): Promise<boolean> {
+    const member = this.getMember(email);
+    if (!member) return false;
+    const res = await this.addOrUpdateMember({ ...member, signatureBase64 });
+    return res.success;
   }
 
   public async removeMember(email: string): Promise<{ success: boolean; message: string }> {

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FileText, 
   History, 
@@ -152,6 +152,12 @@ export const Dashboard: React.FC = () => {
   
   const isSecretary = user?.role === 'SECRETARIA' || user?.role === 'RECEPCION';
   const isDoctor = user?.role === 'MEDICO' || !user;
+
+  // Matriz de Permisos Granulares (Pilar 4)
+  const canCalibrateA4 = user?.permissions?.canCalibrateA4 ?? (user?.role === 'ADMINISTRADOR' || user?.role === 'DESARROLLADOR' || user?.email === 'moucharrafiepc@gmail.com');
+  const canManageStaff = user?.permissions?.canManageStaff ?? (user?.role === 'ADMINISTRADOR' || user?.role === 'DESARROLLADOR' || user?.email === 'moucharrafiepc@gmail.com');
+  const canAccessQuoter = user?.permissions?.canAccessQuoter ?? (!isSecretary);
+  const canViewFullHistory = user?.permissions?.canViewFullHistory ?? (!isSecretary);
 
   // Inicialización de sincronización de calibraciones en Firestore
   useEffect(() => {
@@ -492,27 +498,31 @@ export const Dashboard: React.FC = () => {
                       Operaciones & Soporte
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => setIsTechModalOpen(true)}
-                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
-                      }`}
-                    >
-                      <Settings className="w-4 h-4 text-cyan-400 shrink-0" />
-                      <span>Técnico & Calibración</span>
-                    </button>
+                    {canCalibrateA4 && (
+                      <button
+                        type="button"
+                        onClick={() => setIsTechModalOpen(true)}
+                        className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                          isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                        }`}
+                      >
+                        <Settings className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <span>Técnico & Calibración</span>
+                      </button>
+                    )}
 
-                    <button
-                      type="button"
-                      onClick={() => setIsStaffModalOpen(true)}
-                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
-                      }`}
-                    >
-                      <Users className="w-4 h-4 text-purple-400 shrink-0" />
-                      <span>Gestión de Personal</span>
-                    </button>
+                    {canManageStaff && (
+                      <button
+                        type="button"
+                        onClick={() => setIsStaffModalOpen(true)}
+                        className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                          isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                        }`}
+                      >
+                        <Users className="w-4 h-4 text-purple-400 shrink-0" />
+                        <span>Gestión de Personal</span>
+                      </button>
+                    )}
 
                     <button
                       type="button"
@@ -525,16 +535,18 @@ export const Dashboard: React.FC = () => {
                       <span>Sello & Firma Médica</span>
                     </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab(activeTab === 'quoter' ? 'portal' : 'quoter')}
-                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
-                        isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
-                      }`}
-                    >
-                      <Boxes className="w-4 h-4 text-emerald-400 shrink-0" />
-                      <span>Cotizador Quirúrgico</span>
-                    </button>
+                    {canAccessQuoter && (
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab(activeTab === 'quoter' ? 'portal' : 'quoter')}
+                        className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition cursor-pointer ${
+                          isClinicalLight ? 'hover:bg-slate-100 text-slate-800' : 'hover:bg-slate-800 text-slate-200'
+                        }`}
+                      >
+                        <Boxes className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>Cotizador Quirúrgico</span>
+                      </button>
+                    )}
 
                     <button
                       type="button"
@@ -690,29 +702,33 @@ export const Dashboard: React.FC = () => {
               {activeTab === 'dictation_ai' && <ChevronRight className="w-3.5 h-3.5 text-white" />}
             </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                setIsTechModalOpen(true);
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-cyan-300 hover:bg-blue-900/40"
-            >
-              <Settings className="w-4 h-4 text-cyan-400" />
-              <span>Herramientas Técnicas de Papelería</span>
-            </button>
+            {canCalibrateA4 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsTechModalOpen(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-cyan-300 hover:bg-blue-900/40"
+              >
+                <Settings className="w-4 h-4 text-cyan-400" />
+                <span>Herramientas Técnicas de Papelería</span>
+              </button>
+            )}
 
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('quoter');
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:bg-blue-900/40"
-            >
-              <Boxes className="w-4 h-4 text-emerald-400" />
-              <span>Cotizador Quirúrgico</span>
-            </button>
+            {canAccessQuoter && (
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('quoter');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:bg-blue-900/40"
+              >
+                <Boxes className="w-4 h-4 text-emerald-400" />
+                <span>Cotizador Quirúrgico</span>
+              </button>
+            )}
           </div>
         )}
       </header>

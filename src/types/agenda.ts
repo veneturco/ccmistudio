@@ -36,6 +36,8 @@ export interface ClinicalAppointment {
   id: string;
   tenantId: string;
   doctorUserId: string;
+  doctorName?: string;
+  doctorSpecialty?: string;
   patientId: string;
   patientName: string;
   patientNationalId: string;
