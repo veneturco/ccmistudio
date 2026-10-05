@@ -7,12 +7,13 @@ import {
   Pill, 
   FlaskConical, 
   CalendarCheck, 
-  ClipboardList,
-  Boxes,
-  Menu,
-  X,
-  Code2,
-  Home
+  ClipboardList, 
+  Boxes, 
+  Menu, 
+  X, 
+  Code2, 
+  Home,
+  Stethoscope 
 } from 'lucide-react';
 import { ProcessedDocumentResult, DocType } from '../types';
 import { BrandLogo } from './BrandLogo';
@@ -24,7 +25,6 @@ import { DoctorBusinessCard } from './DoctorBusinessCard';
 import { DocumentZoneEditorStudio } from './DocumentZoneEditorStudio';
 import { FirestoreStationerySync } from '../cloud/FirestoreStationerySync';
 
-// Initial Mock History Records
 const INITIAL_HISTORY: ProcessedDocumentResult[] = [
   {
     id: 'doc_init_1',
@@ -104,17 +104,15 @@ const INITIAL_HISTORY: ProcessedDocumentResult[] = [
 ];
 
 export const Dashboard: React.FC = () => {
-  // Inicialización de sincronización de calibraciones en Firestore
   useEffect(() => {
     FirestoreStationerySync.initialize().catch((err) => {
       console.warn('[Dashboard] Sincronización offline:', err);
     });
   }, []);
 
-  // Direct default to the institutional portal of Dr. Samir and CCMI
   const [activeTab, setActiveTab] = useState<'portal' | 'workspace' | 'history' | 'quoter' | 'developer_studio'>('portal');
   const [selectedDoc, setSelectedDoc] = useState<DocType>('RECIPES');
-  const [documentsHistory, setDocumentsHistory] = useState<ProcessedDocumentResult[]>(INITIAL_HISTORY);
+  const [documentsHistory] = useState<ProcessedDocumentResult[]>(INITIAL_HISTORY);
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -128,11 +126,8 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div id="socs-dashboard-root" className="min-h-screen bg-slate-100/80 text-slate-900 flex flex-col font-sans">
-      {/* 1. TOP EXECUTIVE CLINICAL BAR */}
       <header className="bg-[#092347] text-white border-b border-blue-950/80 sticky top-0 z-40 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          
-          {/* Logo e Identidad del Doctor - Clickable to return to Portal */}
           <div 
             onClick={() => setActiveTab('portal')}
             className="flex items-center gap-3 shrink-0 cursor-pointer group"
@@ -141,7 +136,6 @@ export const Dashboard: React.FC = () => {
             <div className="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shadow-md group-hover:ring-2 group-hover:ring-cyan-400 transition">
               <BrandLogo size={32} />
             </div>
-            
             <div className="hidden sm:block">
               <div className="flex items-center gap-2">
                 <span className="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-cyan-300 transition">
@@ -157,7 +151,6 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Navegación Principal: Portal CMI + Selector de 5 Documentos A4 */}
           <div className="hidden md:flex items-center bg-[#061833] p-1 rounded-xl border border-blue-900/60 gap-1">
             <button
               type="button"
@@ -199,7 +192,6 @@ export const Dashboard: React.FC = () => {
             })}
           </div>
 
-          {/* Acciones Rápidas */}
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -215,7 +207,6 @@ export const Dashboard: React.FC = () => {
               <span className="hidden sm:inline">Cotizador</span>
             </button>
 
-            {/* BOTÓN EXCLUSIVO: DEVELOPER STUDIO */}
             <button
               type="button"
               onClick={() => setActiveTab(activeTab === 'developer_studio' ? 'workspace' : 'developer_studio')}
@@ -224,7 +215,7 @@ export const Dashboard: React.FC = () => {
                   ? 'bg-amber-400 text-slate-950 border-amber-300 ring-2 ring-amber-400/50'
                   : 'bg-slate-900/90 hover:bg-slate-800 text-amber-300 border-amber-400/30 hover:border-amber-400'
               }`}
-              title="Área exclusiva de Desarrollador: Calibración milimétrica sobre fondos originales fijos, editor de formas PDF y exportador para Gemini AI"
+              title="Área exclusiva de Desarrollador"
             >
               <Code2 className="w-3.5 h-3.5 text-amber-400" />
               <span className="hidden sm:inline">Dev Studio</span>
@@ -257,7 +248,6 @@ export const Dashboard: React.FC = () => {
               <span className="hidden lg:inline">Tarjeta Dr. Samir</span>
             </button>
 
-            {/* Mobile Toggle */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -269,7 +259,6 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Submenu */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#061833] border-t border-blue-900 p-3 space-y-1 animate-fade-in">
             <button
@@ -354,9 +343,7 @@ export const Dashboard: React.FC = () => {
         )}
       </header>
 
-      {/* 2. MAIN CENTERPIECE */}
       <main className="flex-1 py-4 sm:py-6 px-2 sm:px-6 max-w-7xl mx-auto w-full">
-        {/* Portal Principal CMI */}
         {activeTab === 'portal' && (
           <div className="w-full animate-fade-in">
             <CmiSpecialtiesPortal
@@ -376,7 +363,6 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Vista Clínica Oficial de Trabajo */}
         {activeTab === 'workspace' && (
           <div className="w-full space-y-3">
             <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200/80 shadow-xs">
@@ -397,4 +383,123 @@ export const Dashboard: React.FC = () => {
                 onClick={() => setActiveTab('portal')}
                 className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer transition flex items-center gap-1"
               >
-                <span>← Volver al Portal CMI
+                <span>← Volver al Portal CMI</span>
+              </button>
+            </div>
+
+            <DocumentSelectorWorkspace 
+              initialDocType={selectedDoc} 
+              key={selectedDoc} 
+              onOpenZoneEditor={() => setActiveTab('developer_studio')}
+            />
+          </div>
+        )}
+
+        {activeTab === 'developer_studio' && (
+          <div className="w-full space-y-3">
+            <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-slate-200/80 shadow-xs">
+              <div className="flex items-center gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('portal')}
+                  className="text-blue-700 hover:text-blue-900 font-bold flex items-center gap-1 cursor-pointer"
+                >
+                  <Home className="w-3.5 h-3.5" />
+                  <span>Portal CMI</span>
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-slate-600 font-medium">Developer Studio (Calibración & Formas PDF)</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveTab('portal')}
+                className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold cursor-pointer transition flex items-center gap-1"
+              >
+                <span>← Volver al Portal CMI</span>
+              </button>
+            </div>
+
+            <DocumentZoneEditorStudio
+              initialDoc={selectedDoc}
+              onClose={() => setActiveTab('workspace')}
+              onNavigateToWorkspace={(doc) => {
+                setSelectedDoc(doc);
+                setActiveTab('workspace');
+              }}
+            />
+          </div>
+        )}
+
+        {activeTab === 'history' && (
+          <div className="space-y-4 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div>
+                <h2 className="text-base font-bold text-slate-900">
+                  Historial de Documentos Emitidos
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Registro de récipes, informes y constancias generadas en esta sesión.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('portal')}
+                  className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold cursor-pointer transition"
+                >
+                  ← Portal CMI
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('workspace')}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold cursor-pointer"
+                >
+                  Hoja de Trabajo A4
+                </button>
+              </div>
+            </div>
+            <HistoryList documents={documentsHistory} />
+          </div>
+        )}
+
+        {activeTab === 'quoter' && (
+          <div className="space-y-4 max-w-5xl mx-auto">
+            <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div>
+                <h2 className="text-base font-bold text-slate-900">
+                  Cotizador Logístico Quirúrgico Synapsis
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Presupuestos de implantes, prótesis y tornillos de columna / cráneo.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('portal')}
+                  className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold cursor-pointer transition"
+                >
+                  ← Portal CMI
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('workspace')}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold cursor-pointer"
+                >
+                  Hoja de Trabajo A4
+                </button>
+              </div>
+            </div>
+            <LogisticsQuoter />
+          </div>
+        )}
+      </main>
+
+      <DoctorBusinessCard
+        isModal
+        isOpen={isCardModalOpen}
+        onClose={() => setIsCardModalOpen(false)}
+      />
+    </div>
+  );
+};
