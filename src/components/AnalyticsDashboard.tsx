@@ -57,7 +57,7 @@ export const AnalyticsDashboard: React.FC = () => {
         });
       } else if (p.patientData?.diagnosis) {
          // Fallback a los datos base
-         const dx = p.patientData.diagnosis.toLowerCase();
+         const dx = (p.patientData.diagnosis || '').toLowerCase();
           if (dx.includes('hernia') || dx.includes('hnp')) diagCount['Hernia Discal']++;
           else if (dx.includes('canal') || dx.includes('estrecho')) diagCount['Canal Estrecho']++;
           else if (dx.includes('mielopat')) diagCount['Mielopatía']++;

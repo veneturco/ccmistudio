@@ -233,7 +233,7 @@ export const Dashboard: React.FC = () => {
             >
               <History className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Historial</span>
-              <span className="px-1.5 py-0.2 bg-blue-950 text-cyan-300 rounded text-[10px] font-mono">
+              <span className="px-1.5 py-0.5 bg-blue-950 text-cyan-300 rounded text-[10px] font-mono">
                 {documentsHistory.length}
               </span>
             </button>
