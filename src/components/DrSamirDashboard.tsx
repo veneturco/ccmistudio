@@ -1,47 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  FileText, History, ChevronRight, CreditCard, Pill, FlaskConical, CalendarCheck, ClipboardList, Boxes, Menu, X, Code2, Home, Stethoscope 
-} from 'lucide-react';
-import { ProcessedDocumentResult, DocType } from '../types';
-import { DocumentSelectorWorkspace } from './DocumentSelectorWorkspace';
-import { LogisticsQuoter } from './LogisticsQuoter';
-import { HistoryList } from './HistoryList';
-import { DoctorBusinessCard } from './DoctorBusinessCard';
-import { DocumentZoneEditorStudio } from './DocumentZoneEditorStudio';
+import React, { useState } from 'react';
 
-export const Dashboard: React.FC = () => {
+export default function DrSamirDashboard() {
   const [activeView, setActiveView] = useState('view-dashboard');
   const [bimodalMode, setBimodalMode] = useState('consulta');
   const [theme, setTheme] = useState('light');
-  
-  // App state
-  const [activeTab, setActiveTab] = useState<'portal' | 'workspace' | 'history' | 'quoter' | 'developer_studio'>('portal');
-  const [selectedDoc, setSelectedDoc] = useState<DocType>('RECIPES');
-  const [documentsHistory] = useState<ProcessedDocumentResult[]>([]);
-  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
 
-  const switchView = (view: string) => {
-    if (view === 'view-recipe') { setActiveTab('workspace'); setSelectedDoc('RECIPES'); }
-    else if (view === 'view-report') { setActiveTab('workspace'); setSelectedDoc('INFORME'); }
-    else if (view === 'view-orders') { setActiveTab('workspace'); setSelectedDoc('ORDEN_LAB'); }
-    else if (view === 'view-certificate') { setActiveTab('workspace'); setSelectedDoc('CONSTANCIA'); }
-    else { setActiveTab('portal'); setActiveView(view); }
-  };
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    if(newTheme === 'dark') document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
-  };
-  
+  const switchView = (view: string) => setActiveView(view);
+  const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
   const setBimodalSubMode = (mode: string) => setBimodalMode(mode);
-  
-  // Dummy handlers for now to avoid crashes
-  const togglePatientPanel = () => console.log("Toggle patient");
-  const toggleVoicePanel = () => console.log("Toggle voice");
-  const showToast = (msg: string) => console.log("Toast:", msg);
-  const openNewPatientModal = () => console.log("New patient");
 
   return (
     <div className={`${theme === 'dark' ? 'dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-800'} relative min-h-screen flex flex-col selection:bg-sky-500 selection:text-white transition-colors duration-500`}>
@@ -53,7 +19,7 @@ export const Dashboard: React.FC = () => {
     <header className="glass-header sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
             
-            <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group relative z-10 flex-shrink-0" onClick={() => { switchView('view-dashboard') }}>
+            <div className="flex items-center gap-2 sm:gap-3 cursor-pointer group relative z-10 flex-shrink-0" onClick={() => {}}>
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 p-1 flex items-center justify-center shadow-lg shadow-sky-500/30 border border-white/20 group-hover:scale-105 transition-transform duration-300">
                     <i className="fa-solid fa-brain text-white text-sm sm:text-lg"></i>
                 </div>
@@ -81,7 +47,7 @@ export const Dashboard: React.FC = () => {
                     En línea
                 </div>
 
-                <button onClick={() => { toggleTheme() }} className="flex items-center justify-center sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-sky-500/40 shadow-sm transition-colors group">
+                <button onClick={() => {}} className="flex items-center justify-center sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-sky-500/40 shadow-sm transition-colors group">
                     <i className="fa-solid fa-moon dark:fa-sun text-slate-600 dark:text-amber-400 text-sm group-hover:rotate-45 dark:group-hover:-rotate-12 transition-transform duration-300" id="theme-icon"></i>
                     <span className="text-[10px] font-bold text-slate-600 dark:text-amber-400 hidden sm:inline ml-2" id="theme-text">Guardia</span>
                 </button>
@@ -90,31 +56,11 @@ export const Dashboard: React.FC = () => {
     </header>
 
     <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 pb-24 md:pb-6 z-10 relative">
-
-        {activeTab === 'workspace' && (
-          <div className="w-full space-y-3 animate-fade-in-up relative z-20">
-            <div className="flex items-center justify-between bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-              <div className="flex items-center gap-2 text-xs">
-                <button onClick={() => setActiveTab('portal')} className="text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1">
-                  <Home className="w-4 h-4" />
-                  <span>Dashboard Principal</span>
-                </button>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-slate-600 dark:text-slate-300 font-medium">Estación de Papelería</span>
-              </div>
-            </div>
-            <DocumentSelectorWorkspace initialDocType={selectedDoc} key={selectedDoc} onOpenZoneEditor={() => setActiveTab('developer_studio')} />
-          </div>
-        )}
-        
-        {activeTab === 'portal' && (
-          <div className="portal-views-container">
-            
         
         {/*  ==========================================  */}
         {/*  VIEW 1: DASHBOARD PRINCIPAL                */}
         {/*  ==========================================  */}
-        <div id="view-dashboard" className={`app-view ${activeTab === \'portal\' && activeView === \'view-dashboard\' ? \'active-view\' : \'hidden\'}  space-y-4 sm:space-y-5`}>
+        <div id="view-dashboard" className="app-view active-view space-y-4 sm:space-y-5">
             
             {/*  ========================================================  */}
             {/*  HERO BIMODAL ADAPTATIVO ("Consulta vs Quirófano")         */}
@@ -130,19 +76,19 @@ export const Dashboard: React.FC = () => {
 
                     {/*  Conmutador contextual Consulta / Quirófano  */}
                     <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-[10px] font-bold">
-                        <button id="btn-sub-consulta" onClick={() => { setBimodalSubMode('consulta') }} className="px-3 py-1 rounded-lg bg-sky-500 text-white shadow-sm transition">
+                        <button id="btn-sub-consulta" onClick={() => {}} className="px-3 py-1 rounded-lg bg-sky-500 text-white shadow-sm transition">
                             <i className="fa-solid fa-user-doctor mr-1"></i> Consulta
                         </button>
-                        <button id="btn-sub-quirofano" onClick={() => { setBimodalSubMode('quirofano') }} className="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-white transition">
+                        <button id="btn-sub-quirofano" onClick={() => {}} className="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-white transition">
                             <i className="fa-solid fa-hospital mr-1"></i> Quirófano / Guardia
                         </button>
                     </div>
                 </div>
 
                 {/*  SUB-VISTA 1: MODO CONSULTA (Paciente en Silla + Acciones Instantáneas)  */}
-                <div id="bimodal-consulta-view" className={`grid ${bimodalMode === \'consulta\' ? \'\' : \'hidden\'}` grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <div id="bimodal-consulta-view" className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
                     <div className="lg:col-span-5 flex items-center gap-3.5">
-                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-sky-500/30 flex-shrink-0 cursor-pointer" onClick={() => { togglePatientPanel('Mariana G. Rivas', '42 años', 'V-14.230.198', 'Cervicalgia aguda (M54.2)', 'MR') }}>
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-sky-500/30 flex-shrink-0 cursor-pointer" onClick={() => {}}>
                             MR
                         </div>
                         <div>
@@ -156,23 +102,23 @@ export const Dashboard: React.FC = () => {
                     </div>
 
                     <div className="lg:col-span-7 flex flex-wrap items-center justify-start lg:justify-end gap-2">
-                        <button onClick={() => { toggleVoicePanel() }} className="px-3.5 py-2.5 rounded-xl bg-sky-500/15 hover:bg-sky-500 text-sky-600 hover:text-white dark:text-sky-300 dark:hover:text-white border border-sky-400/40 text-xs font-bold transition flex items-center gap-2">
+                        <button onClick={() => {}} className="px-3.5 py-2.5 rounded-xl bg-sky-500/15 hover:bg-sky-500 text-sky-600 hover:text-white dark:text-sky-300 dark:hover:text-white border border-sky-400/40 text-xs font-bold transition flex items-center gap-2">
                             <i className="fa-solid fa-microphone"></i> Dictar SOAP
                         </button>
-                        <button onClick={() => { switchView('view-recipe') }} className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-xs font-bold transition flex items-center gap-2">
+                        <button onClick={() => {}} className="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-xs font-bold transition flex items-center gap-2">
                             <i className="fa-solid fa-file-prescription text-sky-500"></i> Emitir Récipe
                         </button>
-                        <button onClick={() => { showToast('Alerta clínica: Alergia a Penicilina registrada', 'fa-triangle-exclamation', 'text-amber-400') }} className="px-3 py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs font-bold flex items-center gap-1.5">
+                        <button onClick={() => {}} className="px-3 py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs font-bold flex items-center gap-1.5">
                             <i className="fa-solid fa-triangle-exclamation"></i> Penicilina
                         </button>
-                        <button onClick={() => { openNewPatientModal() }} className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-sky-500/20 active:scale-95 transition flex items-center gap-1.5">
+                        <button onClick={() => {}} className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-sky-500/20 active:scale-95 transition flex items-center gap-1.5">
                             <i className="fa-solid fa-plus"></i> Nueva Consulta
                         </button>
                     </div>
                 </div>
 
                 {/*  SUB-VISTA 2: MODO QUIRÓFANO / GUARDIA (Procedimiento, Horario y Checklist)  */}
-                <div id="bimodal-quirofano-view" className={`grid ${bimodalMode === \'quirofano\' ? \'\' : \'hidden\'}` grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <div id="bimodal-quirofano-view" className="hidden grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
                     <div className="lg:col-span-6 flex items-center gap-3.5">
                         <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-amber-500/30 flex-shrink-0">
                             <i className="fa-solid fa-hospital-user"></i>
@@ -191,7 +137,7 @@ export const Dashboard: React.FC = () => {
                         <span className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-1.5">
                             <i className="fa-solid fa-heart-pulse"></i> Riesgo Quirúrgico: Aprobado (ASA II)
                         </span>
-                        <button onClick={() => { showToast('Cargando protocolo y checklist Synapsis...', 'fa-file-shield', 'text-sky-400') }} className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-indigo-600 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+                        <button onClick={() => {}} className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-indigo-600 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
                             <i className="fa-solid fa-clipboard-check"></i> Ver Protocolo Quirúrgico
                         </button>
                     </div>
@@ -200,7 +146,7 @@ export const Dashboard: React.FC = () => {
 
             {/*  KPI Grid Interconectado con sub-vistas  */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onClick={() => { switchView('view-appointments') }}>
+                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onClick={() => {}}>
                     <div className="beam-content">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-sky-600 dark:text-sky-400 flex items-center justify-center mx-auto mb-3">
                             <i className="fa-solid fa-calendar-day text-base"></i>
@@ -212,7 +158,7 @@ export const Dashboard: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center relative cursor-pointer" onClick={() => { switchView('view-waiting-room') }}>
+                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center relative cursor-pointer" onClick={() => {}}>
                     <div className="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-ping z-10"></div>
                     <div className="beam-content">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3">
@@ -225,7 +171,7 @@ export const Dashboard: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onClick={() => { switchView('view-active-consultation') }}>
+                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onClick={() => {}}>
                     <div className="beam-content">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-3">
                             <i className="fa-solid fa-user-doctor text-base"></i>
@@ -237,7 +183,7 @@ export const Dashboard: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onClick={() => { switchView('view-attended') }}>
+                <div className="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onClick={() => {}}>
                     <div className="beam-content">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-sky-600 dark:text-sky-400 flex items-center justify-center mx-auto mb-3">
                             <i className="fa-solid fa-circle-check text-base"></i>
@@ -259,7 +205,7 @@ export const Dashboard: React.FC = () => {
                     </div>
                     
                     <div id="patient-queue-list" className="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-4 pb-4">
-                        <div className="snap-center shrink-0 w-[90%] md:w-full border border-slate-200 dark:border-slate-700 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 cursor-pointer hover:border-sky-400 transition-colors" onClick={() => { togglePatientPanel('Mariana G. Rivas', '42 años', 'V-14.230.198', 'Cervicalgia aguda (M54.2)', 'MR') }}>
+                        <div className="snap-center shrink-0 w-[90%] md:w-full border border-slate-200 dark:border-slate-700 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 cursor-pointer hover:border-sky-400 transition-colors" onClick={() => {}}>
                             <div className="flex flex-row items-center gap-4">
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-sky-500/40">MR</div>
                                 <div>
@@ -269,7 +215,7 @@ export const Dashboard: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="snap-center shrink-0 w-[90%] md:w-full border border-slate-200 dark:border-slate-700 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 cursor-pointer hover:border-sky-400 transition-colors" onClick={() => { togglePatientPanel('Héctor José Valera', '31 años', 'V-19.502.833', 'Hernia L5-S1', 'HJ') }}>
+                        <div className="snap-center shrink-0 w-[90%] md:w-full border border-slate-200 dark:border-slate-700 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 cursor-pointer hover:border-sky-400 transition-colors" onClick={() => {}}>
                             <div className="flex flex-row items-center gap-4">
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-indigo-500/40">HJ</div>
                                 <div>
@@ -282,7 +228,7 @@ export const Dashboard: React.FC = () => {
                     </div>
                     
                     <div className="space-y-2 sm:space-y-3 pt-2 border-t border-slate-200 dark:border-white/10">
-                        <button onClick={() => { togglePatientPanel() }} className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-sky-500/30 text-slate-700 dark:text-sky-300 font-bold py-3 rounded-2xl text-[11px] flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+                        <button onClick={() => {}} className="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-sky-500/30 text-slate-700 dark:text-sky-300 font-bold py-3 rounded-2xl text-[11px] flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
                             <i className="fa-solid fa-user-injured"></i> Ver Perfil Detallado
                         </button>
                     </div>
@@ -295,25 +241,25 @@ export const Dashboard: React.FC = () => {
                         <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mb-4 sm:mb-6 font-medium">Módulos de emisión rápida con autocompletado neuroquirúrgico.</p>
                         
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                            <div onClick={() => { switchView('view-recipe') }} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                            <div onClick={() => {}} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
                                 <div className="beam-content flex items-center gap-3 w-full">
                                     <div className="w-10 h-10 rounded-xl icon-box-clean text-sky-600 dark:text-sky-400 flex items-center justify-center"><i className="fa-solid fa-pills text-base"></i></div>
                                     <div><h4 className="text-[11px] sm:text-xs font-bold transition-colors">Récipe Médico</h4></div>
                                 </div>
                             </div>
-                            <div onClick={() => { switchView('view-report') }} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                            <div onClick={() => {}} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
                                 <div className="beam-content flex items-center gap-3 w-full">
                                     <div className="w-10 h-10 rounded-xl icon-box-clean text-indigo-600 dark:text-indigo-400 flex items-center justify-center"><i className="fa-solid fa-file-medical text-base"></i></div>
                                     <div><h4 className="text-[11px] sm:text-xs font-bold transition-colors">Informe Médico</h4></div>
                                 </div>
                             </div>
-                            <div onClick={() => { switchView('view-orders') }} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                            <div onClick={() => {}} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
                                 <div className="beam-content flex items-center gap-3 w-full">
                                     <div className="w-10 h-10 rounded-xl icon-box-clean text-violet-600 dark:text-violet-400 flex items-center justify-center"><i className="fa-solid fa-flask text-base"></i></div>
                                     <div><h4 className="text-[11px] sm:text-xs font-bold transition-colors">Orden Exámenes</h4></div>
                                 </div>
                             </div>
-                            <div onClick={() => { switchView('view-certificate') }} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                            <div onClick={() => {}} className="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
                                 <div className="beam-content flex items-center gap-3 w-full">
                                     <div className="w-10 h-10 rounded-xl icon-box-clean text-amber-600 dark:text-amber-400 flex items-center justify-center"><i className="fa-solid fa-calendar-check text-base"></i></div>
                                     <div><h4 className="text-[11px] sm:text-xs font-bold transition-colors">Constancia Reposo</h4></div>
@@ -328,9 +274,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 2: CITAS DE HOY (AGENDA DÍA)           */}
         {/*  ==========================================  */}
-        <div id="view-appointments" className={`app-view  space-y-4 ${activeView === 'view-appointments' ? 'active-view' : 'hidden'}`}">
+        <div id="view-appointments" className="app-view space-y-4">
             <div className="flex items-center justify-between">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                <button onClick={() => {}} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -352,7 +298,7 @@ export const Dashboard: React.FC = () => {
                 </div>
 
                 <div className="space-y-3">
-                    <div className="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onClick={() => { togglePatientPanel('Mariana G. Rivas', '42 años', 'V-14.230.198', 'Cervicalgia aguda (M54.2)', 'MR') }}>
+                    <div className="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onClick={() => {}}>
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-xs font-black text-sky-600 dark:text-sky-400 w-16">08:30 AM</span>
                             <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-500 flex items-center justify-center font-bold text-xs">MR</div>
@@ -364,7 +310,7 @@ export const Dashboard: React.FC = () => {
                         <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold">En Consulta</span>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onClick={() => { togglePatientPanel('Héctor José Valera', '31 años', 'V-19.502.833', 'Hernia L5-S1', 'HJ') }}>
+                    <div className="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onClick={() => {}}>
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-xs font-black text-sky-600 dark:text-sky-400 w-16">09:15 AM</span>
                             <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs">HJ</div>
@@ -376,7 +322,7 @@ export const Dashboard: React.FC = () => {
                         <span className="px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 text-[10px] font-bold">En Sala</span>
                     </div>
 
-                    <div className="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onClick={() => { togglePatientPanel('Elena P. Salazar', '58 años', 'V-8.910.421', 'Canal lumbar estrecho', 'ES') }}>
+                    <div className="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onClick={() => {}}>
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-xs font-black text-sky-600 dark:text-sky-400 w-16">10:00 AM</span>
                             <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-xs">ES</div>
@@ -394,9 +340,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 3: SALA DE ESPERA (TRIAGE)             */}
         {/*  ==========================================  */}
-        <div id="view-waiting-room" className={`app-view  space-y-4 ${activeView === 'view-waiting-room' ? 'active-view' : 'hidden'}`}">
+        <div id="view-waiting-room" className="app-view space-y-4">
             <div className="flex items-center justify-between">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                <button onClick={() => {}} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -418,7 +364,7 @@ export const Dashboard: React.FC = () => {
                                 <h4 className="text-sm font-bold mt-1">Héctor José Valera</h4>
                                 <p className="text-[11px] text-slate-500">Llegada: hace 22 minutos · Triage: Normal (125/82 mmHg)</p>
                             </div>
-                            <button onClick={() => { showToast('Llamando a Héctor Valera a consultorio...', 'fa-bullhorn', 'text-sky-400') }} className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-md shadow-sky-500/20">
+                            <button onClick={() => {}} className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-md shadow-sky-500/20">
                                 Llamar a Consultorio
                             </button>
                         </div>
@@ -429,7 +375,7 @@ export const Dashboard: React.FC = () => {
                                 <h4 className="text-sm font-bold mt-1">Carlos Eduardo Méndez</h4>
                                 <p className="text-[11px] text-slate-500">Llegada: hace 10 minutos · Triage: Dolor Agudo (135/88 mmHg)</p>
                             </div>
-                            <button onClick={() => { showToast('Llamando a Carlos Méndez...', 'fa-bullhorn', 'text-sky-400') }} className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-sky-500 hover:text-white text-slate-800 dark:text-white text-xs font-bold transition">
+                            <button onClick={() => {}} className="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-sky-500 hover:text-white text-slate-800 dark:text-white text-xs font-bold transition">
                                 Llamar a Consultorio
                             </button>
                         </div>
@@ -446,7 +392,7 @@ export const Dashboard: React.FC = () => {
                             <p className="text-xs font-semibold text-slate-500">Consultorio 1 · Dr. Samir</p>
                         </div>
                     </div>
-                    <button onClick={() => { showToast('Timbre de llamado emitido en sala', 'fa-bell', 'text-amber-400') }} className="w-full mt-4 py-3 rounded-xl border border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white font-bold text-xs transition">
+                    <button onClick={() => {}} className="w-full mt-4 py-3 rounded-xl border border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white font-bold text-xs transition">
                         <i className="fa-solid fa-volume-high mr-1"></i> Notificar por Altavoz
                     </button>
                 </div>
@@ -456,9 +402,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 4: CONSULTA ACTIVA (EXPEDIENTE)        */}
         {/*  ==========================================  */}
-        <div id="view-active-consultation" className={`app-view  space-y-4 ${activeView === 'view-active-consultation' ? 'active-view' : 'hidden'}`}">
+        <div id="view-active-consultation" className="app-view space-y-4">
             <div className="flex items-center justify-between">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                <button onClick={() => {}} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <div className="flex items-center gap-2">
@@ -477,7 +423,7 @@ export const Dashboard: React.FC = () => {
                                 <p className="text-xs text-slate-500">42 años · CI: 14.230.198 · Ocupación: Docente</p>
                             </div>
                         </div>
-                        <button onClick={() => { toggleVoicePanel() }} className="px-4 py-2 rounded-xl bg-sky-500/20 text-sky-500 border border-sky-500/40 text-xs font-bold flex items-center gap-2 hover:bg-sky-500 hover:text-white transition">
+                        <button onClick={() => {}} className="px-4 py-2 rounded-xl bg-sky-500/20 text-sky-500 border border-sky-500/40 text-xs font-bold flex items-center gap-2 hover:bg-sky-500 hover:text-white transition">
                             <i className="fa-solid fa-microphone"></i> Dictar Evolución
                         </button>
                     </div>
@@ -501,10 +447,10 @@ export const Dashboard: React.FC = () => {
                     </div>
 
                     <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
-                        <button onClick={() => { switchView('view-recipe') }} className="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-white hover:bg-slate-300">
+                        <button onClick={() => {}} className="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-white hover:bg-slate-300">
                             Emitir Récipe
                         </button>
-                        <button onClick={() => { showToast('Consulta guardada y finalizada con éxito', 'fa-check', 'text-emerald-400'); switchView('view-dashboard'); }} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-black shadow-lg shadow-emerald-500/20">
+                        <button onClick={() => {}} className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-black shadow-lg shadow-emerald-500/20">
                             Finalizar Consulta
                         </button>
                     </div>
@@ -516,7 +462,7 @@ export const Dashboard: React.FC = () => {
                         <i className="fa-solid fa-x-ray text-3xl text-sky-500 mb-2"></i>
                         <p className="text-xs font-bold">RMN Columna Cervical</p>
                         <p className="text-[10px] text-slate-500">C5-C6 Hernia posterolateral derecha</p>
-                        <button onClick={() => { showToast('Abriendo visor DICOM...', 'fa-eye', 'text-sky-400') }} className="mt-3 px-3 py-1.5 rounded-lg bg-sky-500/20 text-sky-500 text-[10px] font-bold">Ver Resonancia</button>
+                        <button onClick={() => {}} className="mt-3 px-3 py-1.5 rounded-lg bg-sky-500/20 text-sky-500 text-[10px] font-bold">Ver Resonancia</button>
                     </div>
                 </div>
             </div>
@@ -525,9 +471,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 5: PACIENTES ATENDIDOS                 */}
         {/*  ==========================================  */}
-        <div id="view-attended" className={`app-view  space-y-4 ${activeView === 'view-attended' ? 'active-view' : 'hidden'}`}">
+        <div id="view-attended" className="app-view space-y-4">
             <div className="flex items-center justify-between">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                <button onClick={() => {}} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -566,9 +512,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 6: RÉCIPE MÉDICO A4                   */}
         {/*  ==========================================  */}
-        <div id="view-recipe" className={`app-view  space-y-4 ${activeView === 'view-recipe' ? 'active-view' : 'hidden'}`}">
+        <div id="view-recipe" className="app-view space-y-4">
             <div className="flex items-center justify-between mb-2">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-[10px] sm:text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                <button onClick={() => {}} className="text-[10px] sm:text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <span className="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -633,13 +579,13 @@ export const Dashboard: React.FC = () => {
                     <div className="glass-card p-5 rounded-3xl">
                         <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Acciones de Emisión</h3>
                         <div className="space-y-3">
-                            <button onClick={() => { window.print() }} className="w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-600 flex items-center justify-center gap-2 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                            <button onClick={() => {}} className="w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-600 flex items-center justify-center gap-2 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                                 <i className="fa-solid fa-print"></i> Imprimir Físico (A4)
                             </button>
-                            <button onClick={() => { showToast('Generando PDF firmado...', 'fa-file-pdf', 'text-indigo-400') }} className="w-full py-3 px-4 rounded-xl bg-slate-800 text-white flex items-center justify-center gap-2 text-xs font-bold hover:bg-slate-700 transition">
+                            <button onClick={() => {}} className="w-full py-3 px-4 rounded-xl bg-slate-800 text-white flex items-center justify-center gap-2 text-xs font-bold hover:bg-slate-700 transition">
                                 <i className="fa-solid fa-file-pdf"></i> Generar PDF
                             </button>
-                            <button onClick={() => { showToast('Enviado por WhatsApp a Mariana Rivas', 'fa-whatsapp', 'text-emerald-400') }} className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white flex items-center justify-center gap-2 text-xs font-bold shadow-lg shadow-emerald-500/30">
+                            <button onClick={() => {}} className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white flex items-center justify-center gap-2 text-xs font-bold shadow-lg shadow-emerald-500/30">
                                 <i className="fa-brands fa-whatsapp"></i> Enviar a Paciente
                             </button>
                         </div>
@@ -651,9 +597,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 7: INFORME MÉDICO A4                   */}
         {/*  ==========================================  */}
-        <div id="view-report" className={`app-view  space-y-4 ${activeView === 'view-report' ? 'active-view' : 'hidden'}`}">
+        <div id="view-report" className="app-view space-y-4">
             <div className="flex items-center justify-between mb-2">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                <button onClick={() => {}} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -696,9 +642,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 8: ORDEN DE EXÁMENES A4                */}
         {/*  ==========================================  */}
-        <div id="view-orders" className={`app-view  space-y-4 ${activeView === 'view-orders' ? 'active-view' : 'hidden'}`}">
+        <div id="view-orders" className="app-view space-y-4">
             <div className="flex items-center justify-between mb-2">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                <button onClick={() => {}} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -736,9 +682,9 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 9: CONSTANCIA DE REPOSO A4             */}
         {/*  ==========================================  */}
-        <div id="view-certificate" className={`app-view  space-y-4 ${activeView === 'view-certificate' ? 'active-view' : 'hidden'}`}">
+        <div id="view-certificate" className="app-view space-y-4">
             <div className="flex items-center justify-between mb-2">
-                <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                <button onClick={() => {}} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
                 </button>
                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -767,17 +713,13 @@ export const Dashboard: React.FC = () => {
             </div>
         </div>
 
-    
-          </div>
-        )}
-  
-</main>
+    </main>
 
     {/*  Sami Copilot Desktop  */}
     <div className="ai-avatar-container animate-float" id="sami-desktop">
         <div className="sami-wrapper relative">
             <div className="ai-tooltip">Sami Copilot — <span className="text-sky-500 font-normal">IA CMI</span></div>
-            <div className="avatar-seal" onClick={() => { toggleVoicePanel() }}>
+            <div className="avatar-seal" onClick={() => {}}>
                 <div className="seal-ring-liquid"></div>
                 <div className="seal-core-glass">
                     <i className="fa-solid fa-brain seal-icon-gradient"></i>
@@ -788,17 +730,17 @@ export const Dashboard: React.FC = () => {
 
     {/*  Barra Navegación Móvil con Sami Copilot Central  */}
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-header border-t-white/10 flex justify-between items-center px-4 py-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-        <div className="flex flex-col items-center gap-1 w-1/5 cursor-pointer mobile-nav-item active" id="nav-dashboard" onClick={() => { switchView('view-dashboard') }}>
+        <div className="flex flex-col items-center gap-1 w-1/5 cursor-pointer mobile-nav-item active" id="nav-dashboard" onClick={() => {}}>
             <i className="fa-solid fa-house text-lg"></i>
             <span className="text-[9px] font-bold">Inicio</span>
         </div>
-        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 relative cursor-pointer" id="nav-waiting" onClick={() => { switchView('view-waiting-room') }}>
+        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 relative cursor-pointer" id="nav-waiting" onClick={() => {}}>
             <span className="absolute top-0 right-3 w-2 h-2 rounded-full bg-red-500"></span>
             <i className="fa-solid fa-users text-lg"></i>
             <span className="text-[9px] font-bold">Espera</span>
         </div>
         
-        <div className="sami-mobile-container" onClick={() => { toggleVoicePanel() }}>
+        <div className="sami-mobile-container" onClick={() => {}}>
             <div className="sami-mobile-bg">
                 <div className="avatar-seal">
                     <div className="seal-ring-liquid"></div>
@@ -809,22 +751,22 @@ export const Dashboard: React.FC = () => {
             </div>
         </div>
         
-        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-recipe" onClick={() => { switchView('view-recipe') }}>
+        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-recipe" onClick={() => {}}>
             <i className="fa-solid fa-file-prescription text-lg"></i>
             <span className="text-[9px] font-bold">Récipes</span>
         </div>
-        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-appointments" onClick={() => { switchView('view-appointments') }}>
+        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-appointments" onClick={() => {}}>
             <i className="fa-solid fa-calendar-days text-lg"></i>
             <span className="text-[9px] font-bold">Agenda</span>
         </div>
     </nav>
 
-    <div id="app-overlay" className="glass-overlay" onClick={() => { closeAllPanels() }}></div>
+    <div id="app-overlay" className="glass-overlay" onClick={() => {}}></div>
 
     {/*  Panel de Dictado por Voz (Sami)  */}
     <div id="voice-panel" className="voice-panel">
         <div className="absolute top-4 right-4">
-            <button onClick={() => { closeAllPanels() }} className="w-8 h-8 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors">
+            <button onClick={() => {}} className="w-8 h-8 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors">
                 <i className="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -843,7 +785,7 @@ export const Dashboard: React.FC = () => {
             "Paciente refiere cervicalgia irradiada a hombro derecho..."
         </p>
         
-        <button onClick={() => { processDictation() }} className="mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs font-bold shadow-lg shadow-sky-500/30 hover:scale-105 transition-transform flex items-center gap-2">
+        <button onClick={() => {}} className="mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs font-bold shadow-lg shadow-sky-500/30 hover:scale-105 transition-transform flex items-center gap-2">
             <i className="fa-solid fa-wand-magic-sparkles"></i> Transcribir Nota SOAP
         </button>
     </div>
@@ -852,7 +794,7 @@ export const Dashboard: React.FC = () => {
     <div id="patient-panel" className="side-panel p-6">
         <div className="flex justify-between items-center mb-6">
             <h2 className="font-bold text-lg">Perfil del Paciente</h2>
-            <button onClick={() => { closeAllPanels() }} className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+            <button onClick={() => {}} className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
                 <i className="fa-solid fa-xmark"></i>
             </button>
         </div>
@@ -885,10 +827,10 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="mt-auto pt-6 space-y-3">
-            <button onClick={() => { switchView('view-active-consultation'); closeAllPanels(); }} className="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20">
+            <button onClick={() => {}} className="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20">
                 <i className="fa-solid fa-stethoscope"></i> Abrir Consulta Activa
             </button>
-            <button onClick={() => { switchView('view-recipe'); closeAllPanels(); }} className="w-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2">
+            <button onClick={() => {}} className="w-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2">
                 <i className="fa-solid fa-file-prescription"></i> Emitir Récipe
             </button>
         </div>
@@ -907,12 +849,12 @@ export const Dashboard: React.FC = () => {
                         <p className="text-[10px] text-slate-500">Ingreso a sala de espera y expediente rápido</p>
                     </div>
                 </div>
-                <button onClick={() => { closeNewPatientModal() }} className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors">
+                <button onClick={() => {}} className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors">
                     <i className="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <form id="new-patient-form" onsubmit="handleNewPatientSubmit(event)" className="space-y-4">
+            <form id="new-patient-form" onSubmit={() => {}} className="space-y-4">
                 <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Nombre Completo del Paciente</label>
                     <input type="text" id="inp-patient-name" required placeholder="Ej: Carlos Eduardo Méndez" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
@@ -935,7 +877,7 @@ export const Dashboard: React.FC = () => {
                 </div>
 
                 <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
-                    <button type="button" onClick={() => { closeNewPatientModal() }} className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <button type="button" onClick={() => {}} className="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
                         Cancelar
                     </button>
                     <button type="submit" className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-sky-500/30 active:scale-95 transition">
@@ -951,12 +893,6 @@ export const Dashboard: React.FC = () => {
 
     
 
-      
-      <DoctorBusinessCard
-        isModal
-        isOpen={isCardModalOpen}
-        onClose={() => setIsCardModalOpen(false)}
-      />
     </div>
   );
 }

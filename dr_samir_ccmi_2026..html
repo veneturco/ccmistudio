@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dr. Samir - CMI Clinical Management 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cosmic: { 950: '#030712', 900: '#060e1e', 800: '#0b1329', 700: '#111e38' }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            cursor: default; 
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        .app-view { display: none; }
+        .app-view.active-view { 
+            display: block; 
+            animation: viewFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+        }
+        @keyframes viewFadeIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.99); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Giro acelerado nativo */
+        @-webkit-keyframes spin-liquid { 
+            0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+        }
+        @keyframes spin-liquid { 
+            0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+        }
+
+        /* Tarjetas de cristal */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 1);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                        box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+            position: relative;
+        }
+        .dark .glass-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.45) 0%, rgba(15, 23, 42, 0.65) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* EFECTO BORDE LÁSER PERIMETRAL */
+        .beam-card {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .beam-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: conic-gradient(
+                from 0deg, 
+                transparent 0deg, 
+                transparent 280deg, 
+                rgba(14, 165, 233, 0.4) 310deg, 
+                rgba(56, 189, 248, 1) 345deg, 
+                rgba(125, 211, 252, 1) 360deg
+            );
+            -webkit-animation: spin-liquid 3s linear infinite;
+            animation: spin-liquid 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            z-index: 0;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .dark .beam-card::before {
+            background: conic-gradient(
+                from 0deg, 
+                transparent 0deg, 
+                transparent 270deg, 
+                rgba(56, 189, 248, 0.3) 300deg, 
+                rgba(56, 189, 248, 1) 340deg, 
+                rgba(192, 132, 252, 1) 360deg
+            );
+        }
+
+        .beam-card::after {
+            content: '';
+            position: absolute;
+            inset: 1.5px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: inherit;
+            z-index: 1;
+            transition: background 0.3s ease;
+            pointer-events: none;
+        }
+
+        .dark .beam-card::after {
+            background: linear-gradient(135deg, rgba(20, 29, 47, 0.95) 0%, rgba(10, 16, 31, 0.98) 100%);
+        }
+
+        @media (hover: hover) {
+            .beam-card:hover {
+                transform: translateY(-3px) scale(1.01);
+                box-shadow: 0 20px 40px rgba(14, 165, 233, 0.15), 0 0 30px rgba(56, 189, 248, 0.2);
+            }
+            .beam-card:hover::before { opacity: 1; }
+            .beam-card:hover::after { background: rgba(255, 255, 255, 0.94); }
+            .dark .beam-card:hover::after {
+                background: linear-gradient(135deg, rgba(24, 35, 58, 0.96) 0%, rgba(12, 19, 36, 0.98) 100%);
+            }
+        }
+
+        .beam-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .icon-box-clean {
+            background: rgba(241, 245, 249, 0.9);
+            border: 1px solid rgba(226, 232, 240, 1);
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 1), 0 4px 10px rgba(15, 23, 42, 0.05);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, border-color 0.3s ease;
+        }
+        .dark .icon-box-clean {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .beam-card:hover .icon-box-clean {
+            transform: scale(1.08) translateY(-2px);
+            border-color: rgba(56, 189, 248, 0.6);
+            background: rgba(224, 242, 254, 0.9);
+        }
+        .dark .beam-card:hover .icon-box-clean {
+            background: rgba(14, 165, 233, 0.18);
+            border-color: rgba(56, 189, 248, 0.6);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        .dark .glass-header {
+            background: rgba(3, 7, 18, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .ambient-glow-1 {
+            position: absolute; top: -5%; left: 5%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: 0; pointer-events: none; filter: blur(80px); transition: background 0.5s ease;
+        }
+        .dark .ambient-glow-1 { background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(3, 7, 18, 0) 70%); }
+        .ambient-glow-2 {
+            position: absolute; top: 40%; right: -5%; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: 0; pointer-events: none; filter: blur(90px); transition: background 0.5s ease;
+        }
+        .dark .ambient-glow-2 { background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, rgba(3, 7, 18, 0) 70%); }
+
+        .ai-tooltip {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 1); color: #0f172a;
+            padding: 0.6rem 1.2rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); opacity: 0; 
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none;
+            position: absolute; white-space: nowrap; right: 115%; top: 50%; margin-top: -18px; transform: translateX(10px);
+        }
+        .dark .ai-tooltip { 
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%); 
+            border: 1px solid rgba(56, 189, 248, 0.3); color: #f8fafc; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+        }
+        .sami-wrapper:hover .ai-tooltip { opacity: 1; transform: translateX(0); }
+
+        .ai-avatar-container {
+            position: fixed; bottom: 2.5rem; right: 2.5rem; z-index: 50;
+            display: none; flex-direction: column; align-items: flex-end; gap: 0.5rem;
+        }
+        @media (min-width: 768px) { .ai-avatar-container { display: flex; } }
+
+        .avatar-seal { 
+            width: 66px; height: 66px; position: relative; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; 
+        }
+        @media (min-width: 768px) { .avatar-seal { width: 76px; height: 76px; } }
+        
+        .seal-ring-liquid {
+            position: absolute; 
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(14,165,233,0.1) 20%, rgba(14,165,233,0.7) 50%, rgba(2,132,199,1) 75%, transparent 100%);
+            -webkit-animation: spin-liquid 3s linear infinite;
+            animation: spin-liquid 3s linear infinite; 
+            opacity: 0.9;
+            will-change: transform;
+            -webkit-transform-origin: center center;
+            transform-origin: center center;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .dark .seal-ring-liquid { 
+            background: conic-gradient(from 0deg, transparent 0%, rgba(56,189,248,0.1) 20%, rgba(56,189,248,0.8) 50%, rgba(139,92,246,1) 75%, transparent 100%); 
+        }
+        .avatar-seal:hover .seal-ring-liquid, .avatar-seal:active .seal-ring-liquid { 
+            animation-duration: 1.5s; opacity: 1; filter: drop-shadow(0 0 12px rgba(56,189,248,0.6)); 
+        }
+
+        .seal-core-glass {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(241,245,249,0.9) 100%); 
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,1); 
+            box-shadow: inset 0 4px 6px rgba(255,255,255,1), 0 6px 20px rgba(15, 23, 42, 0.1);
+            display: flex; align-items: center; justify-content: center; z-index: 10; 
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        @media (min-width: 768px) { .seal-core-glass { width: 62px; height: 62px; } }
+        
+        .dark .seal-core-glass {
+            background: linear-gradient(135deg, rgba(30,41,59,0.95) 0%, rgba(15,23,42,0.95) 100%); border-color: rgba(56,189,248,0.4);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.1), inset 0 -4px 10px rgba(0,0,0,0.5), 0 10px 25px rgba(0,0,0,0.7);
+        }
+        .avatar-seal:hover .seal-core-glass, .avatar-seal:active .seal-core-glass { 
+            transform: scale(1.12); box-shadow: inset 0 4px 6px rgba(255,255,255,1), 0 12px 30px rgba(14,165,233,0.3); 
+        }
+        .dark .avatar-seal:hover .seal-core-glass, .dark .avatar-seal:active .seal-core-glass { 
+            box-shadow: inset 0 2px 8px rgba(255,255,255,0.3), 0 15px 40px rgba(56,189,248,0.4); border-color: rgba(56,189,248,0.8); background: linear-gradient(135deg, rgba(30,41,59,1) 0%, rgba(14,165,233,0.2) 100%); 
+        }
+
+        .seal-icon-gradient {
+            font-size: 22px; background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #4f46e5 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative; z-index: 15; filter: drop-shadow(0 2px 4px rgba(2,132,199,0.2));
+        }
+        @media (min-width: 768px) { .seal-icon-gradient { font-size: 26px; } }
+        .dark .seal-icon-gradient { background: linear-gradient(135deg, #38bdf8 0%, #bae6fd 50%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 6px rgba(56,189,248,0.5)); }
+
+        .sami-mobile-container {
+            width: 20%; display: flex; justify-content: center; position: relative; top: -26px; z-index: 50;
+        }
+        .sami-mobile-bg {
+            background-color: #f8fafc;
+            border-radius: 50%; padding: 5px;
+            box-shadow: 0 -8px 20px rgba(0,0,0,0.08);
+            transition: background-color 0.5s;
+        }
+        .dark .sami-mobile-bg {
+            background-color: #030712;
+            box-shadow: 0 -8px 20px rgba(0,0,0,0.5);
+        }
+
+        .glass-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
+            z-index: 55; opacity: 0; pointer-events: none; transition: opacity 0.35s ease;
+        }
+        .glass-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .voice-panel {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 320px; z-index: 60;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(40px); border-top: 1px solid rgba(255,255,255,0.9);
+            transform: translateY(100%); transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-top-left-radius: 2rem; border-top-right-radius: 2rem; box-shadow: 0 -20px 50px rgba(0,0,0,0.1);
+        }
+        .dark .voice-panel {
+            background: linear-gradient(to top, rgba(3, 7, 18, 0.96), rgba(15, 23, 42, 0.92)); 
+            border-top: 1px solid rgba(56,189,248,0.3); box-shadow: 0 -20px 50px rgba(0,0,0,0.6);
+        }
+        @media (min-width: 768px) {
+            .voice-panel { right: 2.5rem; left: auto; bottom: 8rem; height: 260px; width: 360px; border-radius: 2rem; border: 1px solid rgba(56,189,248,0.3); transform: translateY(150%) scale(0.9); }
+            .voice-panel.active { transform: translateY(0) scale(1); }
+        }
+        .voice-panel.active { transform: translateY(0); }
+
+        .sound-waves { display: flex; gap: 6px; align-items: center; height: 50px; margin-bottom: 1rem; }
+        .sound-bar {
+            width: 5px; background: linear-gradient(to top, #0ea5e9, #8b5cf6); border-radius: 3px;
+            animation: pulse-wave 1s infinite ease-in-out alternate;
+        }
+        .dark .sound-bar { background: linear-gradient(to top, #38bdf8, #a78bfa); box-shadow: 0 0 10px rgba(56,189,248,0.5); }
+        @keyframes pulse-wave { 0% { height: 8px; } 100% { height: 46px; } }
+        .sound-bar:nth-child(1) { animation-delay: 0.1s; } .sound-bar:nth-child(2) { animation-delay: 0.3s; }
+        .sound-bar:nth-child(3) { animation-delay: 0.0s; } .sound-bar:nth-child(4) { animation-delay: 0.4s; }
+        .sound-bar:nth-child(5) { animation-delay: 0.2s; }
+
+        .side-panel {
+            position: fixed; top: 0; right: -100%; width: 420px; height: 100vh; z-index: 60;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border-left: 1px solid rgba(226, 232, 240, 0.8); box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+            transition: right 0.45s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column;
+        }
+        .dark .side-panel {
+            background: rgba(15, 23, 42, 0.96); border-left: 1px solid rgba(56, 189, 248, 0.3); box-shadow: -10px 0 50px rgba(0,0,0,0.6);
+        }
+        .side-panel.active { right: 0; }
+        
+        @media (max-width: 768px) {
+            .side-panel { 
+                right: 0; top: auto; bottom: -100%; width: 100%; height: 85vh; 
+                border-left: none; border-top: 1px solid rgba(56, 189, 248, 0.3);
+                border-radius: 2rem 2rem 0 0; transition: bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1); 
+            }
+            .side-panel.active { bottom: 0; right: 0; }
+        }
+
+        .mobile-nav-item { transition: all 0.3s; }
+        .mobile-nav-item.active { color: #0ea5e9; }
+        .dark .mobile-nav-item.active { color: #38bdf8; transform: translateY(-2px); }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Hojas de Papelería A4 Institucional */
+        .a4-paper {
+            background: #ffffff;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+            min-height: 860px;
+            width: 100%;
+            border-radius: 12px;
+            color: #0f172a;
+        }
+        .dark .a4-paper { 
+            background: #f1f5f9; 
+            color: #0f172a; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Estilo para impresión limpia del A4 */
+        @media print {
+            body * { visibility: hidden; }
+            .a4-printable, .a4-printable * { visibility: visible; }
+            .a4-printable { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col selection:bg-sky-500 selection:text-white dark:selection:text-slate-950 transition-colors duration-500 relative" id="app-body">
+
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <header class="glass-header sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
+            
+            <div class="flex items-center gap-2 sm:gap-3 cursor-pointer group relative z-10 flex-shrink-0" onclick="switchView('view-dashboard')">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 p-1 flex items-center justify-center shadow-lg shadow-sky-500/30 border border-white/20 group-hover:scale-105 transition-transform duration-300">
+                    <i class="fa-solid fa-brain text-white text-sm sm:text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-1 sm:gap-2">
+                        <span class="font-extrabold text-xs sm:text-base tracking-tight text-slate-800 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors truncate max-w-[130px] sm:max-w-none">
+                            Dr. Samir Moucharrafie
+                        </span>
+                        <span class="text-[9px] sm:text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 font-semibold border border-sky-200 dark:border-sky-400/30 hidden md:inline-block">
+                            MPPS: 61231
+                        </span>
+                    </div>
+                    <p class="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-wide truncate max-w-[150px] sm:max-w-none">
+                        Unidad Cerebro Columna (CMI)
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3 relative z-10 flex-shrink-0">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-[9px] font-bold tracking-widest uppercase shadow-inner cursor-default">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    En línea
+                </div>
+
+                <button onclick="toggleTheme()" class="flex items-center justify-center sm:px-3 sm:py-1.5 w-8 h-8 sm:w-auto sm:h-auto rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-sky-500/40 shadow-sm transition-colors group">
+                    <i class="fa-solid fa-moon dark:fa-sun text-slate-600 dark:text-amber-400 text-sm group-hover:rotate-45 dark:group-hover:-rotate-12 transition-transform duration-300" id="theme-icon"></i>
+                    <span class="text-[10px] font-bold text-slate-600 dark:text-amber-400 hidden sm:inline ml-2" id="theme-text">Guardia</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 pb-24 md:pb-6 z-10 relative">
+        
+        <!-- ========================================== -->
+        <!-- VIEW 1: DASHBOARD PRINCIPAL               -->
+        <!-- ========================================== -->
+        <div id="view-dashboard" class="app-view active-view space-y-4 sm:space-y-5">
+            
+            <!-- ======================================================== -->
+            <!-- HERO BIMODAL ADAPTATIVO ("Consulta vs Quirófano")        -->
+            <!-- ======================================================== -->
+            <div id="hero-bimodal-container" class="glass-card rounded-3xl p-4 sm:p-5 relative overflow-hidden transition-all duration-500">
+                <div class="flex flex-wrap items-center justify-between gap-3 pb-3 mb-3 border-b border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] font-black text-sky-700 dark:text-sky-400 bg-sky-100 dark:bg-sky-950/80 border border-sky-300 dark:border-sky-800 px-2.5 py-1 rounded-full uppercase tracking-widest inline-flex items-center gap-1.5">
+                            <i class="fa-solid fa-bolt text-amber-500"></i> Estación de Comando Clínico
+                        </span>
+                        <span class="text-[11px] font-bold text-slate-500" id="bimodal-status-label">Modo: Consulta en Vivo</span>
+                    </div>
+
+                    <!-- Conmutador contextual Consulta / Quirófano -->
+                    <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-900/90 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-[10px] font-bold">
+                        <button id="btn-sub-consulta" onclick="setBimodalSubMode('consulta')" class="px-3 py-1 rounded-lg bg-sky-500 text-white shadow-sm transition">
+                            <i class="fa-solid fa-user-doctor mr-1"></i> Consulta
+                        </button>
+                        <button id="btn-sub-quirofano" onclick="setBimodalSubMode('quirofano')" class="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-white transition">
+                            <i class="fa-solid fa-hospital mr-1"></i> Quirófano / Guardia
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUB-VISTA 1: MODO CONSULTA (Paciente en Silla + Acciones Instantáneas) -->
+                <div id="bimodal-consulta-view" class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                    <div class="lg:col-span-5 flex items-center gap-3.5">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-sky-500/30 flex-shrink-0 cursor-pointer" onclick="togglePatientPanel('Mariana G. Rivas', '42 años', 'V-14.230.198', 'Cervicalgia aguda (M54.2)', 'MR')">
+                            MR
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">Mariana González Rivas</h3>
+                                <span class="px-2 py-0.5 rounded-full bg-red-500/10 text-red-500 border border-red-500/30 text-[9px] font-black">EVA: 8/10</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-0.5">42 años · CI: 14.230.198 · <strong>En silla: 18 min</strong></p>
+                            <p class="text-[10px] font-bold text-sky-600 dark:text-sky-400 mt-0.5"><i class="fa-solid fa-notes-medical"></i> Cervicalgia aguda con radiculopatía C6</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-wrap items-center justify-start lg:justify-end gap-2">
+                        <button onclick="toggleVoicePanel()" class="px-3.5 py-2.5 rounded-xl bg-sky-500/15 hover:bg-sky-500 text-sky-600 hover:text-white dark:text-sky-300 dark:hover:text-white border border-sky-400/40 text-xs font-bold transition flex items-center gap-2">
+                            <i class="fa-solid fa-microphone"></i> Dictar SOAP
+                        </button>
+                        <button onclick="switchView('view-recipe')" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white text-xs font-bold transition flex items-center gap-2">
+                            <i class="fa-solid fa-file-prescription text-sky-500"></i> Emitir Récipe
+                        </button>
+                        <button onclick="showToast('Alerta clínica: Alergia a Penicilina registrada', 'fa-triangle-exclamation', 'text-amber-400')" class="px-3 py-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Penicilina
+                        </button>
+                        <button onclick="openNewPatientModal()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-sky-500/20 active:scale-95 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> Nueva Consulta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUB-VISTA 2: MODO QUIRÓFANO / GUARDIA (Procedimiento, Horario y Checklist) -->
+                <div id="bimodal-quirofano-view" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                    <div class="lg:col-span-6 flex items-center gap-3.5">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-amber-500/30 flex-shrink-0">
+                            <i class="fa-solid fa-hospital-user"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">Quirófano 2 · Synapsis CMI</h3>
+                                <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[9px] font-black">10:30 AM</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Procedimiento: <strong>Microdiscectomía tubular L5-S1</strong></p>
+                            <p class="text-[10px] font-bold text-amber-500 mt-0.5"><i class="fa-solid fa-box-archive"></i> Cajas intersomáticas y set CMI verificados en sala</p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-6 flex flex-wrap items-center justify-start lg:justify-end gap-2">
+                        <span class="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-heart-pulse"></i> Riesgo Quirúrgico: Aprobado (ASA II)
+                        </span>
+                        <button onclick="showToast('Cargando protocolo y checklist Synapsis...', 'fa-file-shield', 'text-sky-400')" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-indigo-600 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+                            <i class="fa-solid fa-clipboard-check"></i> Ver Protocolo Quirúrgico
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Grid Interconectado con sub-vistas -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                <div class="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onclick="switchView('view-appointments')">
+                    <div class="beam-content">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-sky-600 dark:text-sky-400 flex items-center justify-center mx-auto mb-3">
+                            <i class="fa-solid fa-calendar-day text-base"></i>
+                        </div>
+                        <span class="text-xl font-black" id="kpi-today-count">18</span>
+                        <p class="text-[10px] text-slate-500 font-bold mt-1 uppercase flex items-center justify-center gap-1">
+                            Citas Hoy <i class="fa-solid fa-chevron-right text-[8px] text-sky-500"></i>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center relative cursor-pointer" onclick="switchView('view-waiting-room')">
+                    <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-emerald-500 animate-ping z-10"></div>
+                    <div class="beam-content">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-3">
+                            <i class="fa-solid fa-users text-base"></i>
+                        </div>
+                        <span class="text-xl font-black" id="kpi-waiting-count">4</span>
+                        <p class="text-[10px] text-slate-500 font-bold mt-1 uppercase flex items-center justify-center gap-1">
+                            En Espera <i class="fa-solid fa-chevron-right text-[8px] text-emerald-500"></i>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onclick="switchView('view-active-consultation')">
+                    <div class="beam-content">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-3">
+                            <i class="fa-solid fa-user-doctor text-base"></i>
+                        </div>
+                        <span class="text-xl font-black">1</span>
+                        <p class="text-[10px] text-slate-500 font-bold mt-1 uppercase flex items-center justify-center gap-1">
+                            En Consulta <i class="fa-solid fa-chevron-right text-[8px] text-indigo-500"></i>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="glass-card beam-card p-4 sm:p-5 rounded-3xl text-center cursor-pointer" onclick="switchView('view-attended')">
+                    <div class="beam-content">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl icon-box-clean text-sky-600 dark:text-sky-400 flex items-center justify-center mx-auto mb-3">
+                            <i class="fa-solid fa-circle-check text-base"></i>
+                        </div>
+                        <span class="text-xl font-black">13</span>
+                        <p class="text-[10px] text-slate-500 font-bold mt-1 uppercase flex items-center justify-center gap-1">
+                            Atendidos <i class="fa-solid fa-chevron-right text-[8px] text-sky-500"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Fila Deslizable de Pacientes -->
+                <div class="glass-card rounded-3xl p-5 sm:p-6 flex flex-col justify-between overflow-hidden relative">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-[9px] font-black text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800 px-3 py-1.5 rounded-md uppercase tracking-widest shadow-inner"><i class="fa-solid fa-arrows-left-right mr-1"></i> Fila de Pacientes</span>
+                        <span class="text-[10px] text-slate-500 font-bold" id="queue-turn-indicator">En turno: 104</span>
+                    </div>
+                    
+                    <div id="patient-queue-list" class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-4 pb-4">
+                        <div class="snap-center shrink-0 w-[90%] md:w-full border border-slate-200 dark:border-slate-700 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 cursor-pointer hover:border-sky-400 transition-colors" onclick="togglePatientPanel('Mariana G. Rivas', '42 años', 'V-14.230.198', 'Cervicalgia aguda (M54.2)', 'MR')">
+                            <div class="flex flex-row items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-sky-500/40">MR</div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Mariana G. Rivas</h3>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">42 años · CI: 14.230.198</p>
+                                    <p class="text-[10px] font-bold text-sky-600 dark:text-sky-400 mt-1"><i class="fa-solid fa-notes-medical"></i> Cervicalgia aguda</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="snap-center shrink-0 w-[90%] md:w-full border border-slate-200 dark:border-slate-700 rounded-2xl p-4 bg-white/40 dark:bg-slate-800/40 cursor-pointer hover:border-sky-400 transition-colors" onclick="togglePatientPanel('Héctor José Valera', '31 años', 'V-19.502.833', 'Hernia L5-S1', 'HJ')">
+                            <div class="flex flex-row items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-indigo-500/40">HJ</div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Héctor José Valera</h3>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">31 años · CI: 19.502.833</p>
+                                    <p class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 mt-1"><i class="fa-solid fa-notes-medical"></i> Hernia L5-S1</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 sm:space-y-3 pt-2 border-t border-slate-200 dark:border-white/10">
+                        <button onclick="togglePatientPanel()" class="w-full bg-white dark:bg-white/5 border border-slate-300 dark:border-sky-500/30 text-slate-700 dark:text-sky-300 font-bold py-3 rounded-2xl text-[11px] flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+                            <i class="fa-solid fa-user-injured"></i> Ver Perfil Detallado
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Papelería Institucional Completa -->
+                <div class="lg:col-span-2 glass-card rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xs sm:text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest mb-1">Papelería Institucional A4</h3>
+                        <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mb-4 sm:mb-6 font-medium">Módulos de emisión rápida con autocompletado neuroquirúrgico.</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div onclick="switchView('view-recipe')" class="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                                <div class="beam-content flex items-center gap-3 w-full">
+                                    <div class="w-10 h-10 rounded-xl icon-box-clean text-sky-600 dark:text-sky-400 flex items-center justify-center"><i class="fa-solid fa-pills text-base"></i></div>
+                                    <div><h4 class="text-[11px] sm:text-xs font-bold transition-colors">Récipe Médico</h4></div>
+                                </div>
+                            </div>
+                            <div onclick="switchView('view-report')" class="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                                <div class="beam-content flex items-center gap-3 w-full">
+                                    <div class="w-10 h-10 rounded-xl icon-box-clean text-indigo-600 dark:text-indigo-400 flex items-center justify-center"><i class="fa-solid fa-file-medical text-base"></i></div>
+                                    <div><h4 class="text-[11px] sm:text-xs font-bold transition-colors">Informe Médico</h4></div>
+                                </div>
+                            </div>
+                            <div onclick="switchView('view-orders')" class="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                                <div class="beam-content flex items-center gap-3 w-full">
+                                    <div class="w-10 h-10 rounded-xl icon-box-clean text-violet-600 dark:text-violet-400 flex items-center justify-center"><i class="fa-solid fa-flask text-base"></i></div>
+                                    <div><h4 class="text-[11px] sm:text-xs font-bold transition-colors">Orden Exámenes</h4></div>
+                                </div>
+                            </div>
+                            <div onclick="switchView('view-certificate')" class="glass-card beam-card p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer">
+                                <div class="beam-content flex items-center gap-3 w-full">
+                                    <div class="w-10 h-10 rounded-xl icon-box-clean text-amber-600 dark:text-amber-400 flex items-center justify-center"><i class="fa-solid fa-calendar-check text-base"></i></div>
+                                    <div><h4 class="text-[11px] sm:text-xs font-bold transition-colors">Constancia Reposo</h4></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: CITAS DE HOY (AGENDA DÍA)          -->
+        <!-- ========================================== -->
+        <div id="view-appointments" class="app-view space-y-4">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('view-dashboard')" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Módulo: Agenda de Citas de Hoy (18)
+                </span>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200 dark:border-slate-800">
+                    <div>
+                        <h2 class="text-lg font-black text-slate-900 dark:text-white">Agenda Diaria de Consultas</h2>
+                        <p class="text-xs text-slate-500">Dr. Samir Moucharrafie · Martes, 06 Octubre 2026</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="px-3 py-1.5 rounded-xl bg-sky-500 text-white text-xs font-bold shadow-md shadow-sky-500/20">Todos (18)</button>
+                        <button class="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-300">En Espera (4)</button>
+                        <button class="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-300">Atendidos (13)</button>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onclick="togglePatientPanel('Mariana G. Rivas', '42 años', 'V-14.230.198', 'Cervicalgia aguda (M54.2)', 'MR')">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-xs font-black text-sky-600 dark:text-sky-400 w-16">08:30 AM</span>
+                            <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-500 flex items-center justify-center font-bold text-xs">MR</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900 dark:text-white">Mariana González Rivas</h4>
+                                <p class="text-[10px] text-slate-500">Cervicalgia aguda · CI: 14.230.198</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold">En Consulta</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onclick="togglePatientPanel('Héctor José Valera', '31 años', 'V-19.502.833', 'Hernia L5-S1', 'HJ')">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-xs font-black text-sky-600 dark:text-sky-400 w-16">09:15 AM</span>
+                            <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs">HJ</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900 dark:text-white">Héctor José Valera</h4>
+                                <p class="text-[10px] text-slate-500">Hernia L5-S1 · CI: 19.502.833</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 text-[10px] font-bold">En Sala</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between hover:border-sky-400 transition-colors cursor-pointer" onclick="togglePatientPanel('Elena P. Salazar', '58 años', 'V-8.910.421', 'Canal lumbar estrecho', 'ES')">
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono text-xs font-black text-sky-600 dark:text-sky-400 w-16">10:00 AM</span>
+                            <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-xs">ES</div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-900 dark:text-white">Elena Patricia Salazar</h4>
+                                <p class="text-[10px] text-slate-500">Canal lumbar estrecho · CI: 8.910.421</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10px] font-bold">Confirmada</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: SALA DE ESPERA (TRIAGE)            -->
+        <!-- ========================================== -->
+        <div id="view-waiting-room" class="app-view space-y-4">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('view-dashboard')" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Módulo: Control de Sala de Espera
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-card p-6 rounded-3xl md:col-span-2">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-black uppercase text-slate-900 dark:text-white tracking-wider">Pacientes Presentes en Recepción</h3>
+                        <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-bold">4 Pacientes</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/40 dark:bg-slate-800/40 flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 font-bold">Turno #105</span>
+                                <h4 class="text-sm font-bold mt-1">Héctor José Valera</h4>
+                                <p class="text-[11px] text-slate-500">Llegada: hace 22 minutos · Triage: Normal (125/82 mmHg)</p>
+                            </div>
+                            <button onclick="showToast('Llamando a Héctor Valera a consultorio...', 'fa-bullhorn', 'text-sky-400')" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-md shadow-sky-500/20">
+                                Llamar a Consultorio
+                            </button>
+                        </div>
+
+                        <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/40 dark:bg-slate-800/40 flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-950 text-sky-600 dark:text-sky-400 font-bold">Turno #106</span>
+                                <h4 class="text-sm font-bold mt-1">Carlos Eduardo Méndez</h4>
+                                <p class="text-[11px] text-slate-500">Llegada: hace 10 minutos · Triage: Dolor Agudo (135/88 mmHg)</p>
+                            </div>
+                            <button onclick="showToast('Llamando a Carlos Méndez...', 'fa-bullhorn', 'text-sky-400')" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-sky-500 hover:text-white text-slate-800 dark:text-white text-xs font-bold transition">
+                                Llamar a Consultorio
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-3xl flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xs font-black uppercase tracking-wider mb-2">Pantalla de Sala</h4>
+                        <p class="text-[11px] text-slate-500 mb-4">Control de llamado visual para el monitor de recepción de CMI.</p>
+                        <div class="p-4 rounded-2xl bg-sky-500/10 border border-sky-500/30 text-center">
+                            <span class="text-[10px] font-bold uppercase text-sky-400">Próximo en Pantalla</span>
+                            <h2 class="text-2xl font-black mt-1 text-slate-900 dark:text-white">TURNO 105</h2>
+                            <p class="text-xs font-semibold text-slate-500">Consultorio 1 · Dr. Samir</p>
+                        </div>
+                    </div>
+                    <button onclick="showToast('Timbre de llamado emitido en sala', 'fa-bell', 'text-amber-400')" class="w-full mt-4 py-3 rounded-xl border border-sky-500 text-sky-500 hover:bg-sky-500 hover:text-white font-bold text-xs transition">
+                        <i class="fa-solid fa-volume-high mr-1"></i> Notificar por Altavoz
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: CONSULTA ACTIVA (EXPEDIENTE)       -->
+        <!-- ========================================== -->
+        <div id="view-active-consultation" class="app-view space-y-4">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('view-dashboard')" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="text-[10px] font-mono font-bold text-emerald-500">Consulta en Progreso: 18 min</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-card p-6 sm:p-8 rounded-3xl space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg">MR</div>
+                            <div>
+                                <h2 class="text-lg font-black text-slate-900 dark:text-white">Mariana González Rivas</h2>
+                                <p class="text-xs text-slate-500">42 años · CI: 14.230.198 · Ocupación: Docente</p>
+                            </div>
+                        </div>
+                        <button onclick="toggleVoicePanel()" class="px-4 py-2 rounded-xl bg-sky-500/20 text-sky-500 border border-sky-500/40 text-xs font-bold flex items-center gap-2 hover:bg-sky-500 hover:text-white transition">
+                            <i class="fa-solid fa-microphone"></i> Dictar Evolución
+                        </button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-1.5">Evolución Clínica / Anamnesis</label>
+                            <textarea rows="4" class="w-full p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-white focus:outline-none focus:border-sky-500" placeholder="Escriba aquí los hallazgos clínicos o utilice Sami Copilot...">Paciente femenina refiere mejoría parcial con tratamiento conservador. Persiste radiculopatía C6 derecha con parestesias intermitentes en pulgar y dedo índice. Reflejo bicipital conservado.</textarea>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-1.5">Diagnóstico Principal (CIE-10)</label>
+                                <input type="text" value="Cervicalgia aguda con radiculopatía (M54.2)" class="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-white font-bold">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-1.5">Conducta Médica</label>
+                                <input type="text" value="Plan quirúrgico mínimamente invasivo vs Bloqueo" class="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-white font-bold">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+                        <button onclick="switchView('view-recipe')" class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-white hover:bg-slate-300">
+                            Emitir Récipe
+                        </button>
+                        <button onclick="showToast('Consulta guardada y finalizada con éxito', 'fa-check', 'text-emerald-400'); switchView('view-dashboard');" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-black shadow-lg shadow-emerald-500/20">
+                            Finalizar Consulta
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-3xl space-y-4">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">Estudios de Imagen (PACS / RMN)</h3>
+                    <div class="border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-6 text-center">
+                        <i class="fa-solid fa-x-ray text-3xl text-sky-500 mb-2"></i>
+                        <p class="text-xs font-bold">RMN Columna Cervical</p>
+                        <p class="text-[10px] text-slate-500">C5-C6 Hernia posterolateral derecha</p>
+                        <button onclick="showToast('Abriendo visor DICOM...', 'fa-eye', 'text-sky-400')" class="mt-3 px-3 py-1.5 rounded-lg bg-sky-500/20 text-sky-500 text-[10px] font-bold">Ver Resonancia</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: PACIENTES ATENDIDOS                -->
+        <!-- ========================================== -->
+        <div id="view-attended" class="app-view space-y-4">
+            <div class="flex items-center justify-between">
+                <button onclick="switchView('view-dashboard')" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Módulo: Pacientes Atendidos Hoy (13)
+                </span>
+            </div>
+
+            <div class="glass-card p-6 rounded-3xl">
+                <h3 class="text-sm font-black uppercase text-slate-900 dark:text-white mb-4">Consultas Concluidas con Éxito</h3>
+                <div class="space-y-3">
+                    <div class="p-4 rounded-2xl bg-white/40 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold">Dr. Armando Quintero</h4>
+                                <p class="text-[10px] text-slate-500">Control Postoperatorio Artrodesis L4-L5 · Atendido 08:00 AM</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-400 font-mono">Récipe & Informe Generados</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white/40 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i>
+                            <div>
+                                <h4 class="text-xs font-bold">Beatriz Morales</h4>
+                                <p class="text-[10px] text-slate-500">Cefalea tensional crónica · Atendido 08:45 AM</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-400 font-mono">Tratamiento Médico Indicado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 6: RÉCIPE MÉDICO A4                  -->
+        <!-- ========================================== -->
+        <div id="view-recipe" class="app-view space-y-4">
+            <div class="flex items-center justify-between mb-2">
+                <button onclick="switchView('view-dashboard')" class="text-[10px] sm:text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Módulo: Récipe Médico Oficial A4
+                </span>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-6">
+                <div class="flex-1 overflow-x-auto pb-4">
+                    <div class="a4-paper a4-printable p-8 sm:p-12 mx-auto max-w-[800px] border border-slate-200 dark:border-slate-700 relative">
+                        <div class="border-b-2 border-slate-800 pb-4 mb-6 flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-brain text-3xl text-slate-800"></i>
+                                <div>
+                                    <h1 class="text-xl font-black uppercase tracking-tight text-slate-900">Dr. Samir Moucharrafie</h1>
+                                    <p class="text-xs font-bold text-slate-700">Neurocirugía · Cirugía de Columna Mínimamente Invasiva</p>
+                                    <p class="text-[10px] text-slate-600">MPPS 61231 | CMI Cerebro y Columna · UCBL Lyon 1</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] font-bold uppercase text-slate-600">Fecha de Emisión</p>
+                                <p class="text-sm font-mono font-bold text-slate-900">06/10/2026</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-100 p-4 rounded-lg mb-6 text-xs grid grid-cols-2 gap-4 border border-slate-300">
+                            <div>
+                                <span class="font-bold">Paciente:</span> Mariana G. Rivas<br>
+                                <span class="font-bold">CI:</span> V-14.230.198
+                            </div>
+                            <div>
+                                <span class="font-bold">Edad:</span> 42 años<br>
+                                <span class="font-bold">Diagnóstico:</span> Cervicalgia aguda (M54.2)
+                            </div>
+                        </div>
+
+                        <div class="min-h-[400px]">
+                            <h2 class="text-lg font-black mb-4 flex items-center gap-2 text-slate-900"><i class="fa-solid fa-pills"></i> Rp.</h2>
+                            <div class="space-y-4 text-sm font-medium text-slate-800">
+                                <div class="border-b border-slate-300 pb-2">
+                                    <p class="font-bold text-base">1. Tiocolchicósido 4mg</p>
+                                    <p class="pl-4">Tomar 1 cápsula vía oral cada 12 horas por 5 días.</p>
+                                </div>
+                                <div class="border-b border-slate-300 pb-2">
+                                    <p class="font-bold text-base">2. Ketoprofeno 100mg</p>
+                                    <p class="pl-4">Tomar 1 tableta vía oral cada 8 horas por 4 días. Administrar con protector gástrico.</p>
+                                </div>
+                                <textarea class="w-full mt-4 p-2 bg-transparent border border-dashed border-slate-400 rounded resize-none focus:outline-none focus:border-sky-500 text-slate-800" rows="3" placeholder="Escriba aquí la siguiente indicación médica..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-12 pt-8 border-t border-slate-300 text-center w-64 mx-auto">
+                            <p class="text-2xl mb-1 text-slate-800 font-serif italic">Dr. Samir Moucharrafie</p>
+                            <div class="border-t border-slate-800 pt-1">
+                                <p class="text-[10px] font-bold text-slate-700">Firma y Sello Digital Oficial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full lg:w-72 flex flex-col gap-4">
+                    <div class="glass-card p-5 rounded-3xl">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Acciones de Emisión</h3>
+                        <div class="space-y-3">
+                            <button onclick="window.print()" class="w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-600 flex items-center justify-center gap-2 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                                <i class="fa-solid fa-print"></i> Imprimir Físico (A4)
+                            </button>
+                            <button onclick="showToast('Generando PDF firmado...', 'fa-file-pdf', 'text-indigo-400')" class="w-full py-3 px-4 rounded-xl bg-slate-800 text-white flex items-center justify-center gap-2 text-xs font-bold hover:bg-slate-700 transition">
+                                <i class="fa-solid fa-file-pdf"></i> Generar PDF
+                            </button>
+                            <button onclick="showToast('Enviado por WhatsApp a Mariana Rivas', 'fa-whatsapp', 'text-emerald-400')" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white flex items-center justify-center gap-2 text-xs font-bold shadow-lg shadow-emerald-500/30">
+                                <i class="fa-brands fa-whatsapp"></i> Enviar a Paciente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 7: INFORME MÉDICO A4                  -->
+        <!-- ========================================== -->
+        <div id="view-report" class="app-view space-y-4">
+            <div class="flex items-center justify-between mb-2">
+                <button onclick="switchView('view-dashboard')" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Módulo: Informe Neuroquirúrgico A4
+                </span>
+            </div>
+
+            <div class="a4-paper a4-printable p-8 sm:p-12 mx-auto max-w-[800px] border border-slate-200 dark:border-slate-700 space-y-6">
+                <div class="border-b-2 border-slate-800 pb-4 flex justify-between items-start">
+                    <div>
+                        <h1 class="text-xl font-black uppercase text-slate-900">Dr. Samir Moucharrafie</h1>
+                        <p class="text-xs font-bold text-slate-700">Informe Médico Especializado de Columna</p>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-slate-700">INF-CMI-2026-088</span>
+                </div>
+
+                <div class="space-y-4 text-xs leading-relaxed text-slate-800">
+                    <p><strong>Paciente:</strong> Mariana González Rivas | <strong>C.I.:</strong> V-14.230.198 | <strong>Edad:</strong> 42 años</p>
+                    <div>
+                        <h4 class="font-bold uppercase text-slate-900 mb-1">Motivo de Evaluación y Resumen Clínico:</h4>
+                        <p>Paciente acude a valoración por cuadro de cervicalgia irradiada a dermatoma C6 derecho con 3 semanas de evolución, refractario a analgésicos de primer escalón.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold uppercase text-slate-900 mb-1">Hallazgos en Imagenología (Resonancia Magnética):</h4>
+                        <p>La RMN de columna cervical evidencia discopatía degenerativa en el espacio intervertebral C5-C6 con protrusión posterolateral derecha que condiciona contacto radicular.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold uppercase text-slate-900 mb-1">Plan Terapéutico y Recomendación Quirúrgica:</h4>
+                        <p>Se sugiere abordaje mínimamente invasivo (Microdiscectomía / Artroplastia cervical) tras fracaso de protocolo fisiátrico.</p>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-slate-300 text-center w-64 mx-auto">
+                    <p class="font-serif italic text-2xl text-slate-900">Dr. Samir Moucharrafie</p>
+                    <p class="text-[10px] font-bold text-slate-700">Neurocirujano Especialista</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 8: ORDEN DE EXÁMENES A4               -->
+        <!-- ========================================== -->
+        <div id="view-orders" class="app-view space-y-4">
+            <div class="flex items-center justify-between mb-2">
+                <button onclick="switchView('view-dashboard')" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Módulo: Orden de Laboratorio e Imágenes A4
+                </span>
+            </div>
+
+            <div class="a4-paper a4-printable p-8 sm:p-12 mx-auto max-w-[800px] border border-slate-200 dark:border-slate-700 space-y-6">
+                <div class="border-b-2 border-slate-800 pb-4 flex justify-between items-start">
+                    <div>
+                        <h1 class="text-xl font-black uppercase text-slate-900">Dr. Samir Moucharrafie</h1>
+                        <p class="text-xs font-bold text-slate-700">Orden Médica de Estudios y Laboratorios</p>
+                    </div>
+                    <span class="text-xs font-mono font-bold text-slate-700">Fecha: 06/10/2026</span>
+                </div>
+
+                <div class="text-xs space-y-4 text-slate-800">
+                    <p><strong>Paciente:</strong> Mariana González Rivas | <strong>C.I.:</strong> V-14.230.198</p>
+                    <div class="p-4 bg-slate-100 rounded-xl space-y-2">
+                        <p class="font-bold text-sm text-slate-900">1. Resonancia Magnética Nuclear (RMN):</p>
+                        <p class="pl-4">• Columna Cervical con y sin contraste.</p>
+                        <p class="font-bold text-sm text-slate-900 mt-2">2. Estudios Preoperatorios Básicos:</p>
+                        <p class="pl-4">• Hematología Completa, Tiempos de Coagulación (PT, PTT, INR), Glicemia, Urea, Creatinina.</p>
+                        <p class="pl-4">• Valoración Cardiovascular Preoperatoria.</p>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-slate-300 text-center w-64 mx-auto">
+                    <p class="font-serif italic text-2xl text-slate-900">Dr. Samir Moucharrafie</p>
+                    <p class="text-[10px] font-bold text-slate-700">Firma y Sello Médico</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 9: CONSTANCIA DE REPOSO A4            -->
+        <!-- ========================================== -->
+        <div id="view-certificate" class="app-view space-y-4">
+            <div class="flex items-center justify-between mb-2">
+                <button onclick="switchView('view-dashboard')" class="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Dashboard
+                </button>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Módulo: Constancia de Reposo Médico A4
+                </span>
+            </div>
+
+            <div class="a4-paper a4-printable p-8 sm:p-12 mx-auto max-w-[800px] border border-slate-200 dark:border-slate-700 space-y-6">
+                <div class="border-b-2 border-slate-800 pb-4 text-center">
+                    <h1 class="text-xl font-black uppercase text-slate-900">Constancia Médica de Reposo</h1>
+                    <p class="text-xs font-bold text-slate-700">Dr. Samir Moucharrafie Naime · Neurocirugía</p>
+                </div>
+
+                <div class="text-xs space-y-6 leading-relaxed text-slate-800 pt-4">
+                    <p>Por medio de la presente se hace constar que el (la) ciudadano(a): <strong>Mariana González Rivas</strong>, titular de la Cédula de Identidad <strong>V-14.230.198</strong>, fue evaluado(a) clínicamente en el día de la fecha, presentando diagnóstico de: <strong>Cervicalgia Aguda Incapacitante (CIE-10: M54.2)</strong>.</p>
+                    
+                    <p>Por tal motivo, se indica <strong>REPOSO FÍSICO Y LABORAL</strong> por un período de <strong>siete (07) días consecutivos</strong>, comprendidos desde el 06/10/2026 hasta el 13/10/2026 inclusive.</p>
+                    
+                    <p class="italic text-[11px] text-slate-600">Constancia expedida a petición de la parte interesada para los fines legales que estime convenientes.</p>
+                </div>
+
+                <div class="pt-12 border-t border-slate-300 text-center w-64 mx-auto">
+                    <p class="font-serif italic text-2xl text-slate-900">Dr. Samir Moucharrafie</p>
+                    <p class="text-[10px] font-bold text-slate-700">MPPS 61231 | CMI</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Sami Copilot Desktop -->
+    <div class="ai-avatar-container animate-float" id="sami-desktop">
+        <div class="sami-wrapper relative">
+            <div class="ai-tooltip">Sami Copilot — <span class="text-sky-500 font-normal">IA CMI</span></div>
+            <div class="avatar-seal" onclick="toggleVoicePanel()">
+                <div class="seal-ring-liquid"></div>
+                <div class="seal-core-glass">
+                    <i class="fa-solid fa-brain seal-icon-gradient"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra Navegación Móvil con Sami Copilot Central -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-header border-t-white/10 flex justify-between items-center px-4 py-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+        <div class="flex flex-col items-center gap-1 w-1/5 cursor-pointer mobile-nav-item active" id="nav-dashboard" onclick="switchView('view-dashboard')">
+            <i class="fa-solid fa-house text-lg"></i>
+            <span class="text-[9px] font-bold">Inicio</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 relative cursor-pointer" id="nav-waiting" onclick="switchView('view-waiting-room')">
+            <span class="absolute top-0 right-3 w-2 h-2 rounded-full bg-red-500"></span>
+            <i class="fa-solid fa-users text-lg"></i>
+            <span class="text-[9px] font-bold">Espera</span>
+        </div>
+        
+        <div class="sami-mobile-container" onclick="toggleVoicePanel()">
+            <div class="sami-mobile-bg">
+                <div class="avatar-seal">
+                    <div class="seal-ring-liquid"></div>
+                    <div class="seal-core-glass">
+                        <i class="fa-solid fa-brain seal-icon-gradient"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-recipe" onclick="switchView('view-recipe')">
+            <i class="fa-solid fa-file-prescription text-lg"></i>
+            <span class="text-[9px] font-bold">Récipes</span>
+        </div>
+        <div class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-appointments" onclick="switchView('view-appointments')">
+            <i class="fa-solid fa-calendar-days text-lg"></i>
+            <span class="text-[9px] font-bold">Agenda</span>
+        </div>
+    </nav>
+
+    <div id="app-overlay" class="glass-overlay" onclick="closeAllPanels()"></div>
+
+    <!-- Panel de Dictado por Voz (Sami) -->
+    <div id="voice-panel" class="voice-panel">
+        <div class="absolute top-4 right-4">
+            <button onclick="closeAllPanels()" class="w-8 h-8 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="w-12 h-12 mb-3 rounded-full bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-500 shadow-[0_0_15px_rgba(14,165,233,0.3)] animate-pulse">
+            <i class="fa-solid fa-microphone text-xl"></i>
+        </div>
+        
+        <h3 class="text-[10px] md:text-xs font-bold uppercase text-sky-600 dark:text-sky-400 mb-3 tracking-widest text-center">Sami está escuchando...</h3>
+        
+        <div class="sound-waves">
+            <div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div><div class="sound-bar"></div>
+        </div>
+        
+        <p class="text-xs md:text-sm font-medium text-slate-600 dark:text-slate-300 text-center px-8 italic">
+            "Paciente refiere cervicalgia irradiada a hombro derecho..."
+        </p>
+        
+        <button onclick="processDictation()" class="mt-4 px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs font-bold shadow-lg shadow-sky-500/30 hover:scale-105 transition-transform flex items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Transcribir Nota SOAP
+        </button>
+    </div>
+
+    <!-- Panel Lateral de Paciente -->
+    <div id="patient-panel" class="side-panel p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="font-bold text-lg">Perfil del Paciente</h2>
+            <button onclick="closeAllPanels()" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <div class="flex items-center gap-4 mb-6">
+            <div id="panel-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center font-bold text-2xl">MR</div>
+            <div>
+                <h3 id="panel-patient-name" class="text-xl font-black">Mariana G. Rivas</h3>
+                <p id="panel-patient-age" class="text-xs text-slate-500">42 años</p>
+                <p id="panel-patient-id" class="text-xs text-slate-500">CI: 14.230.198</p>
+            </div>
+        </div>
+
+        <div class="space-y-4 flex-1">
+            <div class="p-3 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                <p class="text-[10px] uppercase font-bold text-slate-500 mb-1">Motivo de Consulta (Triage)</p>
+                <p id="panel-patient-reason" class="text-sm font-medium">Dolor agudo en región cervical irradiado a hombro derecho.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <div class="p-3 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <p class="text-[10px] uppercase font-bold text-slate-500">Alergias</p>
+                    <p class="text-sm font-medium text-red-500"><i class="fa-solid fa-triangle-exclamation"></i> Penicilina</p>
+                </div>
+                <div class="p-3 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <p class="text-[10px] uppercase font-bold text-slate-500">Signos Vitales</p>
+                    <p class="text-sm font-medium">120/80 mmHg</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-auto pt-6 space-y-3">
+            <button onclick="switchView('view-active-consultation'); closeAllPanels();" class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-sky-500/20">
+                <i class="fa-solid fa-stethoscope"></i> Abrir Consulta Activa
+            </button>
+            <button onclick="switchView('view-recipe'); closeAllPanels();" class="w-full bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-prescription"></i> Emitir Récipe
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal: Nueva Consulta -->
+    <div id="new-patient-modal" class="fixed inset-0 z-[65] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 relative border border-slate-300 dark:border-sky-500/40 shadow-2xl overflow-hidden">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-user-plus text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white">Nueva Consulta</h3>
+                        <p class="text-[10px] text-slate-500">Ingreso a sala de espera y expediente rápido</p>
+                    </div>
+                </div>
+                <button onclick="closeNewPatientModal()" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="new-patient-form" onsubmit="handleNewPatientSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Nombre Completo del Paciente</label>
+                    <input type="text" id="inp-patient-name" required placeholder="Ej: Carlos Eduardo Méndez" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Cédula / Documento</label>
+                        <input type="text" id="inp-patient-ci" required placeholder="V-18.452.901" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Edad</label>
+                        <input type="number" id="inp-patient-age" required min="1" max="110" placeholder="38" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Motivo de Consulta / Triage</label>
+                    <input type="text" id="inp-patient-reason" required placeholder="Ej: Lumbociatalgia derecha, parestesias L5" class="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500">
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+                    <button type="button" onclick="closeNewPatientModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-sky-500/30 active:scale-95 transition">
+                        <i class="fa-solid fa-check mr-1.5"></i> Ingresar a Sala
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-[70] flex flex-col space-y-2 pointer-events-none w-[calc(100%-2rem)] sm:w-auto max-w-sm"></div>
+
+    <script>
+        // CONTEXTO BIMODAL (Consulta vs Quirófano)
+        function setBimodalSubMode(subMode) {
+            const consultaView = document.getElementById('bimodal-consulta-view');
+            const quirofanoView = document.getElementById('bimodal-quirofano-view');
+            const label = document.getElementById('bimodal-status-label');
+            const btnConsulta = document.getElementById('btn-sub-consulta');
+            const btnQuirofano = document.getElementById('btn-sub-quirofano');
+
+            if (subMode === 'consulta') {
+                consultaView.classList.remove('hidden');
+                quirofanoView.classList.add('hidden');
+                label.innerText = "Modo: Consulta en Vivo";
+                btnConsulta.className = "px-3 py-1 rounded-lg bg-sky-500 text-white shadow-sm transition";
+                btnQuirofano.className = "px-3 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-white transition";
+                showToast("Contexto: Consultorio de Columna", "fa-user-doctor", "text-sky-400");
+            } else {
+                consultaView.classList.add('hidden');
+                quirofanoView.classList.remove('hidden');
+                label.innerText = "Modo: Quirófano Asignado";
+                btnQuirofano.className = "px-3 py-1 rounded-lg bg-gradient-to-r from-amber-500 to-indigo-600 text-white shadow-sm transition";
+                btnConsulta.className = "px-3 py-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-white transition";
+                showToast("Contexto: Quirófano CMI Synapsis", "fa-hospital", "text-amber-400");
+            }
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.app-view').forEach(view => {
+                view.classList.remove('active-view');
+            });
+            
+            const targetView = document.getElementById(viewId);
+            if (targetView) {
+                targetView.classList.add('active-view');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+                item.classList.add('text-slate-400', 'dark:text-slate-500');
+            });
+
+            const navIdMap = {
+                'view-dashboard': 'nav-dashboard',
+                'view-waiting-room': 'nav-waiting',
+                'view-recipe': 'nav-recipe',
+                'view-appointments': 'nav-appointments'
+            };
+            
+            const activeNavItem = document.getElementById(navIdMap[viewId]);
+            if (activeNavItem) {
+                activeNavItem.classList.add('active');
+                activeNavItem.classList.remove('text-slate-400', 'dark:text-slate-500');
+            }
+        }
+
+        function openNewPatientModal() {
+            closeAllPanels();
+            const modal = document.getElementById('new-patient-modal');
+            const overlay = document.getElementById('app-overlay');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            overlay.classList.add('active');
+            setTimeout(() => {
+                document.getElementById('inp-patient-name').focus();
+            }, 100);
+        }
+
+        function closeNewPatientModal() {
+            const modal = document.getElementById('new-patient-modal');
+            const overlay = document.getElementById('app-overlay');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            overlay.classList.remove('active');
+            document.getElementById('new-patient-form').reset();
+        }
+
+        function handleNewPatientSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('inp-patient-name').value.trim();
+            const ci = document.getElementById('inp-patient-ci').value.trim();
+            const age = document.getElementById('inp-patient-age').value.trim();
+            const reason = document.getElementById('inp-patient-reason').value.trim();
+
+            if (!name || !ci) return;
+
+            const parts = name.split(' ').filter(Boolean);
+            const initials = parts.length > 1 
+                ? (parts[0][0] + parts[1][0]).toUpperCase() 
+                : (name.substring(0, 2)).toUpperCase();
+
+            const queueList = document.getElementById('patient-queue-list');
+            const newCard = document.createElement('div');
+            newCard.className = "snap-center shrink-0 w-[90%] md:w-full border border-sky-400 dark:border-sky-500 rounded-2xl p-4 bg-sky-50/60 dark:bg-sky-950/30 cursor-pointer hover:border-sky-400 transition-all duration-300";
+            newCard.onclick = () => togglePatientPanel(name, age + ' años', ci, reason, initials);
+            newCard.innerHTML = `
+                <div class="flex flex-row items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-emerald-500/40">${initials}</div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">${name}</h3>
+                            <span class="text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500 text-white">Nuevo</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">${age} años · CI: ${ci}</p>
+                        <p class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 mt-1"><i class="fa-solid fa-notes-medical"></i> ${reason}</p>
+                    </div>
+                </div>
+            `;
+
+            queueList.prepend(newCard);
+
+            const waitingCount = document.getElementById('kpi-waiting-count');
+            if (waitingCount) waitingCount.innerText = parseInt(waitingCount.innerText || "4", 10) + 1;
+            
+            const todayCount = document.getElementById('kpi-today-count');
+            if (todayCount) todayCount.innerText = parseInt(todayCount.innerText || "18", 10) + 1;
+
+            closeNewPatientModal();
+            showToast(`${name} ingresado a sala de espera`, 'fa-user-check', 'text-emerald-500');
+        }
+
+        function toggleVoicePanel() {
+            const panel = document.getElementById('voice-panel');
+            const overlay = document.getElementById('app-overlay');
+            
+            document.getElementById('patient-panel').classList.remove('active');
+
+            if (panel.classList.contains('active')) {
+                panel.classList.remove('active');
+                overlay.classList.remove('active');
+            } else {
+                panel.classList.add('active');
+                overlay.classList.add('active');
+                showToast("Sami escuchando...", "fa-microphone", "text-emerald-500");
+            }
+        }
+
+        function togglePatientPanel(name = 'Mariana G. Rivas', age = '42 años', id = 'CI: 14.230.198', reason = 'Dolor agudo en región cervical irradiado a hombro derecho.', initials = 'MR') {
+            const panel = document.getElementById('patient-panel');
+            const overlay = document.getElementById('app-overlay');
+            
+            document.getElementById('voice-panel').classList.remove('active');
+
+            document.getElementById('panel-patient-name').innerText = name;
+            document.getElementById('panel-patient-age').innerText = age;
+            document.getElementById('panel-patient-id').innerText = id;
+            document.getElementById('panel-patient-reason').innerText = reason;
+            document.getElementById('panel-avatar').innerText = initials;
+
+            panel.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        function closeAllPanels() {
+            document.getElementById('voice-panel').classList.remove('active');
+            document.getElementById('patient-panel').classList.remove('active');
+            document.getElementById('app-overlay').classList.remove('active');
+            const modal = document.getElementById('new-patient-modal');
+            if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function processDictation() {
+            closeAllPanels();
+            setTimeout(() => {
+                showToast("Sami procesando audio médico...", "fa-brain", "text-violet-500");
+                setTimeout(() => {
+                    showToast("Nota Clínica SOAP incorporada.", "fa-file-lines", "text-sky-500");
+                }, 1400);
+            }, 300);
+        }
+
+        function toggleTheme() {
+            const htmlTag = document.documentElement;
+            const isDark = htmlTag.classList.contains('dark');
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+
+            if (isDark) {
+                htmlTag.classList.remove('dark');
+                icon.classList.replace('fa-sun', 'fa-moon');
+                text.innerText = "Consulta";
+                setBimodalSubMode('consulta');
+                showToast("Modo Consulta (Diurno) Activado");
+            } else {
+                htmlTag.classList.add('dark');
+                icon.classList.replace('fa-moon', 'fa-sun');
+                text.innerText = "Guardia";
+                setBimodalSubMode('quirofano');
+                showToast("Modo Quirófano / Guardia Activado");
+            }
+        }
+
+        function showToast(message, icon = 'fa-circle-check', colorClass = 'text-sky-500') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "glass-card text-slate-800 dark:text-white px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl shadow-xl border border-slate-300 dark:border-sky-500/40 text-[11px] sm:text-xs font-bold flex items-center gap-3 transform translate-y-10 opacity-0 transition-all duration-300 mb-2 w-full pointer-events-auto";
+            toast.innerHTML = `<i class="fa-solid ${icon} ${colorClass} text-sm sm:text-base flex-shrink-0"></i><span class="break-words">${message}</span>`;
+            container.appendChild(toast);
+            
+            void toast.offsetWidth;
+            setTimeout(() => { toast.classList.remove('translate-y-10', 'opacity-0'); }, 10);
+            
+            setTimeout(() => { 
+                toast.classList.add('opacity-0', 'translate-y-4'); 
+                setTimeout(() => toast.remove(), 300); 
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
