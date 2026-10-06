@@ -114,7 +114,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 1: DASHBOARD PRINCIPAL                */}
         {/*  ==========================================  */}
-        <div id="view-dashboard" className={`app-view ${activeTab === \'portal\' && activeView === \'view-dashboard\' ? \'active-view\' : \'hidden\'}  space-y-4 sm:space-y-5`}>
+        <div id="view-dashboard" className={`app-view ${activeTab === 'portal' && activeView === 'view-dashboard' ? 'active-view' : 'hidden'}  space-y-4 sm:space-y-5`}>
             
             {/*  ========================================================  */}
             {/*  HERO BIMODAL ADAPTATIVO ("Consulta vs Quirófano")         */}
@@ -140,7 +140,7 @@ export const Dashboard: React.FC = () => {
                 </div>
 
                 {/*  SUB-VISTA 1: MODO CONSULTA (Paciente en Silla + Acciones Instantáneas)  */}
-                <div id="bimodal-consulta-view" className={`grid ${bimodalMode === \'consulta\' ? \'\' : \'hidden\'}` grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <div id="bimodal-consulta-view" className={`grid ${bimodalMode === 'consulta' ? '' : 'hidden'} grid-cols-1 lg:grid-cols-12 gap-4 items-center`}>
                     <div className="lg:col-span-5 flex items-center gap-3.5">
                         <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-sky-500/30 flex-shrink-0 cursor-pointer" onClick={() => { togglePatientPanel('Mariana G. Rivas', '42 años', 'V-14.230.198', 'Cervicalgia aguda (M54.2)', 'MR') }}>
                             MR
@@ -172,7 +172,7 @@ export const Dashboard: React.FC = () => {
                 </div>
 
                 {/*  SUB-VISTA 2: MODO QUIRÓFANO / GUARDIA (Procedimiento, Horario y Checklist)  */}
-                <div id="bimodal-quirofano-view" className={`grid ${bimodalMode === \'quirofano\' ? \'\' : \'hidden\'}` grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                <div id="bimodal-quirofano-view" className={`grid ${bimodalMode === 'quirofano' ? '' : 'hidden'} grid-cols-1 lg:grid-cols-12 gap-4 items-center`}>
                     <div className="lg:col-span-6 flex items-center gap-3.5">
                         <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-lg shadow-amber-500/30 flex-shrink-0">
                             <i className="fa-solid fa-hospital-user"></i>
@@ -328,7 +328,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 2: CITAS DE HOY (AGENDA DÍA)           */}
         {/*  ==========================================  */}
-        <div id="view-appointments" className={`app-view  space-y-4 ${activeView === 'view-appointments' ? 'active-view' : 'hidden'}`}">
+        <div id="view-appointments" className={`app-view  space-y-4 ${activeView === 'view-appointments' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
@@ -394,7 +394,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 3: SALA DE ESPERA (TRIAGE)             */}
         {/*  ==========================================  */}
-        <div id="view-waiting-room" className={`app-view  space-y-4 ${activeView === 'view-waiting-room' ? 'active-view' : 'hidden'}`}">
+        <div id="view-waiting-room" className={`app-view  space-y-4 ${activeView === 'view-waiting-room' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
@@ -456,7 +456,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 4: CONSULTA ACTIVA (EXPEDIENTE)        */}
         {/*  ==========================================  */}
-        <div id="view-active-consultation" className={`app-view  space-y-4 ${activeView === 'view-active-consultation' ? 'active-view' : 'hidden'}`}">
+        <div id="view-active-consultation" className={`app-view  space-y-4 ${activeView === 'view-active-consultation' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
@@ -525,7 +525,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 5: PACIENTES ATENDIDOS                 */}
         {/*  ==========================================  */}
-        <div id="view-attended" className={`app-view  space-y-4 ${activeView === 'view-attended' ? 'active-view' : 'hidden'}`}">
+        <div id="view-attended" className={`app-view  space-y-4 ${activeView === 'view-attended' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1.5">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
@@ -566,7 +566,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 6: RÉCIPE MÉDICO A4                   */}
         {/*  ==========================================  */}
-        <div id="view-recipe" className={`app-view  space-y-4 ${activeView === 'view-recipe' ? 'active-view' : 'hidden'}`}">
+        <div id="view-recipe" className={`app-view  space-y-4 ${activeView === 'view-recipe' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between mb-2">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-[10px] sm:text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
@@ -651,7 +651,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 7: INFORME MÉDICO A4                   */}
         {/*  ==========================================  */}
-        <div id="view-report" className={`app-view  space-y-4 ${activeView === 'view-report' ? 'active-view' : 'hidden'}`}">
+        <div id="view-report" className={`app-view  space-y-4 ${activeView === 'view-report' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between mb-2">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
@@ -696,7 +696,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 8: ORDEN DE EXÁMENES A4                */}
         {/*  ==========================================  */}
-        <div id="view-orders" className={`app-view  space-y-4 ${activeView === 'view-orders' ? 'active-view' : 'hidden'}`}">
+        <div id="view-orders" className={`app-view  space-y-4 ${activeView === 'view-orders' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between mb-2">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
@@ -736,7 +736,7 @@ export const Dashboard: React.FC = () => {
         {/*  ==========================================  */}
         {/*  VIEW 9: CONSTANCIA DE REPOSO A4             */}
         {/*  ==========================================  */}
-        <div id="view-certificate" className={`app-view  space-y-4 ${activeView === 'view-certificate' ? 'active-view' : 'hidden'}`}">
+        <div id="view-certificate" className={`app-view  space-y-4 ${activeView === 'view-certificate' ? 'active-view' : 'hidden'}`}>
             <div className="flex items-center justify-between mb-2">
                 <button onClick={() => { switchView('view-dashboard') }} className="text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline flex items-center gap-1">
                     <i className="fa-solid fa-arrow-left"></i> Volver al Dashboard
