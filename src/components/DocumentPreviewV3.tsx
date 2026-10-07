@@ -1,64 +1,87 @@
+// src/components/DocumentPreviewV3.tsx
 import React, { useEffect, useRef } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Configurar el worker de PDF.js para Vite / Web
+// Configurar worker de PDF.js
 if (typeof window !== 'undefined' && pdfjsLib.GlobalWorkerOptions) {
   pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 }
 
-interface Props {
+interface DocumentPreviewV3Props {
   pdfBytes: Uint8Array | null;
   pageNumber?: number; // Base 1
-  widthPx?: number;
+  cssWidth?: number;
 }
 
-export const DocumentPreviewV3: React.FC<Props> = ({ pdfBytes, pageNumber = 1, widthPx = 800 }) => {
+export const DocumentPreviewV3: React.FC<DocumentPreviewV3Props> = ({
+  pdfBytes,
+  pageNumber = 1,
+  cssWidth = 800,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (!pdfBytes || !canvasRef.current) return;
 
+    let isCancelled = false;
+    let pdfDoc: pdfjsLib.PDFDocumentProxy | null = null;
     let renderTask: any = null;
 
     const renderPdf = async () => {
       try {
-        const loadingTask = pdfjsLib.getDocument({ data: pdfBytes.slice() });
-        const pdf = await loadingTask.promise;
-        const page = await pdf.getPage(pageNumber);
+        // Uso de .slice() obligatorio para aislar y no mutar el buffer
+        pdfDoc = await pdfjsLib.getDocument({ data: pdfBytes.slice() }).promise;
+        if (isCancelled) return;
+
+        const maxPages = pdfDoc.numPages;
+        const targetPage = Math.min(Math.max(1, pageNumber), maxPages);
+        const page = await pdfDoc.getPage(targetPage);
+        if (isCancelled) return;
 
         const viewportBase = page.getViewport({ scale: 1 });
-        const scale = widthPx / viewportBase.width;
+        const scale = cssWidth / viewportBase.width;
         const viewport = page.getViewport({ scale });
 
         const canvas = canvasRef.current!;
-        const context = canvas.getContext('2d')!;
-        canvas.height = viewport.height;
         canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
-        renderTask = page.render({ canvasContext: context, viewport });
+        renderTask = page.render({
+          canvasContext: canvas.getContext('2d')!,
+          viewport,
+        });
         await renderTask.promise;
-      } catch (error: any) {
-        if (error?.name === 'RenderingCancelledException') return;
-        console.error('Error renderizando preview V3:', error);
+      } catch (err: any) {
+        if (err?.name === 'RenderingCancelledException') return;
+        console.error('[DocumentPreviewV3] Error renderizando vista previa:', err);
       }
     };
 
     renderPdf();
 
+    // CLEANUP VITAL: Previene fugas de memoria en SPA
     return () => {
+      isCancelled = true;
       if (renderTask && renderTask.cancel) {
         renderTask.cancel();
       }
+      if (pdfDoc && pdfDoc.destroy) {
+        pdfDoc.destroy();
+      }
     };
-  }, [pdfBytes, pageNumber, widthPx]);
+  }, [pdfBytes, pageNumber, cssWidth]);
 
   if (!pdfBytes) {
-    return <div className="animate-pulse bg-slate-900 border border-slate-800 w-full h-[700px] rounded-2xl flex items-center justify-center text-slate-500 font-mono text-xs">Cargando previsualización V3...</div>;
+    return (
+      <div className="w-full h-96 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
+        Cargando vista previa oficial V3.1...
+      </div>
+    );
   }
 
   return (
-    <div className="shadow-2xl border border-slate-700/80 rounded-2xl overflow-hidden bg-slate-950 flex justify-center">
-      <canvas ref={canvasRef} className="max-w-full h-auto block" />
+    <div className="shadow-2xl border border-slate-800 rounded-2xl overflow-hidden bg-slate-950 flex justify-center p-2">
+      <canvas ref={canvasRef} className="shadow-lg border border-slate-700/60 block max-w-full h-auto rounded-lg" />
     </div>
   );
 };

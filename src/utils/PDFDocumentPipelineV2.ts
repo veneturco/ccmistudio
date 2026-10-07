@@ -20,6 +20,14 @@ import { SemanticDataMapperV2, ClinicalWorkspaceContext } from '../calibration/S
 import { downloadBlob, formatWhatsAppPhone, buildWhatsAppMessage, sharePdfToWhatsApp } from './pdfExportHelpers';
 import { getCustomTemplateOriginalPdf, getCustomTemplate } from './templateStorage';
 import { PDFTemplatePreloader } from './PDFTemplatePreloader';
+import {
+  recipeBytes,
+  informeBytes,
+  ordenLabBytes,
+  constanciaBytes,
+  historiaBytes,
+} from '../document-engine-v3/bundled';
+
 
 export interface DocumentPipelineRequest {
   documentType: string; // 'recipe' | 'certificate' | 'report' | 'history' | 'lab_order' o cualquier tipo maestro
@@ -121,112 +129,33 @@ export class PDFDocumentPipelineV2 {
         console.warn(`[PDFDocumentPipelineV2] Error buscando plantilla personalizada para ${documentType}:`, err);
       }
     }
-    const rawType = (documentType || '').toLowerCase().trim();
+    const rawType = (documentType || path || '').toLowerCase().trim();
     
-    // Mapeo exhaustivo y tolerante de nombres a archivos maestros oficiales
-    let defaultPdf = '/templates/recipe_base.pdf';
-    let defaultImg = '/templates/recipes_bg.jpg';
-    
+    // Decouple Red en Producción: Entrega inmediata desde binarios empaquetados en memoria (Zero-Network)
     if (rawType.includes('recipe') || rawType === 'recipes') {
-      defaultPdf = '/templates/recipe_base.pdf';
-      defaultImg = '/templates/recipes_bg.jpg';
-    } else if (rawType.includes('lab') || rawType.includes('orden')) {
-      defaultPdf = '/templates/orden_lab_base.pdf';
-      defaultImg = '/templates/orden_lab_p1_bg.jpg';
-    } else if (rawType.includes('report') || rawType.includes('informe')) {
-      defaultPdf = '/templates/informe_base.pdf';
-      defaultImg = '/templates/informe_bg.jpg';
-    } else if (rawType.includes('cert') || rawType.includes('constancia')) {
-      defaultPdf = '/templates/constancia_base.pdf';
-      defaultImg = '/templates/constancia_bg.jpg';
-    } else if (rawType.includes('hist') || rawType.includes('historia')) {
-      defaultPdf = '/templates/historia_base.pdf';
-      defaultImg = '/templates/historia_bg.jpg';
-    } else if (path && path.length > 3) {
-      const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-      if (normalizedPath.endsWith('.pdf')) {
-        defaultPdf = normalizedPath;
-        defaultImg = normalizedPath.replace(/\.pdf$/i, '_bg.jpg');
-      } else {
-        defaultImg = normalizedPath;
-        defaultPdf = normalizedPath.replace(/(_bg)?\.(jpg|png|jpeg)$/i, '_base.pdf');
-      }
+      return recipeBytes;
+    }
+    if (rawType.includes('lab') || rawType.includes('orden')) {
+      return ordenLabBytes;
+    }
+    if (rawType.includes('report') || rawType.includes('informe')) {
+      return informeBytes;
+    }
+    if (rawType.includes('cert') || rawType.includes('constancia')) {
+      return constanciaBytes;
+    }
+    if (rawType.includes('hist') || rawType.includes('historia')) {
+      return historiaBytes;
     }
 
-    // Carga de archivo maestro oficial canónico:
-    // 1. Intentar cargar el PDF vectorial de imprenta (fidelidad vectorial 100%, logos, membretes y tablas)
-    if (typeof window !== 'undefined') {
-      for (const url of [defaultPdf, `${window.location.origin}${defaultPdf}`]) {
-        try {
-          const r = await fetch(url, { cache: 'force-cache' });
-          if (r.ok) {
-            const b = new Uint8Array(await r.arrayBuffer());
-            const isPdfBuffer = b.length > 1000 && b[0] === 0x25 && b[1] === 0x50 && b[2] === 0x44 && b[3] === 0x46;
-            if (isPdfBuffer) return b;
-          }
-        } catch {}
-      }
-    } else {
-      try {
-        const fs = await import(/* @vite-ignore */ 'fs');
-        const pathModule = await import(/* @vite-ignore */ 'path');
-        const localPdf = pathModule.join(process.cwd(), 'public', defaultPdf.replace(/^\//, ''));
-        if (fs.existsSync(localPdf)) {
-          return new Uint8Array(fs.readFileSync(localPdf));
-        }
-      } catch {}
-    }
-
-    // PRIORIDAD MAESTRA: imagen oficial de plantilla
-    if (typeof window !== 'undefined') {
-      for (const url of [defaultImg, `${window.location.origin}${defaultImg}`]) {
-        try {
-          const r = await fetch(url, { cache: 'force-cache' });
-          if (r.ok) {
-            const b = new Uint8Array(await r.arrayBuffer());
-            const jpg = b.length > 1000 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff;
-            const png = b.length > 1000 && b[0] === 0x89 && b[1] === 0x50;
-            if (jpg || png) return b;
-          }
-        } catch {
-          // siguiente candidato
-        }
-      }
-    }
-
-
-    // 4. Capa de Respaldo Inmune a Fallos: Cargar imagen maestra 300 DPI
-    const imgCandidateUrls = [
-      defaultImg,
-      defaultImg.replace(/^\//, ''),
-      typeof window !== 'undefined' ? `${window.location.origin}${defaultImg}` : null,
-    ].filter(Boolean) as string[];
-
-    for (const url of imgCandidateUrls) {
-      try {
-        const imgResp = await fetch(url);
-        if (imgResp.ok) {
-          const imgBuffer = await imgResp.arrayBuffer();
-          const imgBytes = new Uint8Array(imgBuffer);
-          // Validar cabecera JPEG (0xff, 0xd8, 0xff) o PNG (0x89, 0x50, 0x4e, 0x47)
-          const isJpg = imgBytes.length > 100 && imgBytes[0] === 0xff && imgBytes[1] === 0xd8 && imgBytes[2] === 0xff;
-          const isPng = imgBytes.length > 100 && imgBytes[0] === 0x89 && imgBytes[1] === 0x50 && imgBytes[2] === 0x4e && imgBytes[3] === 0x47;
-          if (isJpg || isPng) {
-            return imgBytes;
-          }
-        }
-      } catch (imgErr) {
-        // Continuar
-      }
-    }
-
-    throw new Error(`[PDFDocumentPipelineV2] No se pudo cargar la papelería oficial maestra para '${documentType || path}'.`);
+    return recipeBytes;
   }
 
   /**
    * Genera el documento PDF final utilizando la Arquitectura V2 completa
    */
   public static async generateDocument(request: DocumentPipelineRequest): Promise<DocumentPipelineResponse> {
+
     const template = request.template || getMasterTemplateV2(request.documentType) || TemplateRegistry.get(request.documentType);
     if (!template) {
       throw new Error(`No existe un MasterTemplateV2 registrado para el tipo '${request.documentType}'`);

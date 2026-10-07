@@ -143,22 +143,22 @@ export class VectorOverlayEngineV2 {
           if (pIdx === 0 && (isJpg || isPng)) {
             imgBytesToEmbed = originalPdfBytes;
           } else {
-            // Cargar de disco o fetch
-            if (typeof window === 'undefined') {
-              try {
-                const fs = await import(/* @vite-ignore */ 'fs');
-                const path = await import(/* @vite-ignore */ 'path');
-                const localImgPath = path.join(process.cwd(), 'public', targetImgUrl.replace(/^\//, ''));
-                if (fs.existsSync(localImgPath)) {
-                  imgBytesToEmbed = new Uint8Array(fs.readFileSync(localImgPath));
-                }
-              } catch {}
-            }
-            if (!imgBytesToEmbed && typeof window !== 'undefined') {
-              for (const candUrl of [targetImgUrl, window.location.origin + targetImgUrl]) {
+            // Carga de imagen de respaldo (100% Browser Fetch sin fs ni path)
+            if (typeof window !== 'undefined') {
+              const candUrls = [
+                targetImgUrl,
+                new URL(targetImgUrl, window.location.origin).href,
+                targetImgUrl.startsWith('/templates/') ? targetImgUrl.replace('/templates/', '/') : '/templates' + targetImgUrl,
+              ];
+              for (const candUrl of candUrls) {
                 try {
                   const resp = await fetch(candUrl, { cache: 'force-cache' });
                   if (resp.ok) {
+                    const cType = resp.headers.get('content-type') || '';
+                    if (cType.includes('text/html')) {
+                      console.warn([VectorOverlayEngineV2] SPA Router interceptó  devolviendo text/html.);
+                      continue;
+                    }
                     const buf = await resp.arrayBuffer();
                     const bytes = new Uint8Array(buf);
                     const validJpg = bytes.length > 500 && bytes[0] === 0xff && bytes[1] === 0xd8;
