@@ -143,8 +143,14 @@ export class PDFDocumentPipelineV2 {
       defaultPdf = '/templates/historia_base.pdf';
       defaultImg = '/templates/historia_bg.jpg';
     } else if (path && path.length > 3) {
-      defaultPdf = path.startsWith('/') ? path : `/${path}`;
-      defaultImg = defaultPdf.replace(/\.pdf$/i, '_bg.jpg');
+      const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+      if (normalizedPath.endsWith('.pdf')) {
+        defaultPdf = normalizedPath;
+        defaultImg = normalizedPath.replace(/\.pdf$/i, '_bg.jpg');
+      } else {
+        defaultImg = normalizedPath;
+        defaultPdf = normalizedPath.replace(/(_bg)?\.(jpg|png|jpeg)$/i, '_base.pdf');
+      }
     }
 
     // Carga de archivo maestro oficial canónico:

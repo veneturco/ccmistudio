@@ -154,11 +154,21 @@ export class VectorOverlayEngineV2 {
                 }
               } catch {}
             }
-            if (!imgBytesToEmbed) {
-              const resp = await fetch(targetImgUrl);
-              if (resp.ok) {
-                const buf = await resp.arrayBuffer();
-                imgBytesToEmbed = new Uint8Array(buf);
+            if (!imgBytesToEmbed && typeof window !== 'undefined') {
+              for (const candUrl of [targetImgUrl, ${window.location.origin}]) {
+                try {
+                  const resp = await fetch(candUrl, { cache: 'force-cache' });
+                  if (resp.ok) {
+                    const buf = await resp.arrayBuffer();
+                    const bytes = new Uint8Array(buf);
+                    const validJpg = bytes.length > 500 && bytes[0] === 0xff && bytes[1] === 0xd8;
+                    const validPng = bytes.length > 500 && bytes[0] === 0x89 && bytes[1] === 0x50;
+                    if (validJpg || validPng) {
+                      imgBytesToEmbed = bytes;
+                      break;
+                    }
+                  }
+                } catch {}
               }
             }
           }

@@ -626,8 +626,17 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         }
       }
     };
+    const handleDocumentsSynced = (e: any) => {
+      const msg = e.detail?.message || 'Consulta confirmada y aplicada a los 5 documentos';
+      setSaveStatus(msg);
+      setTimeout(() => setSaveStatus(null), 4500);
+    };
     window.addEventListener('sami-autofill', handleSamiAutofill);
-    return () => window.removeEventListener('sami-autofill', handleSamiAutofill);
+    window.addEventListener('clinical-documents-synced', handleDocumentsSynced);
+    return () => {
+      window.removeEventListener('sami-autofill', handleSamiAutofill);
+      window.removeEventListener('clinical-documents-synced', handleDocumentsSynced);
+    };
   }, []);
   // ===============================================
 

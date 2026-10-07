@@ -58,14 +58,22 @@ export class PDFTemplatePreloader {
     const fetchPromise = (async () => {
       try {
         if (typeof window !== 'undefined') {
-          const res = await fetch(path);
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status} al cargar ${path}`);
+          const cleanPath = path.startsWith('/') ? path : '/' + path;
+          const candidateUrls = [path, window.location.origin + cleanPath];
+          for (const url of candidateUrls) {
+            try {
+              const res = await fetch(url, { cache: 'force-cache' });
+              if (res.ok) {
+                const buf = await res.arrayBuffer();
+                const bytes = new Uint8Array(buf);
+                if (bytes.length > 500) {
+                  PDF_CACHE.set(path, bytes);
+                  return bytes;
+                }
+              }
+            } catch {}
           }
-          const buf = await res.arrayBuffer();
-          const bytes = new Uint8Array(buf);
-          PDF_CACHE.set(path, bytes);
-          return bytes;
+          throw new Error("No se pudo obtener recurso de plantilla desde " + path);
         }
         return new Uint8Array(0);
       } catch (err) {
