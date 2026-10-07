@@ -155,7 +155,7 @@ export class VectorOverlayEngineV2 {
               } catch {}
             }
             if (!imgBytesToEmbed && typeof window !== 'undefined') {
-              for (const candUrl of [targetImgUrl, ${window.location.origin}]) {
+              for (const candUrl of [targetImgUrl, window.location.origin + targetImgUrl]) {
                 try {
                   const resp = await fetch(candUrl, { cache: 'force-cache' });
                   if (resp.ok) {
