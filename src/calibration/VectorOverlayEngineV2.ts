@@ -156,7 +156,7 @@ export class VectorOverlayEngineV2 {
                   if (resp.ok) {
                     const cType = resp.headers.get('content-type') || '';
                     if (cType.includes('text/html')) {
-                      console.warn([VectorOverlayEngineV2] SPA Router interceptó  devolviendo text/html.);
+                      console.warn("[VectorOverlayEngineV2] SPA Router interceptó devolviendo text/html.");
                       continue;
                     }
                     const buf = await resp.arrayBuffer();
