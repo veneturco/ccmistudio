@@ -23,21 +23,78 @@ export const Dashboard: React.FC = () => {
   const [isPatientPanelOpen, setIsPatientPanelOpen] = useState(false);
   const [isVoicePanelOpen, setIsVoicePanelOpen] = useState(false);
   const [isNewPatientModalOpen, setIsNewPatientModalOpen] = useState(false);
+  const [activePatientData, setActivePatientData] = useState({
+    name: 'Mariana González Rivas',
+    age: '42 años',
+    id: 'V-14.230.198',
+    diagnosis: 'Cervicalgia aguda con radiculopatía C6',
+    initials: 'MR',
+    triageReason: 'Dolor agudo en región cervical irradiado a hombro derecho.',
+    allergies: 'Penicilina',
+    vitals: '120/80 mmHg'
+  });
+  const [toastMessage, setToastMessage] = useState<{ text: string; icon?: string; color?: string } | null>(null);
 
-  const togglePatientPanel = (name?: string, age?: string, id?: string, diag?: string, initials?: string) => setIsPatientPanelOpen(prev => !prev);
-  const closeAllPanels = () => { setIsPatientPanelOpen(false); setIsVoicePanelOpen(false); };
+  const togglePatientPanel = (name?: string, age?: string, id?: string, diag?: string, initials?: string) => {
+    if (name) {
+      setActivePatientData(prev => ({
+        ...prev,
+        name: name || prev.name,
+        age: age || prev.age,
+        id: id || prev.id,
+        diagnosis: diag || prev.diagnosis,
+        initials: initials || (name ? name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() : prev.initials),
+      }));
+    }
+    setIsPatientPanelOpen(prev => !prev);
+  };
+
+  const closeAllPanels = () => { 
+    setIsPatientPanelOpen(false); 
+    setIsVoicePanelOpen(false); 
+  };
+  
   const toggleVoicePanel = () => setIsVoicePanelOpen(prev => !prev);
   const openNewPatientModal = () => setIsNewPatientModalOpen(true);
   const closeNewPatientModal = () => setIsNewPatientModalOpen(false);
-// In a real app this would use a toast library
 
+  const showToast = (text: string, icon: string = 'fa-circle-info', color: string = 'text-sky-400') => {
+    setToastMessage({ text, icon, color });
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 4000);
+  };
 
   const switchView = (view: string) => {
-    if (view === 'view-recipe') { setActiveTab('workspace'); setSelectedDoc('RECIPES'); }
-    else if (view === 'view-report') { setActiveTab('workspace'); setSelectedDoc('INFORME'); }
-    else if (view === 'view-orders') { setActiveTab('workspace'); setSelectedDoc('ORDEN_LAB'); }
-    else if (view === 'view-certificate') { setActiveTab('workspace'); setSelectedDoc('CONSTANCIA'); }
-    else { setActiveTab('portal'); setActiveView(view); }
+    if (view === 'view-recipe') { 
+      setActiveTab('workspace'); 
+      setSelectedDoc('RECIPES'); 
+      setActiveView(view);
+    } else if (view === 'view-report') { 
+      setActiveTab('workspace'); 
+      setSelectedDoc('INFORME'); 
+      setActiveView(view);
+    } else if (view === 'view-orders') { 
+      setActiveTab('workspace'); 
+      setSelectedDoc('ORDEN_LAB'); 
+      setActiveView(view);
+    } else if (view === 'view-certificate') { 
+      setActiveTab('workspace'); 
+      setSelectedDoc('CONSTANCIA'); 
+      setActiveView(view);
+    } else if (view === 'view-history') {
+      setActiveTab('history');
+      setActiveView(view);
+    } else if (view === 'view-quoter') {
+      setActiveTab('quoter');
+      setActiveView(view);
+    } else if (view === 'view-studio') {
+      setActiveTab('developer_studio');
+      setActiveView(view);
+    } else { 
+      setActiveTab('portal'); 
+      setActiveView(view); 
+    }
   };
 
   const toggleTheme = () => {
@@ -48,10 +105,36 @@ export const Dashboard: React.FC = () => {
   };
   
   const setBimodalSubMode = (mode: string) => setBimodalMode(mode);
-  
-  // Dummy handlers for now to avoid crashes
-  const showToast = (msg: string) => console.log("Toast:", msg);
-  const processDictation = () => { console.log('Procesando dictado...'); setIsVoicePanelOpen(false); };
+
+  const processDictation = () => { 
+    showToast('Procesando dictado clínico...', 'fa-wand-magic-sparkles', 'text-sky-400');
+    setIsVoicePanelOpen(false); 
+  };
+
+  const handleNewPatientFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const nameInput = form.elements.namedItem('patientName') as HTMLInputElement;
+    const ciInput = form.elements.namedItem('patientCi') as HTMLInputElement;
+    const ageInput = form.elements.namedItem('patientAge') as HTMLInputElement;
+    const reasonInput = form.elements.namedItem('patientReason') as HTMLInputElement;
+
+    if (nameInput && nameInput.value) {
+      setActivePatientData({
+        name: nameInput.value,
+        age: ageInput ? `${ageInput.value} años` : '30 años',
+        id: ciInput ? ciInput.value : 'V-00.000.000',
+        diagnosis: reasonInput ? reasonInput.value : 'Evaluación inicial',
+        initials: nameInput.value.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase(),
+        triageReason: reasonInput ? reasonInput.value : 'Ingreso por recepción',
+        allergies: 'Ninguna conocida',
+        vitals: 'Normotenso'
+      });
+      showToast(`Paciente ${nameInput.value} ingresado a sala de espera con éxito`, 'fa-circle-check', 'text-emerald-400');
+      closeNewPatientModal();
+      form.reset();
+    }
+  };
 return (
     <div className={`${theme === 'dark' ? 'dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-800'} relative min-h-screen flex flex-col selection:bg-sky-500 selection:text-white transition-colors duration-500`}>
       
@@ -81,7 +164,55 @@ return (
                 </div>
             </div>
 
+            {/* Navegación Superior Principal (Desktop & Tablet) */}
+            <nav className="hidden lg:flex items-center gap-1 bg-slate-100 dark:bg-slate-900/90 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-bold">
+                <button 
+                  onClick={() => { setActiveTab('portal'); switchView('view-dashboard'); }}
+                  className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${activeTab === 'portal' && activeView === 'view-dashboard' ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-sky-500'}`}
+                >
+                  <Home className="w-3.5 h-3.5" />
+                  <span>Inicio</span>
+                </button>
+                <button 
+                  onClick={() => { switchView('view-recipe'); }}
+                  className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${activeTab === 'workspace' ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-sky-500'}`}
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Papelería A4</span>
+                </button>
+                <button 
+                  onClick={() => { switchView('view-history'); }}
+                  className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${activeTab === 'history' ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-sky-500'}`}
+                >
+                  <History className="w-3.5 h-3.5" />
+                  <span>Historial</span>
+                </button>
+                <button 
+                  onClick={() => { switchView('view-quoter'); }}
+                  className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${activeTab === 'quoter' ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-sky-500'}`}
+                >
+                  <CreditCard className="w-3.5 h-3.5" />
+                  <span>Cotizador</span>
+                </button>
+                <button 
+                  onClick={() => { switchView('view-studio'); }}
+                  className={`px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 ${activeTab === 'developer_studio' ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-sky-500'}`}
+                >
+                  <Code2 className="w-3.5 h-3.5" />
+                  <span>Editor Plantillas</span>
+                </button>
+            </nav>
+
             <div className="flex items-center gap-2 sm:gap-3 relative z-10 flex-shrink-0">
+                <button 
+                  onClick={() => setIsCardModalOpen(true)}
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition shadow-sm"
+                  title="Ver Tarjeta de Presentación del Dr. Samir Moucharrafie"
+                >
+                  <CreditCard className="w-3.5 h-3.5 text-sky-500" />
+                  <span>Tarjeta</span>
+                </button>
+
                 <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-[9px] font-bold tracking-widest uppercase shadow-inner cursor-default">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -779,6 +910,78 @@ return (
     
           </div>
         )}
+
+        {/* ======================================================== */}
+        {/* TAB: HISTORIAL CLÍNICO                                   */}
+        {/* ======================================================== */}
+        {activeTab === 'history' && (
+          <div className="w-full space-y-4 animate-fade-in-up relative z-20">
+            <div className="flex items-center justify-between bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center gap-2 text-xs">
+                <button onClick={() => { setActiveTab('portal'); switchView('view-dashboard'); }} className="text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1">
+                  <Home className="w-4 h-4" />
+                  <span>Dashboard Principal</span>
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-slate-600 dark:text-slate-300 font-medium">Historial de Expedientes Emitidos</span>
+              </div>
+            </div>
+            <HistoryList 
+              history={documentsHistory}
+              onSelectDoc={(doc) => {
+                showToast(`Abriendo expediente: ${doc.patientName}`, 'fa-folder-open', 'text-sky-400');
+                setSelectedDoc(doc.docType);
+                setActiveTab('workspace');
+              }}
+            />
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* TAB: COTIZADOR LOGÍSTICO Y HONORARIOS                    */}
+        {/* ======================================================== */}
+        {activeTab === 'quoter' && (
+          <div className="w-full space-y-4 animate-fade-in-up relative z-20">
+            <div className="flex items-center justify-between bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center gap-2 text-xs">
+                <button onClick={() => { setActiveTab('portal'); switchView('view-dashboard'); }} className="text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1">
+                  <Home className="w-4 h-4" />
+                  <span>Dashboard Principal</span>
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-slate-600 dark:text-slate-300 font-medium">Cotizador de Procedimientos Quirúrgicos</span>
+              </div>
+            </div>
+            <LogisticsQuoter 
+              onClose={() => { setActiveTab('portal'); switchView('view-dashboard'); }}
+              onQuoteGenerated={() => {
+                showToast('Presupuesto quirúrgico generado y respaldado', 'fa-file-invoice-dollar', 'text-emerald-400');
+              }}
+            />
+          </div>
+        )}
+
+        {/* ======================================================== */}
+        {/* TAB: ESTUDIO DE DISEÑO / CALIBRACIÓN DE ZONAS (DEVELOPER)*/}
+        {/* ======================================================== */}
+        {activeTab === 'developer_studio' && (
+          <div className="w-full space-y-4 animate-fade-in-up relative z-20">
+            <div className="flex items-center justify-between bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-center gap-2 text-xs">
+                <button onClick={() => { setActiveTab('portal'); switchView('view-dashboard'); }} className="text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1">
+                  <Home className="w-4 h-4" />
+                  <span>Dashboard Principal</span>
+                </button>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-slate-600 dark:text-slate-300 font-medium">Editor de Zonas y Plantillas Vectoriales A4</span>
+              </div>
+            </div>
+            <DocumentZoneEditorStudio 
+              docType={selectedDoc}
+              onClose={() => { setActiveTab('workspace'); }}
+            />
+          </div>
+        )}
   
 </main>
 
@@ -786,11 +989,19 @@ return (
 
     {/*  Barra Navegación Móvil con Sami Copilot Central  */}
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-header border-t-white/10 flex justify-between items-center px-4 py-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-        <div className="flex flex-col items-center gap-1 w-1/5 cursor-pointer mobile-nav-item active" id="nav-dashboard" onClick={() => { switchView('view-dashboard') }}>
+        <div 
+          className={`flex flex-col items-center gap-1 w-1/5 cursor-pointer mobile-nav-item ${activeTab === 'portal' && activeView === 'view-dashboard' ? 'active text-sky-500' : 'text-slate-400 dark:text-slate-500 hover:text-sky-500'}`} 
+          id="nav-dashboard" 
+          onClick={() => { switchView('view-dashboard') }}
+        >
             <i className="fa-solid fa-house text-lg"></i>
             <span className="text-[9px] font-bold">Inicio</span>
         </div>
-        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 relative cursor-pointer" id="nav-waiting" onClick={() => { switchView('view-waiting-room') }}>
+        <div 
+          className={`flex flex-col items-center gap-1 transition-colors w-1/5 relative cursor-pointer ${activeTab === 'portal' && activeView === 'view-waiting-room' ? 'active text-sky-500' : 'text-slate-400 dark:text-slate-500 hover:text-sky-500'}`} 
+          id="nav-waiting" 
+          onClick={() => { switchView('view-waiting-room') }}
+        >
             <span className="absolute top-0 right-3 w-2 h-2 rounded-full bg-red-500"></span>
             <i className="fa-solid fa-users text-lg"></i>
             <span className="text-[9px] font-bold">Espera</span>
@@ -807,11 +1018,19 @@ return (
             </div>
         </div>
         
-        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-recipe" onClick={() => { switchView('view-recipe') }}>
+        <div 
+          className={`flex flex-col items-center gap-1 transition-colors w-1/5 cursor-pointer mobile-nav-item ${activeTab === 'workspace' ? 'active text-sky-500' : 'text-slate-400 dark:text-slate-500 hover:text-sky-500'}`} 
+          id="nav-recipe" 
+          onClick={() => { switchView('view-recipe') }}
+        >
             <i className="fa-solid fa-file-prescription text-lg"></i>
             <span className="text-[9px] font-bold">Récipes</span>
         </div>
-        <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500 hover:text-sky-500 transition-colors w-1/5 cursor-pointer mobile-nav-item" id="nav-appointments" onClick={() => { switchView('view-appointments') }}>
+        <div 
+          className={`flex flex-col items-center gap-1 transition-colors w-1/5 cursor-pointer mobile-nav-item ${activeTab === 'portal' && activeView === 'view-appointments' ? 'active text-sky-500' : 'text-slate-400 dark:text-slate-500 hover:text-sky-500'}`} 
+          id="nav-appointments" 
+          onClick={() => { switchView('view-appointments') }}
+        >
             <i className="fa-solid fa-calendar-days text-lg"></i>
             <span className="text-[9px] font-bold">Agenda</span>
         </div>
@@ -856,28 +1075,28 @@ return (
         </div>
         
         <div className="flex items-center gap-4 mb-6">
-            <div id="panel-avatar" className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center font-bold text-2xl">MR</div>
+            <div id="panel-avatar" className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center font-bold text-2xl">{activePatientData.initials}</div>
             <div>
-                <h3 id="panel-patient-name" className="text-xl font-black">Mariana G. Rivas</h3>
-                <p id="panel-patient-age" className="text-xs text-slate-500">42 años</p>
-                <p id="panel-patient-id" className="text-xs text-slate-500">CI: 14.230.198</p>
+                <h3 id="panel-patient-name" className="text-xl font-black">{activePatientData.name}</h3>
+                <p id="panel-patient-age" className="text-xs text-slate-500">{activePatientData.age}</p>
+                <p id="panel-patient-id" className="text-xs text-slate-500">CI: {activePatientData.id}</p>
             </div>
         </div>
 
         <div className="space-y-4 flex-1">
             <div className="p-3 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
                 <p className="text-[10px] uppercase font-bold text-slate-500 mb-1">Motivo de Consulta (Triage)</p>
-                <p id="panel-patient-reason" className="text-sm font-medium">Dolor agudo en región cervical irradiado a hombro derecho.</p>
+                <p id="panel-patient-reason" className="text-sm font-medium">{activePatientData.triageReason}</p>
             </div>
             
             <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
                     <p className="text-[10px] uppercase font-bold text-slate-500">Alergias</p>
-                    <p className="text-sm font-medium text-red-500"><i className="fa-solid fa-triangle-exclamation"></i> Penicilina</p>
+                    <p className="text-sm font-medium text-red-500"><i className="fa-solid fa-triangle-exclamation"></i> {activePatientData.allergies}</p>
                 </div>
                 <div className="p-3 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
                     <p className="text-[10px] uppercase font-bold text-slate-500">Signos Vitales</p>
-                    <p className="text-sm font-medium">120/80 mmHg</p>
+                    <p className="text-sm font-medium">{activePatientData.vitals}</p>
                 </div>
             </div>
         </div>
@@ -893,8 +1112,9 @@ return (
     </div>
 
     {/*  Modal: Nueva Consulta  */}
-    <div id="new-patient-modal" className="fixed inset-0 z-[65] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
-        <div className="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 relative border border-slate-300 dark:border-sky-500/40 shadow-2xl overflow-hidden">
+    <div id="new-patient-modal" className={`fixed inset-0 z-[65] flex items-center justify-center p-4 transition-all duration-300 ${isNewPatientModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => closeNewPatientModal()}></div>
+        <div className="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 relative border border-slate-300 dark:border-sky-500/40 shadow-2xl overflow-hidden z-10">
             <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-sky-500/20 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold">
@@ -910,26 +1130,26 @@ return (
                 </button>
             </div>
 
-            <form id="new-patient-form" onsubmit="handleNewPatientSubmit(event)" className="space-y-4">
+            <form id="new-patient-form" onSubmit={handleNewPatientFormSubmit} className="space-y-4">
                 <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Nombre Completo del Paciente</label>
-                    <input type="text" id="inp-patient-name" required placeholder="Ej: Carlos Eduardo Méndez" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
+                    <input type="text" name="patientName" required placeholder="Ej: Carlos Eduardo Méndez" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                     <div>
                         <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Cédula / Documento</label>
-                        <input type="text" id="inp-patient-ci" required placeholder="V-18.452.901" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
+                        <input type="text" name="patientCi" required placeholder="V-18.452.901" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
                     </div>
                     <div>
                         <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Edad</label>
-                        <input type="number" id="inp-patient-age" required min="1" max="110" placeholder="38" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
+                        <input type="number" name="patientAge" required min="1" max="110" placeholder="38" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
                     </div>
                 </div>
 
                 <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1">Motivo de Consulta / Triage</label>
-                    <input type="text" id="inp-patient-reason" required placeholder="Ej: Lumbociatalgia derecha, parestesias L5" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
+                    <input type="text" name="patientReason" required placeholder="Ej: Lumbociatalgia derecha, parestesias L5" className="w-full px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500" />
                 </div>
 
                 <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
@@ -945,7 +1165,14 @@ return (
     </div>
 
     {/*  Toast Notifications  */}
-    <div id="toast-container" className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-[70] flex flex-col space-y-2 pointer-events-none w-[calc(100%-2rem)] sm:w-auto max-w-sm"></div>
+    {toastMessage && (
+      <div id="toast-container" className="fixed bottom-24 md:bottom-6 right-4 md:right-6 z-[70] flex flex-col space-y-2 pointer-events-auto w-[calc(100%-2rem)] sm:w-auto max-w-sm animate-fade-in-up">
+        <div className="flex items-center gap-3 bg-slate-900/95 dark:bg-slate-950/95 text-white border border-slate-700/80 shadow-2xl px-4 py-3 rounded-2xl backdrop-blur-xl">
+          <i className={`fa-solid ${toastMessage.icon || 'fa-circle-info'} ${toastMessage.color || 'text-sky-400'} text-base`}></i>
+          <span className="text-xs font-medium leading-snug">{toastMessage.text}</span>
+        </div>
+      </div>
+    )}
 
     
 
