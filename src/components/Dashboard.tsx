@@ -8,6 +8,7 @@ import { LogisticsQuoter } from './LogisticsQuoter';
 import { HistoryList } from './HistoryList';
 import { DoctorBusinessCard } from './DoctorBusinessCard';
 import { DocumentZoneEditorStudio } from './DocumentZoneEditorStudio';
+import { SamiCopilot } from './SamiCopilot';
 
 export const Dashboard: React.FC = () => {
   const [activeView, setActiveView] = useState('view-dashboard');
@@ -781,18 +782,7 @@ return (
   
 </main>
 
-    {/*  Sami Copilot Desktop  */}
-    <div className="ai-avatar-container animate-float" id="sami-desktop">
-        <div className="sami-wrapper relative">
-            <div className="ai-tooltip">Sami Copilot — <span className="text-sky-500 font-normal">IA CMI</span></div>
-            <div className="avatar-seal" onClick={() => { toggleVoicePanel() }}>
-                <div className="seal-ring-liquid"></div>
-                <div className="seal-core-glass">
-                    <i className="fa-solid fa-brain seal-icon-gradient"></i>
-                </div>
-            </div>
-        </div>
-    </div>
+{/* Sami Copilot Desktop se maneja de forma inteligente a través de <SamiCopilot /> */}
 
     {/*  Barra Navegación Móvil con Sami Copilot Central  */}
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-header border-t-white/10 flex justify-between items-center px-4 py-2 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
@@ -965,6 +955,9 @@ return (
         isOpen={isCardModalOpen}
         onClose={() => setIsCardModalOpen(false)}
       />
+
+      {/* Copiloto Clínico Real con IA Gemini, Dictado por Voz y Modos de Audio */}
+      <SamiCopilot activeView={activeView} />
     </div>
   );
 }
