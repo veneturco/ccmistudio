@@ -19,6 +19,17 @@ export const Dashboard: React.FC = () => {
   const [selectedDoc, setSelectedDoc] = useState<DocType>('RECIPES');
   const [documentsHistory] = useState<ProcessedDocumentResult[]>([]);
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+  const [isPatientPanelOpen, setIsPatientPanelOpen] = useState(false);
+  const [isVoicePanelOpen, setIsVoicePanelOpen] = useState(false);
+  const [isNewPatientModalOpen, setIsNewPatientModalOpen] = useState(false);
+
+  const togglePatientPanel = (name?: string, age?: string, id?: string, diag?: string, initials?: string) => setIsPatientPanelOpen(prev => !prev);
+  const closeAllPanels = () => { setIsPatientPanelOpen(false); setIsVoicePanelOpen(false); };
+  const toggleVoicePanel = () => setIsVoicePanelOpen(prev => !prev);
+  const openNewPatientModal = () => setIsNewPatientModalOpen(true);
+  const closeNewPatientModal = () => setIsNewPatientModalOpen(false);
+// In a real app this would use a toast library
+
 
   const switchView = (view: string) => {
     if (view === 'view-recipe') { setActiveTab('workspace'); setSelectedDoc('RECIPES'); }
@@ -38,12 +49,10 @@ export const Dashboard: React.FC = () => {
   const setBimodalSubMode = (mode: string) => setBimodalMode(mode);
   
   // Dummy handlers for now to avoid crashes
-  const togglePatientPanel = () => console.log("Toggle patient");
-  const toggleVoicePanel = () => console.log("Toggle voice");
+const toggleVoicePanel = () => console.log("Toggle voice");
   const showToast = (msg: string) => console.log("Toast:", msg);
-  const openNewPatientModal = () => console.log("New patient");
-
-  return (
+  const processDictation = () => { console.log('Procesando dictado...'); setIsVoicePanelOpen(false); };
+return (
     <div className={`${theme === 'dark' ? 'dark bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-800'} relative min-h-screen flex flex-col selection:bg-sky-500 selection:text-white transition-colors duration-500`}>
       
 
@@ -819,7 +828,7 @@ export const Dashboard: React.FC = () => {
         </div>
     </nav>
 
-    <div id="app-overlay" className="glass-overlay" onClick={() => { closeAllPanels() }}></div>
+    <div id="app-overlay" className={`glass-overlay ${(isPatientPanelOpen || isVoicePanelOpen) ? 'active' : ''}`} onClick={() => { closeAllPanels() }}></div>
 
     {/*  Panel de Dictado por Voz (Sami)  */}
     <div id="voice-panel" className="voice-panel">

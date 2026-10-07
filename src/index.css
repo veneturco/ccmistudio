@@ -874,3 +874,30 @@ body {
             .a4-printable { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; }
         }
     
+
+/* ========================================================================= */
+/* MOBILE RESPONSIVENESS & SAFE AREA INSETS                                  */
+/* ========================================================================= */
+.voice-panel {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    touch-action: none;
+}
+.side-panel {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    touch-action: pan-y;
+}
+.glass-overlay {
+    touch-action: none;
+}
+.sami-mobile-container {
+    padding-bottom: env(safe-area-inset-bottom, 10px);
+}
+/* Ensure tap highlight is transparent globally for PWA feel */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+/* Prevent pull-to-refresh and unwanted scroll on body */
+html, body {
+    overscroll-behavior-y: none;
+    touch-action: pan-x pan-y;
+}
