@@ -476,7 +476,7 @@ export const ClinicalDictationCapsule: React.FC<Props> = ({
           <div className={
             layoutVariant === 'floating'
               ? 'w-[calc(100vw-2rem)] sm:w-96 max-w-sm sm:max-w-none bg-[#0d152a]/95 backdrop-blur-xl rounded-3xl border border-cyan-500/30 p-5 shadow-2xl text-white text-xs space-y-3.5 animate-fade-in ring-1 ring-cyan-500/20'
-              : 'absolute bottom-full mb-3 left-0 sm:left-auto sm:right-0 w-[calc(100vw-2rem)] sm:w-96 max-w-sm sm:max-w-none bg-[#0d152a]/95 backdrop-blur-xl rounded-3xl border border-cyan-500/30 p-5 shadow-2xl text-white text-xs space-y-3.5 animate-fade-in ring-1 ring-cyan-500/20 z-50'
+              : 'absolute top-full mt-2.5 right-0 w-[calc(100vw-2rem)] sm:w-96 max-w-sm sm:max-w-none bg-[#0d152a]/98 backdrop-blur-xl rounded-3xl border border-cyan-500/40 p-5 shadow-2xl text-white text-xs space-y-3.5 animate-fade-in ring-1 ring-cyan-500/30 z-50'
           }>
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
               <span className="font-bold text-white flex items-center gap-2 font-mono uppercase tracking-wider text-[11px]">
@@ -554,9 +554,9 @@ export const ClinicalDictationCapsule: React.FC<Props> = ({
           </div>
         )}
 
-        {/* Status Notification Toast above capsule with quick Retry button if in error */}
+        {/* Status Notification Toast with quick Retry button if in error */}
         {statusMessage && (
-          <div className={`${layoutVariant === 'bar' ? 'absolute bottom-full mb-3 left-0 sm:left-auto sm:right-0 z-50 whitespace-nowrap' : ''} text-white text-[11px] font-medium px-4 py-1.5 rounded-full shadow-2xl border flex items-center gap-2 animate-fade-in ${
+          <div className={`${layoutVariant === 'bar' ? 'absolute top-full mt-2.5 right-0 z-50 whitespace-nowrap' : 'absolute bottom-full mb-3 left-0 sm:left-auto sm:right-0 z-50 whitespace-nowrap'} text-white text-[11px] font-medium px-4 py-1.5 rounded-full shadow-2xl border flex items-center gap-2 animate-fade-in ${
             capsuleState === 'error' 
               ? 'bg-rose-950/95 border-rose-500/50 text-rose-200 shadow-rose-950/40' 
               : capsuleState === 'requiresReview' 

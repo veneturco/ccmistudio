@@ -44,6 +44,8 @@ interface Props {
     labImaging: string;
     restDays: string;
     examNotes: string;
+    labTests?: string[];
+    neuroimagingTests?: string[];
   }) => void;
 }
 
@@ -215,17 +217,80 @@ export const SmartConsultationDictationModal: React.FC<Props> = ({
       });
     }
 
-    // Extraer Estudios
+    // Extraer Neuroimágenes y Estudios Especiales (Página 2 de Orden)
     result.imagingStudies = [];
-    if (lower.includes('resonancia') || lower.includes('rmn')) {
-      result.imagingStudies.push('Resonancia Magnética (RMN) de Columna');
+    if (/\b(resonancia|rmn|neuroresonancia)\b/i.test(lower)) {
+      result.imagingStudies.push('Resonancia Magnética (RMN)');
     }
-    if (lower.includes('tomograf') || lower.includes('tac')) {
+    if (/\b(tomograf|tac|scanner)\b/i.test(lower)) {
       result.imagingStudies.push('Tomografía Axial Computarizada (TAC)');
     }
-    if (lower.includes('radiograf') || lower.includes('rayos x')) {
-      result.imagingStudies.push('Radiografía (Rx) Funcional');
+    if (/\b(radiograf|rayos x|rx)\b/i.test(lower)) {
+      result.imagingStudies.push('Radiología Convencional (Rx)');
     }
+    if (/\b(electromiograf|emg)\b/i.test(lower)) {
+      result.imagingStudies.push('Electromiografía (EMG)');
+    }
+    if (/\b(electroencefalograf|eeg)\b/i.test(lower)) {
+      result.imagingStudies.push('Electroencefalograma (EEG)');
+    }
+    if (/\b(potenciales evocados|pess)\b/i.test(lower)) {
+      result.imagingStudies.push('Potenciales Evocados (PESS)');
+    }
+
+    // Extraer Exámenes de Laboratorio (Página 1 de Orden)
+    result.labTests = [];
+    if (/\b(hematologia|hematología|hemograma|formula|leucocitos|hemoglobina|cbc)\b/i.test(lower)) {
+      result.labTests.push('Hematología Completa');
+    }
+    if (/\b(plaqueta|plaquetas|recuento plaquetario)\b/i.test(lower)) {
+      result.labTests.push('Plaquetas');
+    }
+    if (/\b(coagulacion|coagulación|tiempos|tp|pt|ptt|tpt|tromboplastina|protrombina)\b/i.test(lower)) {
+      result.labTests.push('Pt (Tiempo Protrombina)');
+      result.labTests.push('Ptt (Tiempo Parcial de Tromboplastina)');
+    }
+    if (/\b(fibrinogeno|fibrinógeno)\b/i.test(lower)) {
+      result.labTests.push('Dosificación de Fibrinógeno');
+    }
+    if (/\b(glicemia|glucosa|azucar|azúcar)\b/i.test(lower)) {
+      result.labTests.push('Glicemia');
+    }
+    if (/\b(urea|bun)\b/i.test(lower)) {
+      result.labTests.push('Urea');
+    }
+    if (/\b(creatinina)\b/i.test(lower)) {
+      result.labTests.push('Creatinina');
+    }
+    if (/\b(orina|uroanalisis|uroanálisis|ego)\b/i.test(lower)) {
+      result.labTests.push('Examen General de Orina');
+    }
+    if (/\b(hiv|elisa|vih)\b/i.test(lower)) {
+      result.labTests.push('HIV');
+    }
+    if (/\b(vdrl|sifilis|sífilis)\b/i.test(lower)) {
+      result.labTests.push('VDRL');
+    }
+    if (/\b(grupo sanguineo|factor rh|tipiaje)\b/i.test(lower)) {
+      result.labTests.push('Grupo Sanguíneo, Factor Rh (D)');
+    }
+    if (/\b(preoperatorio|perfil preoperatorio)\b/i.test(lower)) {
+      result.labTests.push(
+        'Hematología Completa',
+        'Plaquetas',
+        'Pt (Tiempo Protrombina)',
+        'Ptt (Tiempo Parcial de Tromboplastina)',
+        'Glicemia',
+        'Urea',
+        'Creatinina',
+        'HIV',
+        'VDRL',
+        'Grupo Sanguíneo, Factor Rh (D)',
+        'Examen General de Orina'
+      );
+    }
+    // Eliminar duplicados
+    result.labTests = Array.from(new Set(result.labTests));
 
     result.clinicalSummary = text;
     return result;
@@ -265,6 +330,8 @@ export const SmartConsultationDictationModal: React.FC<Props> = ({
       labImaging: labImaging,
       restDays: parsedResult.restDays || '',
       examNotes: parsedResult.physicalExam || '',
+      labTests: parsedResult.labTests || [],
+      neuroimagingTests: parsedResult.imagingStudies || [],
     });
 
     onClose();
@@ -429,6 +496,26 @@ export const SmartConsultationDictationModal: React.FC<Props> = ({
                         <p className="font-bold text-white">{m.drug}</p>
                         <p className="text-slate-400 text-[10px]">{m.dose} • {m.frequency} • {m.duration}</p>
                       </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* Estudios de Laboratorio y Neuroimagen detectados */}
+              {((parsedResult.labTests && parsedResult.labTests.length > 0) || (parsedResult.imagingStudies && parsedResult.imagingStudies.length > 0)) && (
+                <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 text-xs">
+                  <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider block">
+                    Estudios de Laboratorio y Neuroimagen Detectados
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {parsedResult.labTests?.map((t, idx) => (
+                      <span key={`lab-${idx}`} className="px-2 py-0.5 rounded-md bg-purple-950/80 border border-purple-500/40 text-purple-200 text-[10px] font-medium">
+                        ✓ {t}
+                      </span>
+                    ))}
+                    {parsedResult.imagingStudies?.map((s, idx) => (
+                      <span key={`img-${idx}`} className="px-2 py-0.5 rounded-md bg-sky-950/80 border border-sky-500/40 text-sky-200 text-[10px] font-medium">
+                        ✓ {s}
+                      </span>
                     ))}
                   </div>
                 </div>

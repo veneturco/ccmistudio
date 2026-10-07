@@ -147,32 +147,28 @@ export class PDFDocumentPipelineV2 {
       defaultImg = defaultPdf.replace(/\.pdf$/i, '_bg.jpg');
     }
 
-    const isLabOrder = rawType.includes('lab') || rawType.includes('orden');
-
-    // Para Órdenes de Laboratorio, el archivo maestro oficial canónico es el PDF vectorial (/templates/orden_lab_base.pdf),
-    // el cual contiene todos los 50+ exámenes, títulos, categorías, recuadros y logos con fidelidad vectorial 100%.
-    if (isLabOrder) {
-      if (typeof window !== 'undefined') {
-        for (const url of [defaultPdf, `${window.location.origin}${defaultPdf}`]) {
-          try {
-            const r = await fetch(url, { cache: 'force-cache' });
-            if (r.ok) {
-              const b = new Uint8Array(await r.arrayBuffer());
-              const isPdfBuffer = b.length > 1000 && b[0] === 0x25 && b[1] === 0x50 && b[2] === 0x44 && b[3] === 0x46;
-              if (isPdfBuffer) return b;
-            }
-          } catch {}
-        }
-      } else {
+    // Carga de archivo maestro oficial canónico:
+    // 1. Intentar cargar el PDF vectorial de imprenta (fidelidad vectorial 100%, logos, membretes y tablas)
+    if (typeof window !== 'undefined') {
+      for (const url of [defaultPdf, `${window.location.origin}${defaultPdf}`]) {
         try {
-          const fs = await import(/* @vite-ignore */ 'fs');
-          const pathModule = await import(/* @vite-ignore */ 'path');
-          const localPdf = pathModule.join(process.cwd(), 'public', defaultPdf.replace(/^\//, ''));
-          if (fs.existsSync(localPdf)) {
-            return new Uint8Array(fs.readFileSync(localPdf));
+          const r = await fetch(url, { cache: 'force-cache' });
+          if (r.ok) {
+            const b = new Uint8Array(await r.arrayBuffer());
+            const isPdfBuffer = b.length > 1000 && b[0] === 0x25 && b[1] === 0x50 && b[2] === 0x44 && b[3] === 0x46;
+            if (isPdfBuffer) return b;
           }
         } catch {}
       }
+    } else {
+      try {
+        const fs = await import(/* @vite-ignore */ 'fs');
+        const pathModule = await import(/* @vite-ignore */ 'path');
+        const localPdf = pathModule.join(process.cwd(), 'public', defaultPdf.replace(/^\//, ''));
+        if (fs.existsSync(localPdf)) {
+          return new Uint8Array(fs.readFileSync(localPdf));
+        }
+      } catch {}
     }
 
     // PRIORIDAD MAESTRA: imagen oficial de plantilla

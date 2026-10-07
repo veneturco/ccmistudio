@@ -3034,11 +3034,39 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
               diagnosis: parsed.diagnosis,
               restDays: parsed.restDays ? Number(parsed.restDays) : prev.restDays,
             }));
+            setLabPresumptiveDx(parsed.diagnosis);
           }
           if (parsed.labImaging) {
             setLabOtherExams((prev) => (prev ? `${prev}\n${parsed.labImaging}` : parsed.labImaging));
           }
-          setSaveStatus('Â¡Consulta dictada estructurada en los 5 documentos oficiales!');
+          // Marcar casillas de laboratorio (Página 1)
+          if (parsed.labTests && parsed.labTests.length > 0) {
+            const { newLab, unmapped } = mapTestsToCanonical(parsed.labTests, labTests);
+            setLabTests(newLab);
+            if (unmapped.length > 0) {
+              setLabOtherExams((prev) => {
+                const combined = [prev, ...unmapped].filter(Boolean).join(', ');
+                return combined;
+              });
+            }
+          }
+          // Marcar casillas de neuroimágenes y estudios especiales (Página 2)
+          if (parsed.neuroimagingTests && parsed.neuroimagingTests.length > 0) {
+            setNeuroimagingTests((prev) => {
+              const updated = { ...prev };
+              parsed.neuroimagingTests?.forEach((study) => {
+                const upper = study.toUpperCase();
+                if (upper.includes('RMN') || upper.includes('RESONANCIA')) updated['RMN'] = true;
+                if (upper.includes('TAC') || upper.includes('TOMOGRAF')) updated['TAC'] = true;
+                if (upper.includes('RX') || upper.includes('RADIOGRAF') || upper.includes('RADIOLOG')) updated['RADIOLOGIA'] = true;
+                if (upper.includes('EMG') || upper.includes('ELECTROMIOGRAF')) updated['EMG'] = true;
+                if (upper.includes('EEG') || upper.includes('ELECTROENCEFAL')) updated['EEG'] = true;
+                if (upper.includes('PESS') || upper.includes('POTENCIALES')) updated['PESS'] = true;
+              });
+              return updated;
+            });
+          }
+          setSaveStatus('¡Consulta dictada estructurada en los 5 documentos oficiales!');
           setTimeout(() => setSaveStatus(null), 4000);
         }}
       />
