@@ -49,7 +49,6 @@ export const Dashboard: React.FC = () => {
   const setBimodalSubMode = (mode: string) => setBimodalMode(mode);
   
   // Dummy handlers for now to avoid crashes
-const toggleVoicePanel = () => console.log("Toggle voice");
   const showToast = (msg: string) => console.log("Toast:", msg);
   const processDictation = () => { console.log('Procesando dictado...'); setIsVoicePanelOpen(false); };
 return (
