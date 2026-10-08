@@ -106,91 +106,14 @@ export class VectorOverlayEngineV2 {
       originalPdfBytes[2] === 0x4e &&
       originalPdfBytes[3] === 0x47;
 
-    // Si el buffer es un PDF maestro vectorial (como orden_lab_base.pdf o documentos base con membrete),
+    // Si el buffer es un PDF maestro vectorial oficial (firma %PDF),
     // se carga directamente con pdf-lib preservando toda la tipografía vectorial, logos y recuadros.
-    if (isPdf) {
-      pdfDoc = await PDFDocument.load(originalPdfBytes, { ignoreEncryption: true });
-    } else {
-      // Si el buffer es una imagen de alta resoluciÃ³n o respaldo, se genera un PDF contenedor con fondo incrustado por cada pÃ¡gina
-      pdfDoc = await PDFDocument.create();
-      const requiredPages = template?.pages?.length || 1;
-
-      for (let pIdx = 0; pIdx < requiredPages; pIdx++) {
-        const pConfig = template?.pages?.[pIdx];
-        const defaultWidthMm = pConfig?.widthMm || (template?.pages?.[0]?.widthMm || 210.0);
-        const defaultHeightMm = pConfig?.heightMm || (template?.pages?.[0]?.heightMm || 297.0);
-        const widthPt = (defaultWidthMm * 72) / 25.4;
-        const heightPt = (defaultHeightMm * 72) / 25.4;
-
-        const page = pdfDoc.addPage([widthPt, heightPt]);
-
-        // Determinar imagen maestra para esta pÃ¡gina especÃ­fica
-        const docTypeLower = (template?.documentType || '').toLowerCase();
-        let targetImgUrl = '/templates/recipes_bg.jpg';
-        if (docTypeLower.includes('lab') || docTypeLower.includes('orden')) {
-          targetImgUrl = pIdx === 1 ? '/templates/orden_lab_p2_bg.jpg' : '/templates/orden_lab_p1_bg.jpg';
-        } else if (docTypeLower.includes('report') || docTypeLower.includes('informe')) {
-          targetImgUrl = '/templates/informe_bg.jpg';
-        } else if (docTypeLower.includes('cert') || docTypeLower.includes('constancia')) {
-          targetImgUrl = '/templates/constancia_bg.jpg';
-        } else if (docTypeLower.includes('hist')) {
-          targetImgUrl = '/templates/historia_bg.jpg';
-        }
-
-        try {
-          let imgBytesToEmbed: Uint8Array | null = null;
-          // Si es la pÃ¡gina 0 y el originalPdfBytes ya era JPG/PNG, usarlo
-          if (pIdx === 0 && (isJpg || isPng)) {
-            imgBytesToEmbed = originalPdfBytes;
-          } else {
-            // Carga de imagen de respaldo (100% Browser Fetch sin fs ni path)
-            if (typeof window !== 'undefined') {
-              const candUrls = [
-                targetImgUrl,
-                new URL(targetImgUrl, window.location.origin).href,
-                targetImgUrl.startsWith('/templates/') ? targetImgUrl.replace('/templates/', '/') : '/templates' + targetImgUrl,
-              ];
-              for (const candUrl of candUrls) {
-                try {
-                  const resp = await fetch(candUrl, { cache: 'force-cache' });
-                  if (resp.ok) {
-                    const cType = resp.headers.get('content-type') || '';
-                    if (cType.includes('text/html')) {
-                      console.warn("[VectorOverlayEngineV2] SPA Router interceptó devolviendo text/html.");
-                      continue;
-                    }
-                    const buf = await resp.arrayBuffer();
-                    const bytes = new Uint8Array(buf);
-                    const validJpg = bytes.length > 500 && bytes[0] === 0xff && bytes[1] === 0xd8;
-                    const validPng = bytes.length > 500 && bytes[0] === 0x89 && bytes[1] === 0x50;
-                    if (validJpg || validPng) {
-                      imgBytesToEmbed = bytes;
-                      break;
-                    }
-                  }
-                } catch {}
-              }
-            }
-          }
-
-          if (imgBytesToEmbed) {
-            const isTargetPng = imgBytesToEmbed.length > 4 && imgBytesToEmbed[0] === 0x89 && imgBytesToEmbed[1] === 0x50;
-            const bgImg = isTargetPng
-              ? await pdfDoc.embedPng(imgBytesToEmbed)
-              : await pdfDoc.embedJpg(imgBytesToEmbed);
-            page.drawImage(bgImg, {
-              x: 0,
-              y: 0,
-              width: widthPt,
-              height: heightPt,
-              opacity: 1.0,
-            });
-          }
-        } catch (imgErr) {
-          console.warn(`[VectorOverlayEngineV2] Advertencia al incrustar fondo de pÃ¡gina ${pIdx}:`, imgErr);
-        }
-      }
+    if (!isPdf) {
+      throw new Error('[VectorOverlayEngineV2] Máster corrupto o inválido (Fallo Cerrado). Se requiere un binario PDF oficial con firma %PDF. Jamás se genera un documento en blanco.');
     }
+
+    pdfDoc = await PDFDocument.load(originalPdfBytes, { ignoreEncryption: true });
+
 
     const fontRegular = await pdfDoc.embedFont('Helvetica');
     const fontBold = await pdfDoc.embedFont('Helvetica-Bold');
@@ -371,6 +294,11 @@ export class VectorOverlayEngineV2 {
             const lines = VectorOverlayEngineV2.wrapText(textToDraw, font, activeFontSize, CalibrationEngine.xMmToPdfPt(geom.widthMm));
             let currentYMm = geom.yMm;
 
+            if (lines.length > (element.maxLines || 40)) {
+              requiresReview = true;
+              warnings.push(`El texto en '${element.id}' excede las líneas máximas permitidas (${element.maxLines || 40}). Riesgo de desbordamiento de caja.`);
+            }
+
             for (let i = 0; i < Math.min(lines.length, element.maxLines || 40); i++) {
               const line = lines[i];
               const textWidth = font.widthOfTextAtSize(line, activeFontSize);
@@ -393,13 +321,14 @@ export class VectorOverlayEngineV2 {
                 size: activeFontSize,
                 font,
                 maxWidth: CalibrationEngine.xMmToPdfPt(geom.widthMm),
-                color: rgb(0.08, 0.12, 0.2), // Mejora: Color clÃ­nico de alto contraste para lectura mÃ©dica
+                color: rgb(0.08, 0.12, 0.2), // Mejora: Color clínico de alto contraste para lectura médica
               });
               currentYMm += CalibrationEngine.ptToMm(lineHeightPt);
             }
             injectedElementsCount++;
             break;
           }
+
 
           case 'checkbox': {
             const rawVal = VectorOverlayEngineV2.resolveDataKey(patientData, element.dataKey);

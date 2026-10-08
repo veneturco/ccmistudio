@@ -135,13 +135,18 @@ export const RecipesMedicalSheet: React.FC<RecipesMedicalSheetProps> = ({
         fontFamily: "'Liberation Sans', 'Arial', sans-serif",
       }}
     >
-      {/* FONDO MASTER OFICIAL INMUTABLE (300 DPI) - Siempre visible e impreso sin depender de ajustes de navegador */}
+      {/* FONDO MASTER EXCLUSIVO PARA VISTA PREVIA DOM (No afecta el motor pdf-lib) */}
       <img
         src={bgImage}
         alt="Fondo Maestro Récipe Médico"
         className="absolute inset-0 w-full h-full object-fill pointer-events-none select-none z-0"
         style={{ width: '100%', height: '100%', display: 'block' }}
+        onError={(e) => {
+          (e.currentTarget as HTMLElement).style.display = 'none';
+        }}
       />
+
+
 
       {/* ==================================================================== */}
       {/* 1. TALÓN IZQUIERDO (FARMACIA / RP.)                                  */}

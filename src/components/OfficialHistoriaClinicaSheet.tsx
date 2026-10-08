@@ -84,11 +84,14 @@ export const OfficialHistoriaClinicaSheet: React.FC<HistoriaClinicaProps> = ({
         style={{
           width: '794px',
           height: '1123px',
+          backgroundColor: '#ffffff',
           backgroundImage: `url('${bgImage}')`,
           backgroundSize: '100% 100%',
           backgroundRepeat: 'no-repeat',
+          boxSizing: 'border-box',
         }}
       >
+
         {/* ======================================================== */}
         {/* 1. CAMPOS DE CABECERA (BLOQUE AZUL SUPERIOR)            */}
         {/* ======================================================== */}

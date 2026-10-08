@@ -250,8 +250,7 @@ export const OfficialLabOrderTwoPageSheet: React.FC<OfficialLabOrderSheetProps> 
           height: `${heightPx}px`,
           minWidth: `${widthPx}px`,
           minHeight: `${heightPx}px`,
-          maxWidth: `${widthPx}px`,
-          maxHeight: `${heightPx}px`,
+          backgroundColor: '#ffffff',
           backgroundImage: `url("${bgP1}")`,
           backgroundSize: '100% 100%',
           backgroundRepeat: 'no-repeat',
@@ -260,6 +259,7 @@ export const OfficialLabOrderTwoPageSheet: React.FC<OfficialLabOrderSheetProps> 
           fontFamily: "'Liberation Sans', 'Arial', sans-serif",
         }}
       >
+
         {/* ELEMENTOS DE TEXTO DE PACIENTE (PÁGINA 1) */}
         {p1TextElements.map((el) => {
           const fieldMap: Record<string, keyof PatientData> = {
@@ -402,8 +402,7 @@ export const OfficialLabOrderTwoPageSheet: React.FC<OfficialLabOrderSheetProps> 
           height: `${heightPx}px`,
           minWidth: `${widthPx}px`,
           minHeight: `${heightPx}px`,
-          maxWidth: `${widthPx}px`,
-          maxHeight: `${heightPx}px`,
+          backgroundColor: '#ffffff',
           backgroundImage: `url("${bgP2}")`,
           backgroundSize: '100% 100%',
           backgroundRepeat: 'no-repeat',
@@ -412,6 +411,7 @@ export const OfficialLabOrderTwoPageSheet: React.FC<OfficialLabOrderSheetProps> 
           fontFamily: "'Liberation Sans', 'Arial', sans-serif",
         }}
       >
+
         {/* ELEMENTOS DE TEXTO PÁGINA 2 */}
         {p2TextElements.map((el) => {
           return (

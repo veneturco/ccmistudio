@@ -71,67 +71,13 @@ function dataUrlToBytes(dataUrl: string): Uint8Array | null {
 
 export class PDFDocumentPipelineV2 {
   /**
-   * Carga el buffer del PDF o imagen base inmutable.
-   * Prioridad 0: Fondo maestro explícito pasado en la petición (DataURL o URL).
-   * Prioridad 1: Plantilla física personalizada en IndexedDB / localStorage.
-   * Prioridad 2: Archivo PDF maestro oficial (/templates/*.pdf).
-   * Prioridad 3: Imagen oficial de alta resolución 300 DPI (/templates/*.jpg).
+   * Carga el buffer del PDF maestro oficial inmutable (Zero-Network).
+   * Lee exclusivamente de los binarios TypeScript pre-empaquetados en memoria.
    */
-  private static async loadOriginalPdf(path: string, documentType?: string, customBgImage?: string | null): Promise<Uint8Array> {
-    // 0. Si se pasó una imagen o fondo maestro directo (DataURL o URL) en la petición
-    if (customBgImage) {
-      const directBytes = dataUrlToBytes(customBgImage);
-      if (directBytes && directBytes.length > 500) {
-        return directBytes;
-      }
-      try {
-        const resp = await fetch(customBgImage);
-        if (resp.ok) {
-          const buf = await resp.arrayBuffer();
-          const bytes = new Uint8Array(buf);
-          if (bytes.length > 500) return bytes;
-        }
-      } catch (err) {
-        console.warn('[PDFDocumentPipelineV2] Error fetching customBgImage:', err);
-      }
-    }
-
-    // 1. Revisar si el usuario tiene una plantilla personalizada en IndexedDB / localStorage
-    if (documentType) {
-      const rawType = documentType.toLowerCase().trim();
-      try {
-        // A. (LEY DEL MASTER) Los PDF vectoriales guardados en IndexedDB se IGNORAN: carecen del arte del master.
-        //    Siempre prevalece la imagen oficial del master (/templates/*_bg.jpg) salvo una imagen propia explícita.
-
-        // B. Revisar si tiene Imagen escaneada/DataURL personalizada en IndexedDB o localStorage
-        const customImgDataUrl =
-          (await getCustomTemplate(documentType)) ||
-          (await getCustomTemplate(rawType)) ||
-          (typeof localStorage !== 'undefined'
-            ? localStorage.getItem(`custom_tpl_${documentType}`) || localStorage.getItem(`custom_tpl_${rawType}`)
-            : null);
-
-        if (customImgDataUrl) {
-          const customBytes = dataUrlToBytes(customImgDataUrl);
-          const isImg = !!customBytes && customBytes.length > 500 && ((customBytes[0] === 0xff && customBytes[1] === 0xd8) || (customBytes[0] === 0x89 && customBytes[1] === 0x50));
-          if (customBytes && isImg) {
-            return customBytes;
-          }
-          if (typeof customImgDataUrl === 'string' && customImgDataUrl.startsWith('http')) {
-            const resp = await fetch(customImgDataUrl);
-            if (resp.ok) {
-              const buf = await resp.arrayBuffer();
-              return new Uint8Array(buf);
-            }
-          }
-        }
-      } catch (err) {
-        console.warn(`[PDFDocumentPipelineV2] Error buscando plantilla personalizada para ${documentType}:`, err);
-      }
-    }
+  private static async loadOriginalPdf(path: string, documentType?: string): Promise<Uint8Array> {
     const rawType = (documentType || path || '').toLowerCase().trim();
     
-    // Decouple Red en Producción: Entrega inmediata desde binarios empaquetados en memoria (Zero-Network)
+    // Entrega inmediata y determinista desde binarios embebidos (Zero-Network)
     if (rawType.includes('recipe') || rawType === 'recipes') {
       return recipeBytes;
     }
@@ -148,8 +94,10 @@ export class PDFDocumentPipelineV2 {
       return historiaBytes;
     }
 
-    return recipeBytes;
+    throw new Error('CRÍTICO: Tipo de documento desconocido. No se puede generar el PDF.');
   }
+
+
 
   /**
    * Genera el documento PDF final utilizando la Arquitectura V2 completa

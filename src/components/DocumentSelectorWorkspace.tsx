@@ -1312,8 +1312,17 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         },
       };
 
-      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName, customBgs[activeDoc] || null);
+      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName);
+      if (result.warnings && result.warnings.length > 0) {
+        const warningMsg = `⚠️ ADVERTENCIA DE SEGURIDAD CLÍNICA:\n\n${result.warnings.join('\n')}\n\n¿Desea continuar con la impresión?`;
+        const proceed = window.confirm(warningMsg);
+        if (!proceed) {
+          setSaveStatus('⚠️ Impresión detenida por revisión clínica.');
+          return;
+        }
+      }
       const blobUrl = URL.createObjectURL(result.blob);
+
       const iframe = document.createElement('iframe');
       iframe.style.position = 'fixed';
       iframe.style.right = '0';
@@ -1455,14 +1464,24 @@ export const DocumentSelectorWorkspace: React.FC<Props> = ({
         },
       };
 
-      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName, customBgs[activeDoc] || null);
+      const result = await generateCanonicalDocumentPDF(activeDoc, patient as PatientData, bundle, fileName);
+      if (result.warnings && result.warnings.length > 0) {
+        const warningMsg = `⚠️ ADVERTENCIA DE SEGURIDAD CLÍNICA:\n\n${result.warnings.join('\n')}\n\n¿Desea continuar con la descarga a pesar de las advertencias?`;
+        const proceed = window.confirm(warningMsg);
+        if (!proceed) {
+          setSaveStatus('⚠️ Descarga detenida por revisión clínica.');
+          return;
+        }
+      }
       downloadBlob(result.pdfBytes, result.fileName);
       const reviewNotice = result.requiresReview ? ' (Nota: El documento requiere revisión)' : '';
       setSaveStatus(`PDF oficial de ${def.label} generado exitosamente sobre PDF original${reviewNotice}`);
       setTimeout(() => setSaveStatus(null), 4000);
     } catch (err: any) {
       console.error('Error al generar PDF oficial:', err);
+      alert('Error generando PDF oficial: ' + (err?.message || 'Error desconocido'));
       setSaveStatus('Error generando PDF: ' + (err?.message || 'Error desconocido'));
+
       setTimeout(() => setSaveStatus(null), 6000);
     } finally {
       setIsExportingPdf(false);
